@@ -1,7 +1,18 @@
 plugins {
 	id 'org.springframework.boot' version '2.6.2'
+
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+
 	id 'java'
+
+	// RestDocs 관련
+	id 'org.asciidoctor.jvm.convert' version '3.1.0'
+
+	// jacoco
+	id 'jacoco'
+
+	//querydsl 추가
+//	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'malangcute.bellytime'
@@ -19,29 +30,126 @@ repositories {
 }
 
 dependencies {
+	// 스프링 배치 설정
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
+
+	// 엘라스틱 서치 설정
 	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// db설정
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// h2 db설정
+	runtimeOnly 'com.h2database:h2'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+	// mysql,jpa 설정
+	runtimeOnly 'mysql:mysql-connector-java'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	//querydsl 추가
+//	implementation 'com.querydsl:querydsl-jpa'
+
+	// 서큐리티 설정
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	// 타임리프 설정
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+	// 밸리데이션 설정
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// 통신 설정
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.kafka:spring-kafka'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-	compileOnly 'org.projectlombok:lombok'
+
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'mysql:mysql-connector-java'
+
+	// 롬복 설정
 	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok'
+
+	// 테스트 설정
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.batch:spring-batch-test'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	// RestDocs 관련
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+	// swagger 설정
+	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+
+	// flyway 설정
+	implementation 'org.flywaydb:flyway-core'
+
 }
+
+
+// jacocotest 리포트 설정
+jacocoTestReport {
+	reports {
+		html.enabled true
+		xml.enabled true
+		csv.enabled false
+	}
+
+	finalizedBy 'jacocoTestCoverageVerification'
+}
+
+// jacoco test coverage 설정 -> 60퍼센트 설정 기본
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			enabled = true
+			element = 'CLASS'
+			// includes = []
+
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.60
+			}
+
+			excludes = []
+		}
+	}
+}
+
+//build -> generate -> querydsl에 querydsl 컴파일시 파일 생성됨
+//def querydslDir = "$buildDir/generated/querydsl"
+//
+//querydsl {
+//	jpa = true
+//	querydslSourcesDir = querydslDir
+//}
+//
+//sourceSets {
+//	main.java.srcDir querydslDir
+//}
+//
+//configurations {
+//	querydsl.extendsFrom compileClasspath
+//}
+//
+//compileQuerydsl {
+//	options.annotationProcessorPath = configurations.querydsl
+//}
+//
+//compileQuerydsl.doFirst { if(file(querydslDir).exists() ) delete(file(querydslDir)) }
+//querydsl 추가 끝
+
 
 test {
 	useJUnitPlatform()
+	finalizedBy 'jacocoTestReport'
 }
