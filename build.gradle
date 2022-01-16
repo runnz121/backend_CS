@@ -92,6 +92,9 @@ dependencies {
 	// flyway 설정
 	implementation 'org.flywaydb:flyway-core'
 
+	//annotationprocessr 설정
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
 }
 
 

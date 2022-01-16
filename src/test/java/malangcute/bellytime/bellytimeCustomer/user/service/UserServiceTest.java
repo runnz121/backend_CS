@@ -41,7 +41,6 @@ class UserServiceTest {
 
         userRepository.save(user);
         //when
-
         UserIdResponse result = userService.findById(123L);
 
 

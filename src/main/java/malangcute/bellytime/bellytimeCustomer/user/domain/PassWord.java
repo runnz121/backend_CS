@@ -18,7 +18,9 @@ import java.util.regex.Pattern;
 public class PassWord {
 
     private static final int MIN_LENGTH = 8;
-    private static final String PASSWORD_CHECK = "^[0-9a-zA-Z]+$";
+    private static final int MAX_LENGTH = 15;
+    private static final String PASSWORD_CHECK = "^.*(?=^.{8,15}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$";
+
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_CHECK);
 
     @Column(nullable = false)
@@ -36,8 +38,8 @@ public class PassWord {
 
     //패스워드 길이 검증(최소 8글자 이상)
     public void validateLength(String passWord) {
-        if (passWord.length() < MIN_LENGTH){
-            throw new UserPassWordException("패스워드는 최소 " + MIN_LENGTH + " 글자 이상입니다");
+        if (passWord.length() < MIN_LENGTH || passWord.length() > MAX_LENGTH){
+            throw new UserPassWordException("패스워드는 최소 " + MIN_LENGTH + " 글자 이상" + MAX_LENGTH + "이하입니다");
         }
     }
 
