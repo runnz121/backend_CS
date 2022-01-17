@@ -45,6 +45,12 @@ public class User extends BaseTimeEntity implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>(Collections.singletonList(Role.USER.getRoleName()));
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AuthProvider authProvider;
+
+    private String providerId;
+
 
     @Builder
     public User (Long id, String nickName, String email, String passWord, String phoneNumber,String profileImg){
@@ -101,4 +107,11 @@ public class User extends BaseTimeEntity implements UserDetails {
         return true;
     }
 
+    public void setAuthProvider(AuthProvider authProvider) {
+        this.authProvider = authProvider;
+    }
+
+    public void setProviderId(String providerId){
+        this.providerId = providerId;
+    }
 }

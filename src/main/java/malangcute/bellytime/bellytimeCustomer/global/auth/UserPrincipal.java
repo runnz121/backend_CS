@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,15 @@ public class UserPrincipal implements UserDetails, OAuth2User {
         );
     }
 
+    public static UserPrincipal createUser(User user, Map<String, Object> attributes){
+        UserPrincipal userPrincipal = UserPrincipal.createUser(user);
+        userPrincipal.setAttributes(attributes);
+        return userPrincipal;
+    }
+
+    public Long getId(){
+        return id;
+    }
 
     @Override
     public String getName() {
@@ -96,5 +106,12 @@ public class UserPrincipal implements UserDetails, OAuth2User {
         return attributes;
     }
 
+    public void setAttributes(Map<String, Object> attributes){
+        this.attributes = attributes;
+    }
+
+    public List<String> getRoles() {
+        return Collections.unmodifiableList(this.roles);
+    }
 
 }

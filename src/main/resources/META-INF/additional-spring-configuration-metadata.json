@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "sec.cors.frontEndDomain",
+      "type": "java.lang.String",
+      "description": "Description for sec.cors.frontEndDomain."
+  }
+] }

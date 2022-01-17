@@ -1,7 +1,4 @@
 spring:
-  profiles:
-    active: dev
-
   # h2 db setting
 #  datasource:
 #    url: jdbc:h2:tcp://localhost/~/test
@@ -24,6 +21,23 @@ spring:
       ddl-auto: create
 
 
+  security:
+    user:
+      name: esanghaesee
+      password: 1234
+
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 71318484453-sn62ah5b0rdiktov48jesea0us3vauph.apps.googleusercontent.com
+            client-secret: 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
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+
+
 #  #flyway setting
   flyway:
     sql-migration-suffixes: .sql
@@ -31,11 +45,28 @@ spring:
     baseline-on-migrate: true
     baseline-version: 0
 
+# bean name 충돌
+  main:
+    allow-bean-definition-overriding: true
+
 logging.level:
   org.hibernate.SQL: debug
 
+
+
+
+
+# custom
 sec:
   auth:
     secretkey: malangcute!
-    validtime: 86400
+    validtimeforAccess: 86400
+    validtimeforRefresh: 864000
+
+  cors:
+    frontEndDomain: http://localhost:3000
+
+  redirectUrl:
+    url: http://localhost:3000/oauth2/redirect?
+
 
