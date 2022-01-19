@@ -1,11 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
-import org.elasticsearch.script.DateFieldScript;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -68,7 +64,14 @@ public class TokenProvider {
     //유효 토큰인지 확인
     public boolean validateToken(String token){
         try{
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+
+            // 비교시간.before(기준시간) -> 기준시간을 지남 -> true를 반환
+            // expirdate 기준 시간보다 커야됨
+            if (claims.getBody().getExpiration().before(new Date())) {
+                throw new NotValidTokenException("유효기간 만료된 코튼입니다");
+            }
+
             return true;
         } catch (JwtException ex){
             throw new NotValidTokenException("유효하지 않은 토큰입니다");

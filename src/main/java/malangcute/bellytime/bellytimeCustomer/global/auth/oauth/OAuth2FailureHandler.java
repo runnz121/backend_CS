@@ -1,33 +1,27 @@
-package malangcute.bellytime.bellytimeCustomer.global.auth;
+package malangcute.bellytime.bellytimeCustomer.global.auth.oauth;
 
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Lazy;
+import malangcute.bellytime.bellytimeCustomer.global.auth.CookieAuthRepositories;
+import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
 @Component
 @AllArgsConstructor
 public class OAuth2FailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    private final CookieAuthRepository cookieAuthRepository;
-
     public static final String REDIRECT_COOKIE = "redirect_uri";
-
-//    public OAuth2FailureHandler(@Lazy CookieAuthRepository cookieAuthRepository){
-//        this.cookieAuthRepository = cookieAuthRepository;
-//    }
+    private final CookieAuthRepositories cookieAuthRepositories;
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         String targetUrl = CookieUtils.getCookie(request, REDIRECT_COOKIE)
                 .map(Cookie::getValue)
                 .orElse(("/"));
@@ -36,7 +30,7 @@ public class OAuth2FailureHandler extends SimpleUrlAuthenticationFailureHandler 
                 .queryParam("error", exception.getLocalizedMessage())
                 .build().toUriString();
 
-        cookieAuthRepository.removeAuthorizationRequestCookies(request, response);
+        cookieAuthRepositories.removeAuthorizationRequestCookies(request, response);
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }

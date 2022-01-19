@@ -1,4 +1,4 @@
-package malangcute.bellytime.bellytimeCustomer.global.auth;
+package malangcute.bellytime.bellytimeCustomer.global.auth.util;
 
 import org.springframework.util.SerializationUtils;
 

@@ -1,4 +1,4 @@
-package malangcute.bellytime.bellytimeCustomer.global.auth;
+package malangcute.bellytime.bellytimeCustomer.global.auth.oauth;
 
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.global.auth.domain.GoogleOAuth2UserInfo;

@@ -1,7 +1,8 @@
-package malangcute.bellytime.bellytimeCustomer.global.auth;
+package malangcute.bellytime.bellytimeCustomer.global.auth.oauth;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import malangcute.bellytime.bellytimeCustomer.global.config.SecurityProperties;
+import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    // 리프레시 토큰을 만들고 반환
+    // 리프레시 토큰을 만들고 지정 uri로 보내주는것
     @Override
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 

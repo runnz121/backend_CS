@@ -1,4 +1,4 @@
-package malangcute.bellytime.bellytimeCustomer.global.auth;
+package malangcute.bellytime.bellytimeCustomer.global.auth.oauth;
 
 import java.util.Map;
 

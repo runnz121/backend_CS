@@ -1,7 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth;
 
 import com.nimbusds.oauth2.sdk.util.StringUtils;
-import lombok.AllArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
-public class CookieAuthRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
+public class CookieAuthRepositories implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
 
     // provider가 초기에 쿠키에 담아서 보내주는 문자 형태

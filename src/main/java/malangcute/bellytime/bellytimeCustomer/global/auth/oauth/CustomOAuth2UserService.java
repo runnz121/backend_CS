@@ -1,7 +1,8 @@
-package malangcute.bellytime.bellytimeCustomer.global.auth;
+package malangcute.bellytime.bellytimeCustomer.global.auth.oauth;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import malangcute.bellytime.bellytimeCustomer.global.auth.UserPrincipal;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoOAuthProviderException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;

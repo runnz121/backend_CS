@@ -1,6 +1,6 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.domain;
 
-import malangcute.bellytime.bellytimeCustomer.global.auth.OAuth2UserInfo;
+import malangcute.bellytime.bellytimeCustomer.global.auth.oauth.OAuth2UserInfo;
 
 import java.util.Map;
 
