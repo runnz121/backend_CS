@@ -14,6 +14,8 @@ import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 
 import java.time.LocalDateTime;
 
+import static malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider.IDPASS;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,6 +28,7 @@ public class UserIdResponse {
     private Email mail;
 
     private String passWord;
+
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDateTime createdDate;
@@ -43,6 +46,7 @@ public class UserIdResponse {
                 user.getPassword(),
                 user.getCreatedAt(),
                 user.getModifiedAt()
+
         );
     }
 }

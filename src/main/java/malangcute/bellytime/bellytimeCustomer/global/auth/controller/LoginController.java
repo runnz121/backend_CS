@@ -19,7 +19,6 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/")
 public class LoginController {
 
     private static final String REFRESH_TOKEN = "refreshToken";
@@ -37,6 +36,16 @@ public class LoginController {
         RefreshAndAccessTokenResponse token = loginService.validUser(loginWithIdAndPassRequest);
         createCookie(response, token.getRefreshToken());
         return ResponseEntity.status(HttpStatus.OK).body(new AccessTokenResponseDto(token.getAccessToken()));
+    }
+
+    @PostMapping("/check")
+    public String check(){
+        return "checking";
+    }
+
+    @PostMapping("/admin")
+    public String admin(){
+        return "admin";
     }
 
 

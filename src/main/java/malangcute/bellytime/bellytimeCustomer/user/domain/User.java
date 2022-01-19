@@ -47,11 +47,11 @@ public class User extends BaseTimeEntity implements UserDetails {
     private List<String> roles = new ArrayList<>(Collections.singletonList(Role.USER.getRoleName()));
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private AuthProvider authProvider;
 
     private String refreshToken;
 
+    @Column(nullable = true)
     private String providerId;
 
 

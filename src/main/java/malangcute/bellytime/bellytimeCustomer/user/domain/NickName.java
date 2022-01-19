@@ -39,5 +39,4 @@ public class NickName {
             throw new UserNickNameException("닉네임은" + MIN_LENGTH + "이상" + MAX_LENGTH + "이하여야 합니다");
         }
     }
-
 }

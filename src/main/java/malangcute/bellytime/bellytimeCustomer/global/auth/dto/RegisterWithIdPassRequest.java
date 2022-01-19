@@ -11,7 +11,7 @@ import lombok.*;
 @ToString
 public class RegisterWithIdPassRequest {
 
-    private String id;
+    private String email;
 
     private String password;
 

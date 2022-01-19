@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 @Setter
 public class Email {
 
-    private static final String EMAIL_CHECK = "^[_0-9a-zA-Z]+@[_0-9a-zA-Z]+(\\.[_0-9a-zA-Z-]+)*$";
+    private static final String EMAIL_CHECK = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_CHECK);
 
     @Column(nullable = false)

@@ -10,6 +10,7 @@ import malangcute.bellytime.bellytimeCustomer.global.config.SecurityProperties;
 import malangcute.bellytime.bellytimeCustomer.global.exception.UserAlreadyExistException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.UserIdNotFoundException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.UserPassWordException;
+import malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.dto.UserIdResponse;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
@@ -64,19 +65,21 @@ public class LoginService {
     // 아이디 비밀번호 기반 유저 저장
     @Transactional
     public void registerNewUser(RegisterWithIdPassRequest registerWithIdPassRequest){
-        Optional<User> checkId = Optional.ofNullable(checkEmail(registerWithIdPassRequest.getId()));
-        if (checkId.isEmpty()){
-            userRepository.save(User.builder()
-                            .email(registerWithIdPassRequest.getId())
-                            .passWord(PASSWORD_ENCODER.encode(registerWithIdPassRequest.getPassword()))
+//        Optional<User> checkId = Optional.ofNullable(checkEmail(registerWithIdPassRequest.getEmail()));
+//        if (checkId.isEmpty()){
+           User user = User.builder()
+                            .email(registerWithIdPassRequest.getEmail())
+                            .passWord(registerWithIdPassRequest.getPassword())
                             .phoneNumber(registerWithIdPassRequest.getPhoneNumber())
                             .nickName(registerWithIdPassRequest.getNickname())
                             .profileImg(registerWithIdPassRequest.getProfileImg())
-                    .build());
-        }
-        else {
-            throw new UserAlreadyExistException("이미 회원가입되어있는 유저입니다");
-        }
+                    .build();
+           user.setAuthProvider(AuthProvider.IDPASS);
+           userRepository.save(user);
+//        }
+//        else {
+//            throw new UserAlreadyExistException("이미 회원가입되어있는 유저입니다");
+//        }
     }
 
     //로그인 유저 이메일확인

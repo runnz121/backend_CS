@@ -4,6 +4,7 @@ package malangcute.bellytime.bellytimeCustomer.global.auth;
 import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.global.auth.service.CustomUserService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoTokenException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
@@ -35,7 +36,7 @@ public class TokenAuthentication extends OncePerRequestFilter {
     public static final String REFRESH = "refreshToken";
 
     private final TokenProvider tokenprovider ;
-    private final UserDetailsService userDetailsService;
+    private final CustomUserService userDetailsService;
 
 
     // 헤더에서 유효토큰 있는지 확인
@@ -69,14 +70,14 @@ public class TokenAuthentication extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String refreshToken = getRefreshFromRequest(request);
-        String accessToken = getJwtFromRequest(request);
-
-        // 둘다 유효한 토큰이면 인증객체 저장
-        if (tokenprovider.validateRefreshToken(refreshToken) && tokenprovider.validateAccessToken(accessToken, refreshToken)){
-            Authentication authentication = getAuthentication(accessToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
+//        String refreshToken = getRefreshFromRequest(request);
+//        String accessToken = getJwtFromRequest(request);
+//
+//        // 둘다 유효한 토큰이면 인증객체 저장
+//        if (tokenprovider.validateRefreshToken(accessToken)){
+//            Authentication authentication = getAuthentication(accessToken);
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//        }
 
         filterChain.doFilter(request, response);
     }
