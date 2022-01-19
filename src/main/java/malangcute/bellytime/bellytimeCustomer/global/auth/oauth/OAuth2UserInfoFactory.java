@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.global.auth.domain.GoogleOAuth2UserInfo;
 import malangcute.bellytime.bellytimeCustomer.global.auth.domain.KakaoOAuth2UserInfo;
 import malangcute.bellytime.bellytimeCustomer.global.auth.domain.NaverOAuth2UserInfo;
+import malangcute.bellytime.bellytimeCustomer.global.auth.domain.OAuth2UserInfo;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoOAuthProviderException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider;
 

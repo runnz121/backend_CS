@@ -4,7 +4,9 @@ package malangcute.bellytime.bellytimeCustomer.global.auth;
 import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoTokenException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,16 +18,21 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.HttpCookie;
+import java.util.Optional;
 
 
 @AllArgsConstructor
 public class TokenAuthentication extends OncePerRequestFilter {
+//public class TokenAuthentication {
 
     public static final String AUTHORIZATION = "Authorization";
     public static String BEARER = "Bearer ";
+    public static final String REFRESH = "refreshToken";
 
     private final TokenProvider tokenprovider ;
     private final UserDetailsService userDetailsService;
@@ -41,6 +48,14 @@ public class TokenAuthentication extends OncePerRequestFilter {
             throw new NoTokenException("토큰에 존재하지않습니다");
     }
 
+
+    // 쿠키에서 리프레시 토큰값을 반환
+    public String getRefreshFromRequest(HttpServletRequest request){
+        Optional<Cookie> cookie = CookieUtils.getCookie(request, REFRESH);
+        Cookie refreshCookie = cookie.orElseThrow(() -> new NotValidTokenException("리프레시토큰이 없습니다"));
+        return refreshCookie.getValue();
+    }
+
     // 토큰으로 부터 아이디 찾아서(이메일) 권한 부여
     public Authentication getAuthentication(String token){
         String userEmail = tokenprovider.getUserIdFromToken(token);
@@ -53,12 +68,16 @@ public class TokenAuthentication extends OncePerRequestFilter {
     //권한 갖고와서 securitycontextholder에 저장(유저 인증 정보 저장) -> accesstoken처리
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String jwtToken = getJwtFromRequest(request);
 
-        if (tokenprovider.validateToken(jwtToken)){
-            Authentication authentication = getAuthentication(jwtToken);
+        String refreshToken = getRefreshFromRequest(request);
+        String accessToken = getJwtFromRequest(request);
+
+        // 둘다 유효한 토큰이면 인증객체 저장
+        if (tokenprovider.validateRefreshToken(refreshToken) && tokenprovider.validateAccessToken(accessToken, refreshToken)){
+            Authentication authentication = getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
         filterChain.doFilter(request, response);
     }
 }

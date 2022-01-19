@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode
 @ToString
 @Builder
-public class LoginIdRequest {
+public class LoginWithIdAndPassRequest {
 
     @Email
     private String id;

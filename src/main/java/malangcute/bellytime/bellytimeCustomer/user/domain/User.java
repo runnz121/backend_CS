@@ -6,6 +6,7 @@ import malangcute.bellytime.bellytimeCustomer.user.domain.common.BaseTimeEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -48,6 +49,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AuthProvider authProvider;
+
+    private String refreshToken;
 
     private String providerId;
 
@@ -113,5 +116,9 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     public void setProviderId(String providerId){
         this.providerId = providerId;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

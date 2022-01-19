@@ -9,7 +9,7 @@ import lombok.*;
 @EqualsAndHashCode
 @Builder
 @ToString
-public class RegisterRequest {
+public class RegisterWithIdPassRequest {
 
     private String id;
 
@@ -19,7 +19,7 @@ public class RegisterRequest {
 
     private String nickname;
 
-    private String phonenumber;
+    private String phoneNumber;
 
     private String profileImg;
 }
