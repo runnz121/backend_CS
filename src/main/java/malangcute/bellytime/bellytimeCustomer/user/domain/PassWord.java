@@ -23,7 +23,7 @@ public class PassWord {
 
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_CHECK);
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String passWord;
 
     public PassWord(String passWord){

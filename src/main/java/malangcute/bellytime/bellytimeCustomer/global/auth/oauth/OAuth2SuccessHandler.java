@@ -1,6 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.oauth;
 
 import lombok.AllArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.global.auth.UserPrincipal;
 import malangcute.bellytime.bellytimeCustomer.global.config.SecurityProperties;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
 import org.springframework.http.ResponseCookie;
@@ -40,7 +41,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
-        String refreshToken = tokenProvider.createRefreshToken(authentication);
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
+        String refreshToken = tokenProvider.createRefreshToken(userPrincipal.getEmail());
         createCookie(response, refreshToken);
 
         String redirect_url = securityProperties.RedirectUrl().getRedirectUrl();

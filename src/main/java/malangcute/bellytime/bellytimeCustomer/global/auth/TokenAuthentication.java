@@ -45,8 +45,7 @@ public class TokenAuthentication extends OncePerRequestFilter {
         if (StringUtils.hasText(token) && token.startsWith(BEARER)){
             return token.substring(BEARER.length(), token.length());
         }
-        else
-            throw new NoTokenException("토큰에 존재하지않습니다");
+        return null;
     }
 
 
@@ -70,14 +69,14 @@ public class TokenAuthentication extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-//        String refreshToken = getRefreshFromRequest(request);
-//        String accessToken = getJwtFromRequest(request);
-//
-//        // 둘다 유효한 토큰이면 인증객체 저장
-//        if (tokenprovider.validateRefreshToken(accessToken)){
-//            Authentication authentication = getAuthentication(accessToken);
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//        }
+       // String refreshToken = getRefreshFromRequest(request);
+        String accessToken = getJwtFromRequest(request);
+
+        // 둘다 유효한 토큰이면 인증객체 저장
+        if (StringUtils.hasText(accessToken) && tokenprovider.validateRefreshToken(accessToken)){
+            Authentication authentication = getAuthentication(accessToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
 
         filterChain.doFilter(request, response);
     }

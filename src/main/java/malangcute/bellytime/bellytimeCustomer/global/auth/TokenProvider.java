@@ -1,6 +1,9 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth;
 
 import io.jsonwebtoken.*;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.global.config.SecurityProperties;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -10,45 +13,31 @@ import java.util.Date;
 import java.util.List;
 
 @Component
+@AllArgsConstructor
 public class TokenProvider {
 
-    private String secretKey;
+    private SecurityProperties securityProperties;
 
-    private String validTimeforRefresh;
-
-    private String validTimeforAccess;
-
-    public TokenProvider(@Value("{sec.auth.secretkey}") String secretkey,
-                         @Value("{sec.auth.validtimeforRefresh}") String validTimeforRefresh,
-                         @Value("{sec.auth.validtimeforAccess}") String validTimeforAccess){
-        this.secretKey = secretkey;
-        this.validTimeforRefresh = validTimeforRefresh;
-        this.validTimeforAccess = validTimeforAccess;
-    }
 
     //리프레시 토큰 생성(100일)
-    public String createRefreshToken(Authentication authentication){
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String userEmail = userPrincipal.getName();
+    public String createRefreshToken(String userPk){
         Date now = new Date();
 
-        Claims claims = Jwts.claims().setSubject(userEmail);
-        Date validate = new Date(now.getTime() + Long.parseLong(validTimeforRefresh));
+        Claims claims = Jwts.claims().setSubject(userPk);
+        Date validate = new Date(now.getTime() + securityProperties.getAuth().getValidtimeforRefresh());
 
-        return generateJwt(claims, now, validate, secretKey);
+        return generateJwt(claims, now, validate, securityProperties.getAuth().getSecretkey());
     }
 
     //엑세스 토큰 생성(1일) 역할도 같이 넣음
-    public String createAccessToken(Authentication authentication, String refreshToken){
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String userEmail = userPrincipal.getName();
+    public String createAccessToken(String userPk, String refreshToken){
         Date now = new Date();
 
-        Claims claims = Jwts.claims().setSubject(userEmail);
+        Claims claims = Jwts.claims().setSubject(userPk);
 //        claims.put("roles", roles);
-        Date validate = new Date(now.getTime() + Long.parseLong(validTimeforAccess));
+        Date validate = new Date(now.getTime() + securityProperties.getAuth().getValidtimeforAccess());
 
-        return generateJwt(claims, now, validate, secretKey);
+        return generateJwt(claims, now, validate, securityProperties.getAuth().getSecretkey());
     }
 
     //jwt 토큰 생성
@@ -64,7 +53,7 @@ public class TokenProvider {
     //리프레시 토큰검증 확인
     public boolean validateRefreshToken(String token){
         try{
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(securityProperties.getAuth().getSecretkey()).parseClaimsJws(token);
 
             // 비교시간.before(기준시간) -> 기준시간을 지남 -> true를 반환
             // expirdate 기준 시간보다 커야됨
@@ -81,8 +70,8 @@ public class TokenProvider {
     // 엑세스 토큰 검증
     public boolean validateAccessToken(String accessToken, String refreshToken){
         try{
-            Jws<Claims> claimsAccess = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken);
-            Date expirationRefresh = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(refreshToken).getBody().getExpiration();
+            Jws<Claims> claimsAccess = Jwts.parser().setSigningKey(securityProperties.getAuth().getSecretkey()).parseClaimsJws(accessToken);
+            Date expirationRefresh = Jwts.parser().setSigningKey(securityProperties.getAuth().getSecretkey()).parseClaimsJws(refreshToken).getBody().getExpiration();
 
             // 비교시간.before(기준시간) -> 기준시간을 지남 -> true를 반환
             // expirdate 기준 시간보다 커야됨
@@ -97,15 +86,10 @@ public class TokenProvider {
     }
 
 
-
-
-
-
-
     //토큰 갖고와서 유저 아이디 찾기(이메일 반환)
     public String getUserIdFromToken(String token){
             Claims claims = Jwts.parser()
-                    .setSigningKey(secretKey)
+                    .setSigningKey(securityProperties.getAuth().getSecretkey())
                     .parseClaimsJws(token)
                     .getBody();
             return claims.getSubject();

@@ -3,22 +3,20 @@ package malangcute.bellytime.bellytimeCustomer.global.auth.controller;
 
 import com.nimbusds.oauth2.sdk.AccessTokenResponse;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.*;
 import malangcute.bellytime.bellytimeCustomer.global.auth.service.LoginService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LoginController {
 
     private static final String REFRESH_TOKEN = "refreshToken";
@@ -30,24 +28,14 @@ public class LoginController {
 
     // id 로 로그인 했을 때 -> httpresponesdp 쿠키 담아서 보냄
     @PostMapping("/login")
-    public ResponseEntity<?> loginWithIdController(@RequestBody LoginWithIdAndPassRequest loginWithIdAndPassRequest
+    public ResponseEntity<RefreshAndAccessTokenResponse> loginWithIdController(@RequestBody LoginWithIdAndPassRequest loginWithIdAndPassRequest
             , HttpServletResponse response) throws Exception {
 
         RefreshAndAccessTokenResponse token = loginService.validUser(loginWithIdAndPassRequest);
         createCookie(response, token.getRefreshToken());
-        return ResponseEntity.status(HttpStatus.OK).body(new AccessTokenResponseDto(token.getAccessToken()));
+        return ResponseEntity.status(HttpStatus.OK).body(new RefreshAndAccessTokenResponse(token.getAccessToken(), token.getRefreshToken()));
+        //return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
-
-    @PostMapping("/check")
-    public String check(){
-        return "checking";
-    }
-
-    @PostMapping("/admin")
-    public String admin(){
-        return "admin";
-    }
-
 
 
     //새로운 유저 가입

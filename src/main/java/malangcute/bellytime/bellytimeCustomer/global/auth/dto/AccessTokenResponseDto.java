@@ -13,6 +13,4 @@ public class AccessTokenResponseDto {
 
     private String accessToken;
 
-
-
 }

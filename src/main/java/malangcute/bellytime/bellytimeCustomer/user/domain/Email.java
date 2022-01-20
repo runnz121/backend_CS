@@ -15,26 +15,25 @@ import java.util.regex.Pattern;
 @EqualsAndHashCode
 @ToString
 @Getter
-@Setter
 public class Email {
 
     private static final String EMAIL_CHECK = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_CHECK);
 
-    @Column(nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    public Email(String email){
+   public Email(String email){
         validate(email);
         this.email = email;
     }
 
-    public void validate(String email){
+    private void validate(String email){
         validPattern(email);
     }
 
     // 이메일 형식 확인
-    public void validPattern(String email){
+    private void validPattern(String email){
         Matcher matcher = EMAIL_PATTERN.matcher(email);
 
         if (!matcher.matches()){

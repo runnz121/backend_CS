@@ -8,6 +8,7 @@ import malangcute.bellytime.bellytimeCustomer.global.auth.domain.OAuth2UserInfo;
 import malangcute.bellytime.bellytimeCustomer.global.auth.oauth.OAuth2UserInfoFactory;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoOAuthProviderException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider;
+import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import org.springframework.http.ResponseCookie;
@@ -70,7 +71,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 인증받은 유저 정보가 저장되어있는 곳
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, attributes);
 
-        Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
+        Optional<User> userOptional = userRepository.findByEmail(new Email(oAuth2UserInfo.getEmail()));
 
         if (userOptional.isPresent()){
             User user = userOptional.get();

@@ -20,7 +20,7 @@ public class NickName {
     private static final int MIN_LENGTH = 2;
     private static final int MAX_LENGTH = 7;
 
-    @Column(nullable = false)
+    @Column(name = "nickname", nullable = false)
     private String nickName;
 
     public NickName(String nickName){

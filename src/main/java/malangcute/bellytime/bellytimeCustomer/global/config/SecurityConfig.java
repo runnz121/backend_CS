@@ -86,7 +86,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .httpBasic().disable()
+                .exceptionHandling().authenticationEntryPoint(new AuthEntryPoint())
+                .and()
                 .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -105,9 +109,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js",
                         "/login",
                         "/join",
-                        "/check"
+                        "/check",
+                        "/gets"
                 ).permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
                 .loginPage("/login")

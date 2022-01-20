@@ -37,21 +37,23 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Embedded
     private PassWord password;
 
-    @Column(nullable = false)
+    @Column(name = "phonenumber" , nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = true)
+    @Column(name = "profileimg")
     private String profileImg;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>(Collections.singletonList(Role.USER.getRoleName()));
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "authprovider")
     private AuthProvider authProvider;
 
+    @Column(name = "refreshtoken")
     private String refreshToken;
 
-    @Column(nullable = true)
+    @Column(name = "providerid")
     private String providerId;
 
 
