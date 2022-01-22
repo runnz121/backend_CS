@@ -52,10 +52,11 @@ public class LoginService {
     public RefreshAndAccessTokenResponse validUser(LoginWithIdAndPassRequest loginWithIdAndPassRequest) {
         User requestLoginUser = checkEmail(loginWithIdAndPassRequest.getEmail());
         checkPassword(requestLoginUser, loginWithIdAndPassRequest.getPassword());
-
         String refreshToken = tokenProvider.createRefreshToken(loginWithIdAndPassRequest.getEmail());
         String accessToken = tokenProvider.createAccessToken(loginWithIdAndPassRequest.getEmail(), refreshToken);
-        return RefreshAndAccessTokenResponse.of(refreshToken, accessToken);
+        requestLoginUser.setRefreshToken(refreshToken);
+        userRepository.save(requestLoginUser);
+        return RefreshAndAccessTokenResponse.of(accessToken, refreshToken);
     }
 
     // 아이디 비밀번호 기반 유저 저장

@@ -6,14 +6,19 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.*;
 import malangcute.bellytime.bellytimeCustomer.global.auth.service.LoginService;
+import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
+import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,6 +49,26 @@ public class LoginController {
         loginService.registerNewUser(registerWithIdPassRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(RegisterCompleteResponse.of(true,"등록되었습니다"));
     }
+
+    @GetMapping("/check")
+    public String check(){
+        return "check";
+    }
+
+//    @PostMapping("/cookie")
+//    public String cookies(HttpServletResponse response)
+//    {   createCookie(response, "cookie");
+//        return "OK";
+//    }
+//
+//    @GetMapping("/cookie")
+//    public String getcookies(HttpServletRequest request){
+//
+//        Optional<Cookie> cookie = CookieUtils.getCookie(request, "refreshToken");
+//        System.out.println(cookie);
+//        Cookie refreshCookie = cookie.orElseThrow(() -> new NotValidTokenException("쿠기가 없음"));
+//        return refreshCookie.getValue();
+//    }
 
 
     private void createCookie(HttpServletResponse response, String refreshToken) {

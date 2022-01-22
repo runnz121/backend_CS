@@ -25,6 +25,7 @@ public class TokenProvider {
 
         Claims claims = Jwts.claims().setSubject(userPk);
         Date validate = new Date(now.getTime() + securityProperties.getAuth().getValidtimeforRefresh());
+        System.out.println("validate" + validate);
 
         return generateJwt(claims, now, validate, securityProperties.getAuth().getSecretkey());
     }
@@ -41,7 +42,7 @@ public class TokenProvider {
     }
 
     //jwt 토큰 생성
-    public String generateJwt(Claims claims,Date now, Date validate, String secretKey){
+    public String generateJwt(Claims claims, Date now, Date validate, String secretKey){
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
@@ -58,12 +59,12 @@ public class TokenProvider {
             // 비교시간.before(기준시간) -> 기준시간을 지남 -> true를 반환
             // expirdate 기준 시간보다 커야됨
             if (claims.getBody().getExpiration().before(new Date())) {
-                throw new NotValidTokenException("유효기간 만료된 코튼입니다");
+                throw new NotValidTokenException("유효기간 만료된 리프레시토큰입니다");
             }
 
             return true;
         } catch (JwtException ex){
-            throw new NotValidTokenException("유효하지 않은 토큰입니다");
+            throw new NotValidTokenException("유효하지 않은 리프레시토큰입니다");
         }
     }
 
@@ -73,15 +74,17 @@ public class TokenProvider {
             Jws<Claims> claimsAccess = Jwts.parser().setSigningKey(securityProperties.getAuth().getSecretkey()).parseClaimsJws(accessToken);
             Date expirationRefresh = Jwts.parser().setSigningKey(securityProperties.getAuth().getSecretkey()).parseClaimsJws(refreshToken).getBody().getExpiration();
 
+            System.out.println(expirationRefresh);
+            System.out.println(claimsAccess.getBody().getExpiration());
             // 비교시간.before(기준시간) -> 기준시간을 지남 -> true를 반환
             // expirdate 기준 시간보다 커야됨
-            if (claimsAccess.getBody().getExpiration().before(expirationRefresh)) {
-                throw new NotValidTokenException("유효기간 만료된 코튼입니다");
+           // if (claimsAccess.getBody().getExpiration().before(expirationRefresh)) {
+            if (expirationRefresh.before(claimsAccess.getBody().getExpiration())){
+                throw new NotValidTokenException("유효기간 만료된 엑세스토큰입니다");
             }
-
             return true;
         } catch (JwtException ex){
-            throw new NotValidTokenException("유효하지 않은 토큰입니다");
+            throw new NotValidTokenException("유효하지 않은 엑세스토큰입니다");
         }
     }
 

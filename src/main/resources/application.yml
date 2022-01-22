@@ -18,7 +18,7 @@ spring:
   # jpa setting
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
 
 
   security:
@@ -62,7 +62,7 @@ sec:
   auth:
     secretkey: malangcute!
     validtimeforAccess: 86400
-    validtimeforRefresh: 864000
+    validtimeforRefresh: 864000000
 
   cors:
     frontEndDomain: http://localhost:3000

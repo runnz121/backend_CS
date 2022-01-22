@@ -6,8 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.global.auth.service.CustomUserService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
+import malangcute.bellytime.bellytimeCustomer.global.config.SecurityProperties;
+import malangcute.bellytime.bellytimeCustomer.global.exception.NoCookieException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoTokenException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
+import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -22,8 +26,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.net.HttpCookie;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -48,12 +54,36 @@ public class TokenAuthentication extends OncePerRequestFilter {
         return null;
     }
 
+//    private String getCookie(NativeWebRequest webRequest) {
+//        String cookie = webRequest.getHeader("Cookie");
+//        if (cookie == null) {
+//            throw new NoCookieException("쿠키가 없습니다");
+//        }
+//        return cookie;
+//    }
+//
+//
+//    private String findRefreshToken(NativeWebRequest webRequest) {
+//        String cookie = getCookie(webRequest);
+//
+//        List<HttpCookie> cookies = HttpCookie.parse(cookie);
+//        HttpCookie httpCookie = cookies.stream()
+//                .filter(it -> it.getName().equals("refreshToken") && !it.getValue().isEmpty())
+//                .findAny()
+//                .orElseThrow(() -> new NoCookieException("쿠키가 없습니다"));
+//
+//        return httpCookie.getValue();
+//    }
+
 
     // 쿠키에서 리프레시 토큰값을 반환
-    public String getRefreshFromRequest(HttpServletRequest request){
+    public String getRefreshFromRequest(HttpServletRequest request) {
         Optional<Cookie> cookie = CookieUtils.getCookie(request, REFRESH);
-        Cookie refreshCookie = cookie.orElseThrow(() -> new NotValidTokenException("리프레시토큰이 없습니다"));
-        return refreshCookie.getValue();
+       if (cookie.isPresent()){
+            Cookie refreshCookie = cookie.orElseThrow(() -> new NotValidTokenException("리프레시토큰이 없습니다"));
+            return refreshCookie.getValue();
+      }
+     return null;
     }
 
     // 토큰으로 부터 아이디 찾아서(이메일) 권한 부여
@@ -69,15 +99,20 @@ public class TokenAuthentication extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-       // String refreshToken = getRefreshFromRequest(request);
+        String refreshToken = getRefreshFromRequest(request);
         String accessToken = getJwtFromRequest(request);
+        System.out.println(refreshToken);
 
-        // 둘다 유효한 토큰이면 인증객체 저장
-        if (StringUtils.hasText(accessToken) && tokenprovider.validateRefreshToken(accessToken)){
-            Authentication authentication = getAuthentication(accessToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+        if (refreshToken != null && !tokenprovider.validateRefreshToken(refreshToken)) {
+            throw new NotValidTokenException("리프레시토큰이 만료되었음으로 다시 로그인 해주세요");
         }
 
+        // 둘다 유효한 토큰이면 인증객체 저장
+        else if (refreshToken != null && StringUtils.hasText(accessToken) && tokenprovider.validateAccessToken(accessToken, refreshToken)){
+                Authentication authentication = getAuthentication(accessToken);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
         filterChain.doFilter(request, response);
     }
 }
