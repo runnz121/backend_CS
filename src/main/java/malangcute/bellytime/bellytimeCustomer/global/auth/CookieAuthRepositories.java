@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// 제3인증 요청의 인가 신청하는동안 권한을 저장
 @Component
 public class CookieAuthRepositories implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 

@@ -9,9 +9,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
 import malangcute.bellytime.bellytimeCustomer.user.domain.NickName;
+import malangcute.bellytime.bellytimeCustomer.user.domain.PassWord;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 
 import java.time.LocalDateTime;
+
+import static malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider.IDPASS;
 
 @Getter
 @AllArgsConstructor
@@ -24,12 +27,14 @@ public class UserIdResponse {
 
     private Email mail;
 
+    private String passWord;
+
+
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDateTime createdDate;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDateTime modifiedDate;
-
 
     // 매개변수를 받아 적합한 타입의 인스턴스를 반환(집계메서드)
     @Builder
@@ -38,8 +43,10 @@ public class UserIdResponse {
                 user.getId(),
                 user.getNickname(),
                 user.getEmail(),
+                user.getPassword(),
                 user.getCreatedAt(),
                 user.getModifiedAt()
+
         );
     }
 }

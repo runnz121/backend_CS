@@ -1,21 +1,25 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.dto;
 
+
 import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
-@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @EqualsAndHashCode
-@ToString
 @Builder
-public class LoginIdRequest {
+@ToString
+public class RegisterWithIdPassRequest {
 
-    @Email
-    private String id;
+    private String email;
 
-    @NotBlank
     private String password;
+
+    private String name;
+
+    private String nickname;
+
+    private String phoneNumber;
+
+    private String profileImg;
 }

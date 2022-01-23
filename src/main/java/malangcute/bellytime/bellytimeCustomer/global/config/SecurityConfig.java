@@ -1,19 +1,24 @@
 package malangcute.bellytime.bellytimeCustomer.global.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import malangcute.bellytime.bellytimeCustomer.global.auth.CookieAuthRepositories;
+import malangcute.bellytime.bellytimeCustomer.global.auth.JWTExceptionFilter;
+import malangcute.bellytime.bellytimeCustomer.global.auth.controller.LoginController;
+import malangcute.bellytime.bellytimeCustomer.global.auth.service.CustomUserService;
+import malangcute.bellytime.bellytimeCustomer.global.auth.service.LoginService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenAuthentication;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
-import malangcute.bellytime.bellytimeCustomer.global.auth.oauth.CustomOAuth2UserService;
+import malangcute.bellytime.bellytimeCustomer.global.auth.service.CustomOAuth2UserService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.oauth.OAuth2FailureHandler;
 import malangcute.bellytime.bellytimeCustomer.global.auth.oauth.OAuth2SuccessHandler;
-import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
@@ -42,17 +47,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final OAuth2FailureHandler oAuth2FailureHandler;
 
-    private final CookieAuthRepositories cookieAuthRepositories;
-
     private final TokenProvider tokenProvider;
 
-    private final UserService userDetailsService;
+    private final CustomUserService userDetailsService;
+
+    private final ObjectMapper objectMapper;
 
     private final long MAX_AGES = 3600;
 
 
+
     // 인증 메니저
-    @Bean
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManager() throws Exception{
         return super.authenticationManager();
@@ -85,7 +91,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .httpBasic().disable()
+                .exceptionHandling().authenticationEntryPoint(new AuthEntryPoint())
+                .and()
                 .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -102,10 +112,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js",
-                        "/login"
+                        "/login",
+                        "/join",
+                        "/cookie"
                 ).permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().hasAnyRole("USER","ADMIN")
+                .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
                 .loginPage("/login")
@@ -122,7 +134,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(oAuth2SuccessHandler)
                 .failureHandler(oAuth2FailureHandler)
                 .and()
-                .addFilterBefore(new TokenAuthentication(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new TokenAuthentication(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTExceptionFilter(tokenProvider, userDetailsService, objectMapper), TokenAuthentication.class);
     }
 
     @Override

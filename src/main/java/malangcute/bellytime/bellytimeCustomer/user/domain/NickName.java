@@ -20,7 +20,7 @@ public class NickName {
     private static final int MIN_LENGTH = 2;
     private static final int MAX_LENGTH = 7;
 
-    @Column(nullable = false)
+    @Column(name = "nickname", nullable = false)
     private String nickName;
 
     public NickName(String nickName){
@@ -39,5 +39,4 @@ public class NickName {
             throw new UserNickNameException("닉네임은" + MIN_LENGTH + "이상" + MAX_LENGTH + "이하여야 합니다");
         }
     }
-
 }

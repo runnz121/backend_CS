@@ -1,5 +1,6 @@
 package malangcute.bellytime.bellytimeCustomer.user.service;
 
+import malangcute.bellytime.bellytimeCustomer.global.auth.service.LoginService;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.dto.UserIdResponse;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
@@ -12,10 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Transactional
 class UserServiceTest {
@@ -23,7 +20,7 @@ class UserServiceTest {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    UserService userService;
+    LoginService userService;
 
     @DisplayName("유저 저장 및 아이디 조회 확인")
     @Test
@@ -31,12 +28,12 @@ class UserServiceTest {
 
         //given
         User user = User.builder()
-                .id(123L)
+                //.id(123L)
                 .nickName("here")
                 .email("adsf@adsf.com")
-                .passWord("AaaAbb1123")
-                .phoneNumber("010-2282-9999")
-                .profileImg("adsfasdf_adf")
+                .passWord("AaaAbb11!23")
+//                .phoneNumber("010-2282-9999")
+//                .profileImg("adsfasdf1A!adf")
                 .build();
 
         userRepository.save(user);

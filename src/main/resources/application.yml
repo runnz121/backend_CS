@@ -48,25 +48,23 @@ spring:
 # bean name 충돌
   main:
     allow-bean-definition-overriding: true
+    allow-circular-references: true
 
 logging.level:
   org.hibernate.SQL: debug
-
-
-
 
 
 # custom
 sec:
   auth:
     secretkey: malangcute!
-    validtimeforAccess: 86400
-    validtimeforRefresh: 864000
+    validtimeforAccess: 8640
+    validtimeforRefresh: 8640000000
 
   cors:
     frontEndDomain: http://localhost:3000
 
-  redirectUrl:
-    url: http://localhost:3000/oauth2/redirect?
+  reuris:
+    google: http://localhost:3000/oauth2/redirect?
 
 

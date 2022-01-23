@@ -1,7 +1,5 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.domain;
 
-import malangcute.bellytime.bellytimeCustomer.global.auth.oauth.OAuth2UserInfo;
-
 import java.util.Map;
 
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
