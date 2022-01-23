@@ -23,10 +23,12 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.context.HttpRequestResponseHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Slf4j
@@ -50,7 +52,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-
+        System.out.println("인증유저" + oAuth2User);
 
         try {
             return processOAuth2User(userRequest, oAuth2User);
@@ -77,20 +79,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             User user = userOptional.get();
             return UserPrincipal.createUser(user, attributes);
         }
-
         User user = registerUser(userRequest, oAuth2UserInfo);
-
-        // Oauth로그인시 이메일 소스제공자를 비밀번호로 쿠키 생성 및 리프레시토큰 추가
-//        Authentication loginUser = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        user.getEmail(),
-//                        user.getProviderId()
-//                )
-//        );
-//
-//        String refreshToken = tokenProvider.createRefreshToken(loginUser);
-//        createCookie(response, refreshToken);
-
         return UserPrincipal.createUser(user, attributes);
     }
 
@@ -100,13 +89,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         AuthProvider authProvider = AuthProvider.of(oAuth2UserRequest.getClientRegistration().getRegistrationId());
 
         User user = User.builder()
-                .nickName(oAuth2UserInfo.getNickName())
                 .email(oAuth2UserInfo.getEmail())
+                .passWord(oAuth2UserInfo.getId())
+                .phoneNumber("")
+                .nickName("USER")
+                .profileImg("")
                 .build();
 
         user.setAuthProvider(authProvider);
-        user.setProviderId(oAuth2UserInfo.getId());
+
         return userRepository.save(user);
     }
-
 }

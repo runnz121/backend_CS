@@ -2,11 +2,11 @@ package malangcute.bellytime.bellytimeCustomer.global.auth.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import malangcute.bellytime.bellytimeCustomer.global.auth.TokenAuthentication;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
-import malangcute.bellytime.bellytimeCustomer.global.auth.dto.LoginWithIdAndPassRequest;
-import malangcute.bellytime.bellytimeCustomer.global.auth.dto.RefreshAndAccessTokenResponse;
-import malangcute.bellytime.bellytimeCustomer.global.auth.dto.RegisterWithIdPassRequest;
-import malangcute.bellytime.bellytimeCustomer.global.config.SecurityConfig;
+import malangcute.bellytime.bellytimeCustomer.global.auth.dto.*;
+import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
+import malangcute.bellytime.bellytimeCustomer.global.exception.NoCookieException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.UserAlreadyExistException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.UserIdNotFoundException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.UserPassWordException;
@@ -16,14 +16,14 @@ import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.dto.UserIdResponse;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -34,10 +34,9 @@ public class LoginService {
 
     private final UserRepository userRepository;
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+    private static final String REFRESH_TOKEN = "refreshToken";
     private final TokenProvider tokenProvider;
-//    private final SecurityConfig securityConfig;
 
-    private final AuthenticationManager authenticationManager;
 
     // 유저 아이디 찾기 -> test
     public UserIdResponse findById(Long id){
@@ -75,6 +74,29 @@ public class LoginService {
            user.setAuthProvider(AuthProvider.IDPASS);
            userRepository.save(user);
     }
+
+    // 엑세스 토큰 재발급
+    @Transactional(readOnly = true)
+    public AccessTokenResponseDto checkAccessToken(RequestAccessTokenCheck requestAccessTokenCheck, HttpServletRequest httpServletRequest) {
+        String checkToken = requestAccessTokenCheck.getAccessToken();
+
+        System.out.println("checkToken " + checkToken);
+        Optional<Cookie> cookie = CookieUtils.getCookie(httpServletRequest, REFRESH_TOKEN);
+        Cookie getCookie = cookie.orElseThrow(() -> new NoCookieException("쿠키가 없습니다"));
+        String refreshToken = getCookie.getValue();
+
+        String userId = tokenProvider.getUserIdFromToken(refreshToken);
+        User newOne = userRepository.findByEmail(new Email(userId)).orElseThrow(()->new UserIdNotFoundException("유저가 존재하지 않습니다"));
+        String newAccessToken = tokenProvider.createAccessToken(newOne.getEmail().getEmail(), refreshToken);
+        System.out.println("newaccesstoken : " + newAccessToken);
+        return AccessTokenResponseDto.of(newAccessToken);
+    }
+
+    public AccessTokenResponseDto refreshAccess(String token) {
+        return AccessTokenResponseDto.of(token);
+    }
+
+
 
     //로그인 유저 이메일확인
     public User checkEmail(String email){

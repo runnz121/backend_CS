@@ -1,9 +1,12 @@
 package malangcute.bellytime.bellytimeCustomer.global.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import malangcute.bellytime.bellytimeCustomer.global.auth.CookieAuthRepositories;
+import malangcute.bellytime.bellytimeCustomer.global.auth.JWTExceptionFilter;
+import malangcute.bellytime.bellytimeCustomer.global.auth.controller.LoginController;
 import malangcute.bellytime.bellytimeCustomer.global.auth.service.CustomUserService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.service.LoginService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenAuthentication;
@@ -47,6 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final TokenProvider tokenProvider;
 
     private final CustomUserService userDetailsService;
+
+    private final ObjectMapper objectMapper;
 
     private final long MAX_AGES = 3600;
 
@@ -129,7 +134,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(oAuth2SuccessHandler)
                 .failureHandler(oAuth2FailureHandler)
                 .and()
-                .addFilterBefore(new TokenAuthentication(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new TokenAuthentication(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTExceptionFilter(tokenProvider, userDetailsService, objectMapper), TokenAuthentication.class);
     }
 
     @Override
