@@ -1,21 +1,15 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.dto;
 
-
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class AccessTokenResponseDto {
+public class RequestAccessTokenCheck {
 
     private String accessToken;
-
-    public static AccessTokenResponseDto of (String accessToken) {
-        return new AccessTokenResponseDto(accessToken);
-    }
 
 }

@@ -1,5 +1,6 @@
 package malangcute.bellytime.bellytimeCustomer.global.config;
 
+import lombok.AllArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,7 @@ public class SecurityProperties {
 
     private final Auth auth = new Auth();
     private final Cors cors = new Cors();
-    private final RedirectUrl redirectUrl = new RedirectUrl();
+    private final Reuris reuris = new Reuris();
 
     public static class Auth {
         private String secretkey;
@@ -25,7 +26,6 @@ public class SecurityProperties {
             this.secretkey = secretkey;
         }
 
-
         public Long getValidtimeforAccess(){
             return validtimeforAccess;
         }
@@ -33,7 +33,6 @@ public class SecurityProperties {
         public void setValidtimeforAccess(long validtimeforAccess) {
             this.validtimeforAccess = validtimeforAccess;
         }
-
 
         public Long getValidtimeforRefresh(){
             return validtimeforRefresh;
@@ -56,15 +55,15 @@ public class SecurityProperties {
         }
     }
 
-    public static class RedirectUrl {
-        private String redirectUrl;
+    public static class Reuris {
+        private String google;
 
-        public String getRedirectUrl(){
-            return redirectUrl;
+        public String getGoogle(){
+            return google;
         }
 
-        public void setRedirectUrl(String redirectUrl){
-            this.redirectUrl = redirectUrl;
+        public void setGoogle(String google){
+            this.google = google;
         }
     }
 
@@ -76,7 +75,7 @@ public class SecurityProperties {
         return cors;
     }
 
-    public RedirectUrl RedirectUrl(){
-        return redirectUrl;
+    public Reuris getReuris(){
+        return reuris;
     }
 }

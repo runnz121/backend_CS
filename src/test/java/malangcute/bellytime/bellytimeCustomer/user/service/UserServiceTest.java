@@ -28,12 +28,12 @@ class UserServiceTest {
 
         //given
         User user = User.builder()
-                .id(123L)
+                //.id(123L)
                 .nickName("here")
                 .email("adsf@adsf.com")
                 .passWord("AaaAbb11!23")
-                .phoneNumber("010-2282-9999")
-                .profileImg("adsfasdf1A!adf")
+//                .phoneNumber("010-2282-9999")
+//                .profileImg("adsfasdf1A!adf")
                 .build();
 
         userRepository.save(user);

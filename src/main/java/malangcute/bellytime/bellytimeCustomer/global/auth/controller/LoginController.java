@@ -2,6 +2,7 @@ package malangcute.bellytime.bellytimeCustomer.global.auth.controller;
 
 
 import com.nimbusds.oauth2.sdk.AccessTokenResponse;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.*;
@@ -33,15 +34,14 @@ public class LoginController {
 
     // id 로 로그인 했을 때 -> httpresponesdp 쿠키 담아서 보냄
     @PostMapping("/login")
-    public ResponseEntity<RefreshAndAccessTokenResponse> loginWithIdController(@RequestBody LoginWithIdAndPassRequest loginWithIdAndPassRequest
+    public ResponseEntity<AccessTokenResponseDto> loginWithIdController(@RequestBody LoginWithIdAndPassRequest loginWithIdAndPassRequest
             , HttpServletResponse response) throws Exception {
 
         RefreshAndAccessTokenResponse token = loginService.validUser(loginWithIdAndPassRequest);
         createCookie(response, token.getRefreshToken());
-        return ResponseEntity.status(HttpStatus.OK).body(new RefreshAndAccessTokenResponse(token.getAccessToken(), token.getRefreshToken()));
+        return ResponseEntity.status(HttpStatus.OK).body(new AccessTokenResponseDto(token.getAccessToken()));
         //return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
-
 
     //새로운 유저 가입
     @PostMapping("/join")
@@ -50,9 +50,26 @@ public class LoginController {
         return ResponseEntity.status(HttpStatus.CREATED).body(RegisterCompleteResponse.of(true,"등록되었습니다"));
     }
 
+    //권한 기반 로그인 확인용
     @GetMapping("/check")
     public String check(){
         return "check";
+    }
+
+    //엑세스 토큰 재발급
+//    @ExceptionHandler(ExpiredJwtException.class)
+    @PostMapping("/regenaccess")
+    //public ResponseEntity<?> checkAccessToken(@RequestBody RequestAccessTokenCheck requestAccessTokenCheck, HttpServletRequest httpServletRequest) {
+    //public ResponseEntity<AccessTokenResponseDto> checkAccessToken(String token) {
+    public String checkAccessToken(String token){
+        System.out.println("controller");
+        //AccessTokenResponseDto accessTokenResponseDto = loginService.checkAccessToken(requestAccessTokenCheck, httpServletRequest);
+//        AccessTokenResponseDto accessTokenResponseDto = AccessTokenResponseDto.of(token);
+//        System.out.println(accessTokenResponseDto);
+//        AccessTokenResponseDto newToken = loginService.refreshAccess(token);
+        //System.out.println("token COntroller " + newToken);
+        System.out.println("controller Token " + token);
+        return token;
     }
 
 //    @PostMapping("/cookie")
