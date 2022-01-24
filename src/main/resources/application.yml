@@ -1,0 +1,70 @@
+spring:
+  # h2 db setting
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/test
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+
+  # mysql db setting
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bellytime?autoReconnect=true
+    username: root
+    password: 123456
+
+
+
+  # jpa setting
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+
+  security:
+    user:
+      name: esanghaesee
+      password: 1234
+
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 71318484453-sn62ah5b0rdiktov48jesea0us3vauph.apps.googleusercontent.com
+            client-secret: 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
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+
+
+#  #flyway setting
+  flyway:
+    sql-migration-suffixes: .sql
+    locations: classpath:/db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
+
+# bean name 충돌
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+
+logging.level:
+  org.hibernate.SQL: debug
+
+
+# custom
+sec:
+  auth:
+    secretkey: malangcute!
+    validtimeforAccess: 8640
+    validtimeforRefresh: 8640000000
+
+  cors:
+    frontEndDomain: http://localhost:3000
+
+  reuris:
+    google: http://localhost:3000/oauth2/redirect?
+
+
