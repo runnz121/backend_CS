@@ -92,7 +92,8 @@ public class LoginController {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
                 //.sameSite(none) -> 도메인 설정후 해당 도메인으로 변경
                 //.domain("localhost:3000") //.domain
-                .sameSite("None")
+                //.sameSite("None")
+                .sameSite("Lax")
                 .maxAge(MAX_AGE)
                 .path("/")
                 //.secure(true) // https 접속일때만 감으로 나중에 설정
