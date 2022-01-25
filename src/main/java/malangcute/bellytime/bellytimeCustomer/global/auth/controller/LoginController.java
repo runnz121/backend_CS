@@ -33,7 +33,7 @@ public class LoginController {
     //기본적으로 리프레시 토큰만 발급해줌으로(Oauth도) 프론트에서 해당 토큰을 받아서 쿠키에 저장 해서 처음 보내줘야된다
     private final LoginService loginService;
 
-    @PostMapping("/")
+    @GetMapping("/")
     public ResponseEntity<?> healthCheck(){
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
