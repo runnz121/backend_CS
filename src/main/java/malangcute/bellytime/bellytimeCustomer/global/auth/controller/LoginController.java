@@ -95,7 +95,7 @@ public class LoginController {
                 .sameSite("none")
                 .maxAge(MAX_AGE)
                 .path("/")
-                .secure(true)
+                //.secure(true) // https 접속일때만 감으로 나중에 설정
                 .httpOnly(true)
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
