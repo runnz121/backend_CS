@@ -91,8 +91,8 @@ public class LoginController {
     private void createCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
                 //.sameSite(none) -> 도메인 설정후 해당 도메인으로 변경
-                //.domain("localhost") //.domain
-                .sameSite("none")
+                .domain("localhost:3000") //.domain
+                .sameSite("None")
                 .maxAge(MAX_AGE)
                 .path("/")
                 //.secure(true) // https 접속일때만 감으로 나중에 설정
