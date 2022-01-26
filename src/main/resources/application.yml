@@ -7,18 +7,19 @@ spring:
 #    driver-class-name: org.h2.Driver
 
   # mysql db setting
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/bellytime?autoReconnect=true
-#    username: root
-#    password: 123456
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bellytime?autoReconnect=true
+    username: root
+    password: 123456
 
   #aws RDS setting
-  datasource:
-    url: jdbc:mysql://belly.cgf7zom8wu6z.ap-northeast-2.rds.amazonaws.com:3306/belly
-    username: root
-    password: malangcute121!
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#  datasource:
+#    url: jdbc:mysql://belly.cgf7zom8wu6z.ap-northeast-2.rds.amazonaws.com:3306/belly
+#    username: root
+#    password: malangcute121!
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+
 
 
 
@@ -71,8 +72,20 @@ sec:
   cors:
     #frontEndDomain: http://localhost:3000
     frontEndDomain: https://www.bellytime.kr
+    #frontEndDomain: https://bellytime.kr
 
   reuris:
     google: http://localhost:3000/oauth2/redirect?
 
+# aws 설정
+cloud:
+  aws:
+    s3:
+      bucket: belly-imges
+
+    region:
+      static: ap-northeast-2
+
+    stack:
+      auto: false
 

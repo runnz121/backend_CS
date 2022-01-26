@@ -2,17 +2,13 @@ package malangcute.bellytime.bellytimeCustomer.user.domain;
 
 
 import lombok.*;
-import malangcute.bellytime.bellytimeCustomer.user.domain.common.BaseTimeEntity;
+import malangcute.bellytime.bellytimeCustomer.global.domain.common.BaseTimeEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -40,8 +36,15 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "phonenumber" , nullable = false)
     private String phoneNumber;
 
-    @Column(name = "profileimg")
-    private String profileImg;
+    //유저 프로필 이미지
+    //user가 연관관계 주인임으로 mappedby -> users
+    @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JoinColumn(name = "profileimg")
+
+    //연관관계 주인을 userimg로
+    //@OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private UserImg profileImg = null;
+
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>(Collections.singletonList(Role.USER.getRoleName()));
@@ -58,7 +61,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 
     @Builder
-    public User (Long id, String nickName, String email, String passWord, String phoneNumber,String profileImg){
+    public User (Long id, String nickName, String email, String passWord, String phoneNumber, UserImg profileImg){
         this.id = id;
         this.nickname = new NickName(nickName);
         this.email = new Email(email);
@@ -122,5 +125,18 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void setImg(UserImg profileImg) {
+        this.profileImg = profileImg;
+    }
+
+    private void setUserImg(UserImg userImg) {
+        if (Objects.isNull(userImg)) {
+            return;
+        }
+        if (userImg.hasNotUser()) {
+            profileImg.setUser(this);
+        }
     }
 }

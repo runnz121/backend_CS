@@ -2,25 +2,18 @@ package malangcute.bellytime.bellytimeCustomer.global.auth.service;
 
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.global.exception.UserEmailException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.UserPassWordException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
-import malangcute.bellytime.bellytimeCustomer.user.dto.UserIdResponse;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.transaction.Transactional;
-
-import java.util.logging.Logger;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

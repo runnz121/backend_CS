@@ -2,7 +2,6 @@ package malangcute.bellytime.bellytimeCustomer.global.auth.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import malangcute.bellytime.bellytimeCustomer.global.auth.TokenAuthentication;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.*;
 import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
@@ -13,9 +12,9 @@ import malangcute.bellytime.bellytimeCustomer.global.exception.UserPassWordExcep
 import malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider;
 import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
+import malangcute.bellytime.bellytimeCustomer.user.domain.UserImg;
 import malangcute.bellytime.bellytimeCustomer.user.dto.UserIdResponse;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -69,9 +68,10 @@ public class LoginService {
                             .passWord(PASSWORD_ENCODER.encode(registerWithIdPassRequest.getPassword()))
                             .phoneNumber(registerWithIdPassRequest.getPhoneNumber())
                             .nickName(registerWithIdPassRequest.getNickname())
-                            .profileImg(registerWithIdPassRequest.getProfileImg())
+                           // .profileImg(registerWithIdPassRequest.getProfileImg())
                     .build();
            user.setAuthProvider(AuthProvider.IDPASS);
+           user.setImg(UserImg.builder().name("test").url("test").build());
            userRepository.save(user);
     }
 

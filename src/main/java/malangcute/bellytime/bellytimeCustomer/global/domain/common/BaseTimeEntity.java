@@ -1,4 +1,4 @@
-package malangcute.bellytime.bellytimeCustomer.user.domain.common;
+package malangcute.bellytime.bellytimeCustomer.global.domain.common;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

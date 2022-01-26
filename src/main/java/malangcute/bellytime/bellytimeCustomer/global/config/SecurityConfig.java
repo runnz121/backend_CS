@@ -77,6 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
         String frontEndDomain = securityProperties.getCors().getFrontEndDomain();
 
+
         configuration.addAllowedOrigin(frontEndDomain);
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");

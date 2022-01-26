@@ -11,24 +11,16 @@ import malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider;
 import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
-import org.springframework.http.ResponseCookie;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.web.context.HttpRequestResponseHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Slf4j
@@ -93,7 +85,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .passWord(oAuth2UserInfo.getId())
                 .phoneNumber("")
                 .nickName("USER")
-                .profileImg("")
+                .profileImg(null)
                 .build();
 
         user.setAuthProvider(authProvider);

@@ -9,12 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
 import malangcute.bellytime.bellytimeCustomer.user.domain.NickName;
-import malangcute.bellytime.bellytimeCustomer.user.domain.PassWord;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 
 import java.time.LocalDateTime;
-
-import static malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider.IDPASS;
 
 @Getter
 @AllArgsConstructor
