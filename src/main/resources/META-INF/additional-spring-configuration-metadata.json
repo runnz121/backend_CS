@@ -14,5 +14,25 @@
       "name": "cloud.aws.s3.bucket",
       "type": "java.lang.String",
       "description": "Description for cloud.aws.s3.bucket."
+    },
+    {
+      "name": "cloud.aws.cloudfront",
+      "type": "java.lang.String",
+      "description": "Description for cloud.aws.cloudfront."
+    },
+    {
+      "name": "aws.cloudfront",
+      "type": "java.lang.String",
+      "description": "Description for aws.cloudfront."
+    },
+    {
+      "name": "aws.region",
+      "type": "java.lang.String",
+      "description": "Description for aws.region."
+    },
+    {
+      "name": "aws.bucket",
+      "type": "java.lang.String",
+      "description": "Description for aws.bucket."
     }
   ] }

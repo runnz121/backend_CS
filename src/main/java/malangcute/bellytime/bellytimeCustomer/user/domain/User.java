@@ -38,13 +38,14 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     //유저 프로필 이미지
     //user가 연관관계 주인임으로 mappedby -> users
-    @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
-    @JoinColumn(name = "profileimg")
+//    @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
+//    @JoinColumn(name = "profileimg")
 
     //연관관계 주인을 userimg로
     //@OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private UserImg profileImg = null;
 
+    @Column(name = "profileImg")
+    private String profileImg;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>(Collections.singletonList(Role.USER.getRoleName()));
@@ -61,7 +62,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 
     @Builder
-    public User (Long id, String nickName, String email, String passWord, String phoneNumber, UserImg profileImg){
+    public User (Long id, String nickName, String email, String passWord, String phoneNumber, String profileImg){
         this.id = id;
         this.nickname = new NickName(nickName);
         this.email = new Email(email);
@@ -127,16 +128,21 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.refreshToken = refreshToken;
     }
 
-    public void setImg(UserImg profileImg) {
-        this.profileImg = profileImg;
-    }
+    public void setProfileImg(String imgUrl) { this.profileImg = imgUrl; }
 
-    private void setUserImg(UserImg userImg) {
-        if (Objects.isNull(userImg)) {
-            return;
-        }
-        if (userImg.hasNotUser()) {
-            profileImg.setUser(this);
-        }
-    }
+    public void setNickname(String nickname) {this.nickname = new NickName(nickname);}
+
+
+//    public void setImg(UserImg profileImg) {
+//        this.profileImg = profileImg;
+//    }
+//
+//    private void setUserImg(UserImg userImg) {
+//        if (Objects.isNull(userImg)) {
+//            return;
+//        }
+//        if (userImg.hasNotUser()) {
+//            profileImg.setUser(this);
+//        }
+//    }
 }

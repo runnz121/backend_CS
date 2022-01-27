@@ -5,14 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.*;
 import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoCookieException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.UserAlreadyExistException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.UserIdNotFoundException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.UserPassWordException;
+import malangcute.bellytime.bellytimeCustomer.global.aws.AwsS3uploader;
+import malangcute.bellytime.bellytimeCustomer.global.exception.*;
 import malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider;
 import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
-import malangcute.bellytime.bellytimeCustomer.user.domain.UserImg;
 import malangcute.bellytime.bellytimeCustomer.user.dto.UserIdResponse;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -35,6 +33,7 @@ public class LoginService {
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
     private static final String REFRESH_TOKEN = "refreshToken";
     private final TokenProvider tokenProvider;
+    private final AwsS3uploader awsS3uploader;
 
 
     // 유저 아이디 찾기 -> test
@@ -59,7 +58,7 @@ public class LoginService {
 
     // 아이디 비밀번호 기반 유저 저장
     @Transactional
-    public void registerNewUser(RegisterWithIdPassRequest registerWithIdPassRequest){
+    public void registerNewUser(RegisterWithIdPassRequest registerWithIdPassRequest) throws FailedToConvertImgFileException {
         if (userRepository.existsByEmail(new Email(registerWithIdPassRequest.getEmail()))) {
             throw new UserAlreadyExistException("이미 가입된 유저입니다");
         }
@@ -68,10 +67,13 @@ public class LoginService {
                             .passWord(PASSWORD_ENCODER.encode(registerWithIdPassRequest.getPassword()))
                             .phoneNumber(registerWithIdPassRequest.getPhoneNumber())
                             .nickName(registerWithIdPassRequest.getNickname())
-                           // .profileImg(registerWithIdPassRequest.getProfileImg())
+                           // .profileImg(awsS3uploader.upload(registerWithIdPassRequest.getProfileImg()))
                     .build();
+           if (!Objects.isNull(registerWithIdPassRequest.getProfileImg()))
+           {
+               user.setProfileImg(awsS3uploader.upload(registerWithIdPassRequest.getProfileImg()));
+           }
            user.setAuthProvider(AuthProvider.IDPASS);
-           user.setImg(UserImg.builder().name("test").url("test").build());
            userRepository.save(user);
     }
 

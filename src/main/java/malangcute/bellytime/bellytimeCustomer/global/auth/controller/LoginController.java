@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.*;
 import malangcute.bellytime.bellytimeCustomer.global.auth.service.LoginService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
+import malangcute.bellytime.bellytimeCustomer.global.exception.FailedToConvertImgFileException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -51,14 +52,21 @@ public class LoginController {
 
     //새로운 유저 가입
     @PostMapping("/join")
-    public ResponseEntity<?> registerNewUser(@RequestBody RegisterWithIdPassRequest registerWithIdPassRequest){
+    public ResponseEntity<?> registerNewUser(@ModelAttribute RegisterWithIdPassRequest registerWithIdPassRequest) throws FailedToConvertImgFileException {
         loginService.registerNewUser(registerWithIdPassRequest);
+        System.out.println(registerWithIdPassRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(RegisterCompleteResponse.of(true,"등록되었습니다"));
     }
 
     //권한 기반 로그인 확인용
+    @PostMapping("/check")
+    public String check(@ModelAttribute RegisterWithIdPassRequest registerWithIdPassRequest){
+        System.out.println(registerWithIdPassRequest);
+        return "check";
+    }
+
     @GetMapping("/check")
-    public String check(){
+    public String check2(){
         return "check";
     }
 

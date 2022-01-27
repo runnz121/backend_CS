@@ -85,19 +85,19 @@ public class TokenAuthentication extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        System.out.println("here?1");
+        //System.out.println("here?1");
         String refreshToken = getRefreshFromRequest(request);
 
-        System.out.println("here2?");
+        //System.out.println("here2?");
         String accessToken = getJwtFromRequest(request);
 
-        System.out.println("here3?");
+        //System.out.println("here3?");
 
 
         // 리프레시 토큰도 없고, 유효하지도 않은 경우
         if (refreshToken != null && !tokenprovider.validateRefreshToken(refreshToken)) {
             log.trace("dofilter TokenAuthentication : " , refreshToken);
-            System.out.println("111");
+           // System.out.println("111");
             throw new NotValidTokenException("리프레시토큰이 만료되었음으로 다시 로그인 해주세요");
         }
 //        else if (!tokenprovider.validateAccessToken(refreshToken, accessToken)){
@@ -125,7 +125,7 @@ public class TokenAuthentication extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        System.out.println("here4");
+        //System.out.println("here4");
         filterChain.doFilter(request, response);
     }
 }

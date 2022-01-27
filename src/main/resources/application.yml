@@ -61,6 +61,12 @@ spring:
 logging.level:
   org.hibernate.SQL: debug
 
+  #aws 에러
+  com:
+    amazonaws:
+      util:
+        EC2MetadataUtils: error
+
 
 # custom
 sec:
@@ -80,12 +86,11 @@ sec:
 # aws 설정
 cloud:
   aws:
-    s3:
-      bucket: belly-imges
-
     region:
       static: ap-northeast-2
-
     stack:
       auto: false
+    credentials:
+      access-key: AKIAUN4P5GCX5AF6AS5E
+      secret-key: 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
 
