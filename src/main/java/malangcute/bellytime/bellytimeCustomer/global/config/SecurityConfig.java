@@ -117,7 +117,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/join",
                         "/cookie",
                         "/",
-                        "/check"
+                        "/check",
+                        "/cooltime/**"
                 ).permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()

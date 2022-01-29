@@ -2,6 +2,7 @@ package malangcute.bellytime.bellytimeCustomer.user.domain;
 
 
 import lombok.*;
+import malangcute.bellytime.bellytimeCustomer.cooltime.domain.CoolTime;
 import malangcute.bellytime.bellytimeCustomer.global.domain.common.BaseTimeEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,9 +15,10 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode
 @ToString
-@Table(name= "users")
+@Table(name ="users")
+//@Table(name= "users")
 public class User extends BaseTimeEntity implements UserDetails {
 
     @Id
@@ -33,7 +35,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Embedded
     private PassWord password;
 
-    @Column(name = "phonenumber" , nullable = false)
+    //@Column(name = "phonenumber" , nullable = false)
     private String phoneNumber;
 
     //유저 프로필 이미지
@@ -44,21 +46,29 @@ public class User extends BaseTimeEntity implements UserDetails {
     //연관관계 주인을 userimg로
     //@OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
 
-    @Column(name = "profileImg")
+    //@Column(name = "profileImg")
     private String profileImg;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>(Collections.singletonList(Role.USER.getRoleName()));
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "authprovider")
+    //@Column(name = "authprovider")
     private AuthProvider authProvider;
 
-    @Column(name = "refreshtoken")
+    //@Column(name = "refreshtoken")
     private String refreshToken;
 
-    @Column(name = "providerid")
+    //@Column(name = "providerid")
     private String providerId;
+
+    /*
+        연관관계 : N쪽이 외래키 있음 = N쪽이 주인이다 = 주인은 mapped by 사용 안함(따라서 user에 mappedby 적용 주인아니니깐)
+     */
+    //mappedby = 반대쪽에 매핑되는 필드값
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true) //정보만 맵핑
+    private List<CoolTime> coolTime = new ArrayList<>();
+
 
 
     @Builder
