@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
+//@ToString
 @EqualsAndHashCode
 @Table(name = "cooltime")
 public class CoolTime extends BaseTimeEntity {
@@ -35,11 +35,19 @@ public class CoolTime extends BaseTimeEntity {
     @ManyToOne
     //@JoinColumn(name = "user_id")//외래키를 맵핑하는 설정
     @JoinColumn(name = "user_id")
-    private User user;
+    private User userId;
 
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "food_id")
     private Food foodId;
 
-
+    @Builder
+    public CoolTime(Long id, LocalDateTime startDate, LocalDateTime endDate, String gauge, User userId, Food foodId) {
+        this.id= id;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.gauge = gauge;
+        this.foodId = foodId;
+        this.userId = userId;
+    }
 }

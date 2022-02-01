@@ -1,25 +1,33 @@
 package malangcute.bellytime.bellytimeCustomer.cooltime.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@Builder
 @Getter
-@AllArgsConstructor
+//@Builder(builderMethodName = "create")
 public class GetMyCoolTimeList {
 
     private String foodId;
 
-    private String foodName;
+    private  String name;
 
-    private String foodImg;
+    private  String gauge;
 
-    private String gauge;
+    private  String foodImg;
 
     // 만기예정일
-    private LocalDateTime startDate;
-
+    private  LocalDateTime predictDate;
     // 현재 날짜 기준으로 남은 일
-    private LocalDateTime endDate;
+    private  Long leftDays;
+
+
+//    public static GetMyCoolTimeListBuilder builder(){
+//        return create();
+//    }
+
+
 }

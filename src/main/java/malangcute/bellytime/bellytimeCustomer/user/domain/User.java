@@ -66,7 +66,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         연관관계 : N쪽이 외래키 있음 = N쪽이 주인이다 = 주인은 mapped by 사용 안함(따라서 user에 mappedby 적용 주인아니니깐)
      */
     //mappedby = 반대쪽에 매핑되는 필드값
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true) //정보만 맵핑
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.PERSIST, orphanRemoval = true) //정보만 맵핑
     private List<CoolTime> coolTime = new ArrayList<>();
 
 

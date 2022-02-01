@@ -5,11 +5,13 @@ import com.nimbusds.oauth2.sdk.AccessTokenResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.*;
 import malangcute.bellytime.bellytimeCustomer.global.auth.service.LoginService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
 import malangcute.bellytime.bellytimeCustomer.global.exception.FailedToConvertImgFileException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -58,10 +60,11 @@ public class LoginController {
         return ResponseEntity.status(HttpStatus.CREATED).body(RegisterCompleteResponse.of(true,"등록되었습니다"));
     }
 
-    //권한 기반 로그인 확인용
+    //권한 기반 로그인 확인용 -> 토큰으로부터 user 객체 갖고오기 완료
     @PostMapping("/check")
-    public String check(@ModelAttribute RegisterWithIdPassRequest registerWithIdPassRequest){
-        System.out.println(registerWithIdPassRequest);
+    public String check(@RequireLogin User userId){
+
+        System.out.println(userId);
         return "check";
     }
 
