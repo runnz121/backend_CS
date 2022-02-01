@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.swing.text.html.Option;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -44,9 +45,6 @@ import java.util.stream.Stream;
 @Slf4j
 @ToString
 public class CoolTimeService {
-
-
-    private static final String REFRESH_TOKEN = "refreshToken";
 
     private final TokenAuthentication tokenAuthentication;
 
@@ -61,16 +59,26 @@ public class CoolTimeService {
     private final CoolTimeRepository coolTimeRepository;
 
 
-
-
     // 쿨타임 항목 갖고오기(Food, CoolTime 조인)
     // 추후 querydsl로 리펙토링 필요
     @Transactional(readOnly = true)
     public List<GetMyCoolTimeList> getMyList(User user) {
-        String userEmail = user.getEmail().getEmail();
-        User finduser = userRepository.findByEmail(new Email(userEmail)).orElseThrow(() -> new UserIdNotFoundException("no userid found"));
-        List<GetMyCoolTimeListIF> listFromRepo = coolTimeRepository.findMyCoolTime(finduser);
-        List<GetMyCoolTimeList> myList = calPredictDate(listFromRepo);
+        Long userId = user.getId();
+        LocalDateTime now = LocalDateTime.now();
+
+        List<GetMyCoolTimeListIF> listFromRepo = coolTimeRepository.findMyCoolTime(userId);
+
+        List<GetMyCoolTimeList> myList = listFromRepo
+                .stream()
+                .map(it -> new GetMyCoolTimeList(
+                        it.getFoodId(),
+                        it.getFoodName(),
+                        it.getGauge(),
+                        it.getFoodImg(),
+                        it.getEndDate(), // yyyy-mm-dd 형식으로 변환 -> string
+                        dateFormatter.minusDateLocalDateTime(now,it.getEndDate())
+                ))
+                .collect(Collectors.toList());
         return myList;
     }
 
@@ -79,13 +87,21 @@ public class CoolTimeService {
     public void settingCoolTime(User user, CoolTimeSettingRequest request) throws ParseException {
         Date startDate = dateFormatter.stringToDate(request.getStartDate());
         String endDate = dateFormatter.plusDate(startDate, request.getDuration());
+        Long userId = user.getId();
+        Long getFoodId= request.getFoodId();
+
         Food foodId = foodService.findFoodFromName(request.getFoodName());
-        Long leftDays = Long.valueOf(request.getDuration());
+
         String gaugeInit = calGauge(0L,0L);
 
         try {
-            coolTimeRepository.findByUserIdAndFoodId(user,foodId).orElseThrow(()->new NotFoundException("쿨타임이 없습니다"));
-           // updateCoolTime(user, foodId, startDate, endDate);
+            Optional<CoolTime> exists = coolTimeRepository.findUserIdAndFoodId(userId,getFoodId);
+            if (exists.isPresent()) {
+                updateCoolTime(userId, getFoodId, startDate, endDate);
+            }
+            else {
+                createCoolTime(user, foodId, gaugeInit, startDate, endDate);
+            }
         } catch(NotFoundException ex) {
             createCoolTime(user, foodId, gaugeInit, startDate, endDate);
         }
@@ -99,34 +115,26 @@ public class CoolTimeService {
                 .foodId(foodId)
                 .startDate(dateFormatter.dateToLocal(startDate))
                 .gauge(gauge)
-                .endDate(dateFormatter.LocalDateToLocalDateTime(dateFormatter.stringToLocal(endDate)))
+                .endDate(dateFormatter.stringToLocal(endDate))
                 .build();
 
         coolTimeRepository.save(createCoolTime);
     }
 
-//    private void  updateCoolTime(User user, Food foodId, Date startDate, String duration) {
-//        Long coolTimeDays = Long.valueOf(duration);
-//        String calgauge = calGauge(coolTimeDays, );
-//
-//
-//    }
+    //쿨타임 업데이트하기
+    private void  updateCoolTime(Long userId, Long foodId, Date startDate, String endDate) {
+        LocalDateTime enddate = dateFormatter.stringToLocal(endDate);
+        LocalDateTime startdate = dateFormatter.dateToLocal(startDate);
 
-    // 게이지 반환
-    private String calGauge(Long coolTimeDays, Long leftDays) {
-        String gauge = "";
-        try {
-            long cal = (leftDays/coolTimeDays) * 100;
-            gauge = Long.toString(cal);
-        } catch (ArithmeticException ex) {
-            log.trace(String.valueOf(ex));
-            System.out.println("error here? by zero");
-            gauge = "0";
-        }
-        return gauge;
+        LocalDateTime now = LocalDateTime.now();
+        Long coolTimeDays = dateFormatter.minusDateLocalDateTime(startdate,enddate);
+        System.out.println("cooltimesdays"+coolTimeDays);
+        Long leftDays = dateFormatter.minusDateLocalDateTime(startdate,now);
+        System.out.println("leftDays" + leftDays);
+        String calgauge = calGauge(coolTimeDays, leftDays);
+        System.out.println(calgauge);
+        coolTimeRepository.updateByUserId(userId,foodId,startdate,enddate,calgauge);
     }
-
-
 
     //나의 쿨타임 삭제하기
     public void deleteCoolTime(User user, DeleteCoolTimeRequest request){
@@ -135,45 +143,17 @@ public class CoolTimeService {
         coolTimeRepository.deleteByUserId(userId, foodId);
     }
 
-
-
-
-
-    //현자 날짜 기준으로 만기날짜 조회
-    private List<GetMyCoolTimeList> calPredictDate(List<GetMyCoolTimeListIF> list) {
-
-        LocalDateTime nowLocal = LocalDateTime.now();
-
-        List<GetMyCoolTimeList> returnList = new ArrayList<>();
-
-
-//        for (int i = 0; i < list.size(); i++) {
-//            LocalDateTime startdate = list.get(i).getStartDate();
-//            LocalDateTime enddate = list.get(i).getEndDate();
-//
-//            String foodname = list.get(i).getFoodName();
-//            String foodid = list.get(i).getFoodId();
-//            String foodimg = list.get(i).getFoodImg();
-//
-//            Long coolTimeDays= ChronoUnit.DAYS.between(startdate, enddate);
-//            Long leftDays = ChronoUnit.DAYS.between(nowLocal, enddate);
-//
-//            System.out.println("items" + startdate +"//" + enddate+"//" + foodid+"//" +foodimg+"//" +coolTimeDays +"//" +leftDays);
-//
-//            String gauge = calGauge(coolTimeDays, leftDays);
-//
-//            System.out.println("gauge" + gauge);
-//            GetMyCoolTimeList cal = GetMyCoolTimeList.builder()
-//                    .foodId(foodid)
-//                    .name(foodname)
-//                    .foodImg(foodimg)
-//                    .predictDate(enddate)
-//                    .leftDays(leftDays)
-//                    .gauge(gauge)
-//                    .build();
-//            returnList.add(cal);
-//        }
-//        System.out.println("return lists"+ returnList);
-        return returnList;
+    // 게이지 반환
+    private String calGauge(Long coolTimeDays, Long leftDays) {
+        String gauge = "";
+        try {
+            Integer cal = Math.round(leftDays*100/coolTimeDays);
+            gauge = Integer.toString(cal);
+        } catch (ArithmeticException ex) {
+            log.trace(String.valueOf(ex));
+            System.out.println("error here? by zero");
+            gauge = "0";
+        }
+        return gauge;
     }
 }

@@ -66,28 +66,39 @@ public class JWTExceptionFilter extends OncePerRequestFilter {
     }
 
 
+
+
+    //더미데이터용 패스
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//        String accessToken = getJwtFromRequest(request);
-        String refreshToken = getRefreshFromRequest(request);
-        String userPk = null;
 
-        if (refreshToken != null){
-            userPk = tokenprovider.getUserIdFromToken(refreshToken);
-        }
-
-        try {
-            //TokenAuthentication 필터로 진행
-            filterChain.doFilter(request, response);
-
-            //유효토큰 만료 예외처리 발생시 -> 컨트롤러로 토큰 보내서 엑세스 토큰 반환
-        } catch(JwtException ex) {
-            String newAccess = tokenprovider.createAccessToken(userPk,refreshToken);
-           // String newAccess = tokenprovider.createRefreshToken(refreshToken);
-            System.out.println("token dofilter " + newAccess);
-            sendNewToken(response, newAccess);
-        }
     }
+
+
+    //실제 배포시 사용할 메소드
+//    @Override
+//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+//        String refreshToken = getRefreshFromRequest(request);
+//        String userPk = null;
+//
+//        if (refreshToken != null){
+//            userPk = tokenprovider.getUserIdFromToken(refreshToken);
+//        }
+//
+//        try {
+//            //TokenAuthentication 필터로 진행
+//            filterChain.doFilter(request, response);
+//
+//            //유효토큰 만료 예외처리 발생시 -> 컨트롤러로 토큰 보내서 엑세스 토큰 반환
+//        } catch(JwtException ex) {
+//            String newAccess = tokenprovider.createAccessToken(userPk,refreshToken);
+//           // String newAccess = tokenprovider.createRefreshToken(refreshToken);
+//            System.out.println("token dofilter " + newAccess);
+//            sendNewToken(response, newAccess);
+//        }
+//    }
+
+
 
     // 엑세스 토큰 생성 및 응답
     public void sendNewToken(HttpServletResponse res, String token) throws IOException {

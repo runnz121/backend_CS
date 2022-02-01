@@ -4,8 +4,11 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collector;
 
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Getter
 //@Builder(builderMethodName = "create")
@@ -25,9 +28,25 @@ public class GetMyCoolTimeList {
     private  Long leftDays;
 
 
-//    public static GetMyCoolTimeListBuilder builder(){
-//        return create();
+
+//    public static GetMyCoolTimeList create(GetMyCoolTimeListIF list) {
+//        return new GetMyCoolTimeList(
+//                list.getFoodId(),
+//                list.getFoodName(),
+//                list.getGauge(),
+//                list.getFoodImg(),
+//                list.getEndDate(),
+//                list.getEndDate()
+//        );
 //    }
 
+//    @Builder
+//    public GetMyCoolTimeList(String foodId, String name, String gauge, String foodImg, LocalDateTime predictDate, Long leftDays) {
+//        this.foodId = foodId;
+//        this.name = name;
+//        this.gauge =gauge;
+//        this.foodImg = foodImg;
+//        this.predictDate = predictDate;
+//        this.leftDays = leftDays;
+    }
 
-}

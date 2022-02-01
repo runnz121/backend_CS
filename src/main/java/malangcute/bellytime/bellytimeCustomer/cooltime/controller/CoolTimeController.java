@@ -49,7 +49,8 @@ public class CoolTimeController {
 
 
     @GetMapping("/check")
-    public String check() {
+    public String check(@RequireLogin User user) {
+        System.out.println("check"+user.getId());
         return "check cooltime";
     }
 }

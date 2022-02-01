@@ -116,8 +116,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/login",
                         "/join",
                         "/cookie",
-                        "/",
+                        "/**", // 배포시 바꿈
 //                        "/check",
+                        "/cooltime/check",
                         "/cooltime/**"
                 ).permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
@@ -136,10 +137,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userService(customOAuth2UserService)
                 .and()
                 .successHandler(oAuth2SuccessHandler)
-                .failureHandler(oAuth2FailureHandler)
-                .and()
-                .addFilterBefore(new TokenAuthentication(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTExceptionFilter(tokenProvider, userDetailsService, objectMapper), TokenAuthentication.class);
+                .failureHandler(oAuth2FailureHandler);
+        //배포시 다시 설정할것
+//                .and()
+//                .addFilterBefore(new TokenAuthentication(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(new JWTExceptionFilter(tokenProvider, userDetailsService, objectMapper), TokenAuthentication.class);
     }
 
     @Override

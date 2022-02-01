@@ -9,4 +9,5 @@ public interface GetMyCoolTimeListIF {
     String getGauge();
     LocalDateTime getStartDate();
     LocalDateTime getEndDate();
+
 }

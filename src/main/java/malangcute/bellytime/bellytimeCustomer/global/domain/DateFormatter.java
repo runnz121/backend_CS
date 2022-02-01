@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -30,12 +31,12 @@ public class DateFormatter {
 
 
     // yyyy-MM-dd로 들어옴
-    public LocalDate stringToLocal(String stringDate) {
+    public LocalDateTime stringToLocal(String stringDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
        // LocalDateTime localDateTime = LocalDateTime.parse(stringDate, formatter).toLocalDate().atStartOfDay();
         //LocalDateTime d = LocalDateTime.parse("2016-10-31 23:59:59", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDate localDateTime = LocalDate.parse(stringDate, formatter);
-    return localDateTime;
+    return LocalDateToLocalDateTime(localDateTime);
     }
 
 
@@ -63,6 +64,12 @@ public class DateFormatter {
         cal.add(Calendar.DATE, appendDays);
         String plusdates = simpleDateFormat.format(cal.getTime());
         return plusdates;
+    }
+
+    // localdatetime으로 두 날짜 사이 계산 -> long days 반환
+    public Long minusDateLocalDateTime(LocalDateTime longer, LocalDateTime shorter) {
+        Long days = ChronoUnit.DAYS.between(longer, shorter);
+        return days;
     }
 
     public LocalDateTime dateToLocal(Date date) {

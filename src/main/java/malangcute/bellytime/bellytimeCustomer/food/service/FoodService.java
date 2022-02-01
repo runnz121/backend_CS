@@ -27,7 +27,7 @@ public class FoodService {
     //음식 검색하기
     public List<SearchResultResponse> findFood(SearchFoodRequest request) {
         String findFood = request.getSearch();
-        List<SearchResultResponse> resultList = foodRepository.findByName(findFood)
+        List<SearchResultResponse> resultList = foodRepository.findByNameContaining(findFood)
                 .stream().map(item -> new SearchResultResponse(item.getId(), item.getName()))
                 .collect(Collectors.toList());
         return resultList;
@@ -35,9 +35,21 @@ public class FoodService {
 
     //food name으로 food 반환
     public Food findFoodFromName(String foodName) {
-        Optional<Food> findFood = foodRepository.findByName(foodName);
-        Food food = findFood.orElseThrow(() -> new NoFoodException("해당음식이 없습니다"));
-        return food;
+        try {
+            Optional<Food> findFood = foodRepository.findByName(foodName);
+            Food food = findFood.orElseThrow(() -> new NoFoodException("해당음식이 없습니다"));
+            return food;
+        } catch (NoFoodException ex) {
+            Food food = registerFood(foodName);
+            return food;
+        }
     }
 
+    public Food registerFood(String foodName) {
+        Food registerNew = Food.builder()
+                .name(foodName)
+                .build();
+        foodRepository.save(registerNew);
+        return registerNew;
+    }
 }

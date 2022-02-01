@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Food extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     //@Column(name = "food_name")
@@ -22,4 +22,11 @@ public class Food extends BaseTimeEntity {
 
     //@Column(name = "food_img")
     private String image;
+
+    @Builder
+    public Food(Long id, String name, String image) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+    }
 }
