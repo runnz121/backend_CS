@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.SearchFoodRequest;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.SearchResultResponse;
 import malangcute.bellytime.bellytimeCustomer.food.domain.Food;
+import malangcute.bellytime.bellytimeCustomer.food.dto.FoodResultDto;
 import malangcute.bellytime.bellytimeCustomer.food.repository.FoodRepository;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoFoodException;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,9 @@ public class FoodService {
     //음식 검색하기
     public List<SearchResultResponse> findFood(SearchFoodRequest request) {
         String findFood = request.getSearch();
-        List<SearchResultResponse> resultList = foodRepository.findByNameContaining(findFood)
-                .stream().map(item -> new SearchResultResponse(item.getId(), item.getName()))
+        List<FoodResultDto> dtoList = foodRepository.findByNameContaining(findFood);
+        List<SearchResultResponse> resultList =
+                dtoList.stream().map(item -> new SearchResultResponse(item.getId(), item.getName()))
                 .collect(Collectors.toList());
         return resultList;
     }

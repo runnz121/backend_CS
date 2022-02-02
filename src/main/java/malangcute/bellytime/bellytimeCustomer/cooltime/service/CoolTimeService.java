@@ -92,7 +92,15 @@ public class CoolTimeService {
 
         Food foodId = foodService.findFoodFromName(request.getFoodName());
 
-        String gaugeInit = calGauge(0L,0L);
+
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime enddate = dateFormatter.stringToLocal(endDate);
+        LocalDateTime startdate = dateFormatter.dateToLocal(startDate);
+        Long leftDays = dateFormatter.minusDateLocalDateTime(startdate,now);
+        Long coolTimeDays = dateFormatter.minusDateLocalDateTime(startdate,enddate);
+
+       String gaugeInit = calGauge(coolTimeDays,leftDays);
 
         try {
             Optional<CoolTime> exists = coolTimeRepository.findUserIdAndFoodId(userId,getFoodId);
@@ -137,6 +145,7 @@ public class CoolTimeService {
     }
 
     //나의 쿨타임 삭제하기
+    @Transactional
     public void deleteCoolTime(User user, DeleteCoolTimeRequest request){
         Long userId = user.getId();
         Long foodId = request.getFoodId();
