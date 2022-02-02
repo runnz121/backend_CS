@@ -1,6 +1,6 @@
 CREAtE TABLE `users`
 (
-    `id`            BIGINT(20)      NOT NULL AUTO_INCREMENT,
+    `id`            BIGINT          NOT NULL AUTO_INCREMENT,
     `nickname`      VARCHAR(255)    NOT NULL ,
     `email`         VARCHAR(255)    NOT NULL ,
     `password`      VARCHAR(255)    NOT NULL ,
@@ -13,38 +13,38 @@ CREAtE TABLE `users`
     `created_at`    DATETIME                 ,
     `modified_at`    DATETIME                 ,
     PRIMARY KEY (`id`)
-)   DEFAULT CHARSET = utf8;
+)   DEFAULT CHARSET = UTF8MB4;
 
 CREATE TABLE `user_roles`
 (
-    `user_id`       BIGINT(20)      NOT NULL AUTO_INCREMENT,
+    `user_id`       BIGINT          NOT NULL AUTO_INCREMENT,
     `roles`         VARCHAR(255)    NOT NULL ,
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-)   DEFAULT CHARSET = utf8;
+)   DEFAULT CHARSET = UTF8MB4;
 
 CREATE TABLE `food`
 (
-    `id`            BIGINT(20)  NOT NULL AUTO_INCREMENT,
+    `id`            BIGINT     NOT NULL AUTO_INCREMENT,
     `name`          VARCHAR(255)               ,
     `image`         VARCHAR(255)               ,
     `created_at`    DATETIME                   ,
     `modified_at`    DATETIME                   ,
 
     PRIMARY KEY (`id`)
-)   DEFAULT CHARSET = utf8;
+)   DEFAULT CHARSET = UTF8MB4;
 
 CREAtE TABLE `cooltime`
 (
-    `id`            BIGINT(20)  NOT NULL AUTO_INCREMENT,
+    `id`            BIGINT      NOT NULL AUTO_INCREMENT,
     `start_date`    DATETIME    NOT NULL       ,
     `end_date`      DATETIME    NOT NULL       ,
     `gauge`         VARCHAR(255)               ,
     `created_at`    DATETIME                   ,
     `modified_at`    DATETIME                   ,
-    `food_id`       BIGINT(20)                 ,
-    `user_id`       BIGINT(20)  NOT NULL       ,
+    `food_id`       BIGINT                     ,
+    `user_id`       BIGINT      NOT NULL       ,
     FOREIGN KEY (`food_id`) REFERENCES `food` (id),
     FOREIGN KEY (`user_id`) REFERENCES `users`(id),
     PRIMARY KEY (`id`)
-)   DEFAULT CHARSET = utf8;
+)   DEFAULT CHARSET = UTF8MB4;
 
