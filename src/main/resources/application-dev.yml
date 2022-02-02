@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+
+sec:
+  auth:
+    secretkey: malangcute!
+    validtimeforAccess: 864000000
+    validtimeforRefresh: 864000000000
+
+  cors:
+    frontEndDomain: http://localhost:3000
+    #frontEndDomain: https://www.bellytime.kr
+    #frontEndDomain: https://bellytime.kr
+
+  reuris:
+    google: http://localhost:3000/oauth2/redirect?

@@ -2,11 +2,6 @@ package malangcute.bellytime.bellytimeCustomer.cooltime.dto;
 
 import lombok.*;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collector;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -16,14 +11,17 @@ public class GetMyCoolTimeList {
 
     private String foodId;
 
-    private  String name;
+    private String foodName;
 
-    private  String gauge;
+    private String gauge;
 
-    private  String foodImg;
+    private String foodImg;
 
+    private String startDate;
+
+    private Integer duration;
     // 만기예정일
-    private  LocalDateTime predictDate;
+    private  String predictDate;
     // 현재 날짜 기준으로 남은 일
     private  Long leftDays;
 

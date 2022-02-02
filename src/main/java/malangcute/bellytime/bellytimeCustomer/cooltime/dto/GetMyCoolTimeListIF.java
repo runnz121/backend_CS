@@ -7,7 +7,7 @@ public interface GetMyCoolTimeListIF {
     String getFoodName();
     String getFoodImg();
     String getGauge();
+    Integer getDuration();
     LocalDateTime getStartDate();
     LocalDateTime getEndDate();
-
 }

@@ -15,5 +15,5 @@ public class CoolTimeSettingRequest {
 
     private String startDate;
 
-    private String duration;
+    private Integer duration;
 }

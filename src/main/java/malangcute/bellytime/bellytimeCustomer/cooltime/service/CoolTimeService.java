@@ -70,14 +70,27 @@ public class CoolTimeService {
 
         List<GetMyCoolTimeList> myList = listFromRepo
                 .stream()
-                .map(it -> new GetMyCoolTimeList(
-                        it.getFoodId(),
-                        it.getFoodName(),
-                        it.getGauge(),
-                        it.getFoodImg(),
-                        it.getEndDate(), // yyyy-mm-dd 형식으로 변환 -> string
-                        dateFormatter.minusDateLocalDateTime(now,it.getEndDate())
-                ))
+               .map(it -> GetMyCoolTimeList.builder()
+                       .foodId(it.getFoodId())
+                       .foodName(it.getFoodName())
+                       .gauge(it.getGauge())
+                       .foodImg(it.getFoodImg())
+                       .startDate(dateFormatter.localToStringPattern(it.getStartDate()))
+                       .duration(it.getDuration())
+                       .predictDate(dateFormatter.localToStringPattern(it.getEndDate()))
+                       .leftDays(dateFormatter.minusDateLocalDateTime(now,it.getEndDate()))
+                       .build()
+
+//                       new GetMyCoolTimeList(
+//                        it.getFoodId(),
+//                        it.getFoodName(),
+//                        it.getGauge(),
+//                        it.getDuration(),
+//                        it.get
+//                        it.getFoodImg(),
+//                        dateFormatter.localToStringPattern(it.getEndDate()), // yyyy-mm-dd 형식으로 변환 -> string
+//                        dateFormatter.minusDateLocalDateTime(now,it.getEndDate())
+                )
                 .collect(Collectors.toList());
         return myList;
     }
@@ -86,13 +99,12 @@ public class CoolTimeService {
     @Transactional
     public void settingCoolTime(User user, CoolTimeSettingRequest request) throws ParseException {
         Date startDate = dateFormatter.stringToDate(request.getStartDate());
-        String endDate = dateFormatter.plusDate(startDate, request.getDuration());
+        String duration = String.valueOf(request.getDuration());
+        String endDate = dateFormatter.plusDate(startDate, duration);
         Long userId = user.getId();
         Long getFoodId= request.getFoodId();
 
         Food foodId = foodService.findFoodFromName(request.getFoodName());
-
-
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime enddate = dateFormatter.stringToLocal(endDate);
@@ -105,32 +117,33 @@ public class CoolTimeService {
         try {
             Optional<CoolTime> exists = coolTimeRepository.findUserIdAndFoodId(userId,getFoodId);
             if (exists.isPresent()) {
-                updateCoolTime(userId, getFoodId, startDate, endDate);
+                updateCoolTime(userId, getFoodId, startDate, endDate, request.getDuration());
             }
             else {
-                createCoolTime(user, foodId, gaugeInit, startDate, endDate);
+                createCoolTime(user,foodId, gaugeInit, startDate, endDate, request.getDuration());
             }
         } catch(NotFoundException ex) {
-            createCoolTime(user, foodId, gaugeInit, startDate, endDate);
+            createCoolTime(user, foodId, gaugeInit, startDate, endDate, request.getDuration());
         }
     }
 
 
     //쿨타임 생성하기
-    private void createCoolTime(User user, Food foodId, String gauge, Date startDate, String endDate) {
+    private void createCoolTime(User user, Food foodId, String gauge, Date startDate, String endDate, Integer duration) {
         CoolTime createCoolTime = CoolTime.builder()
                 .userId(user)
                 .foodId(foodId)
                 .startDate(dateFormatter.dateToLocal(startDate))
                 .gauge(gauge)
                 .endDate(dateFormatter.stringToLocal(endDate))
+                .duration(duration)
                 .build();
 
         coolTimeRepository.save(createCoolTime);
     }
 
     //쿨타임 업데이트하기
-    private void  updateCoolTime(Long userId, Long foodId, Date startDate, String endDate) {
+    private void  updateCoolTime(Long userId, Long foodId, Date startDate, String endDate, Integer duration) {
         LocalDateTime enddate = dateFormatter.stringToLocal(endDate);
         LocalDateTime startdate = dateFormatter.dateToLocal(startDate);
 
@@ -141,7 +154,7 @@ public class CoolTimeService {
         System.out.println("leftDays" + leftDays);
         String calgauge = calGauge(coolTimeDays, leftDays);
         System.out.println(calgauge);
-        coolTimeRepository.updateByUserId(userId,foodId,startdate,enddate,calgauge);
+        coolTimeRepository.updateByUserId(userId,foodId,startdate,enddate,calgauge,duration);
     }
 
     //나의 쿨타임 삭제하기

@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:mysql://belly.cgf7zom8wu6z.ap-northeast-2.rds.amazonaws.com:3306/belly
+    username: root
+    password: malangcute121!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+sec:
+  auth:
+    secretkey: malangcute!
+    validtimeforAccess: 864000000
+    validtimeforRefresh: 864000000000
+
+  cors:
+    #frontEndDomain: http://localhost:3000
+    #frontEndDomain: https://www.bellytime.kr
+    frontEndDomain: https://bellytime.kr
+
+  reuris:
+    google: http://localhost:3000/oauth2/redirect?

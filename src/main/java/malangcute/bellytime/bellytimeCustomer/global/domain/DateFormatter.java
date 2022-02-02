@@ -16,7 +16,7 @@ import java.util.Date;
 public class DateFormatter {
 
     // 2018-08-04T10:11:30 형식으로 들어옴
-    public String localToString(LocalDateTime localDateTime) {
+    public String localToStringPattern(LocalDateTime localDateTime) {
 
         //String dateString = "2018-08-04T10:11:30";
 

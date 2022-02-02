@@ -30,6 +30,8 @@ public class CoolTime extends BaseTimeEntity {
     //@Column(name = "gauge")
     private String gauge;
 
+    private Integer duration;
+
     //@ManyToOne은 항상 연관관계의 주인이 되므로 mappedBy 설정이 불가 !
     //출처: https://data-make.tistory.com/611 [Data Makes Our Future]
     @ManyToOne
@@ -42,12 +44,13 @@ public class CoolTime extends BaseTimeEntity {
     private Food foodId;
 
     @Builder
-    public CoolTime(Long id, LocalDateTime startDate, LocalDateTime endDate, String gauge, User userId, Food foodId) {
+    public CoolTime(Long id, LocalDateTime startDate, Integer duration, LocalDateTime endDate, String gauge, User userId, Food foodId) {
         this.id= id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.gauge = gauge;
         this.foodId = foodId;
         this.userId = userId;
+        this.duration = duration;
     }
 }
