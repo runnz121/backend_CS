@@ -2,6 +2,7 @@ package malangcute.bellytime.bellytimeCustomer.user.domain;
 
 
 import lombok.*;
+import malangcute.bellytime.bellytimeCustomer.chat.domain.Chat;
 import malangcute.bellytime.bellytimeCustomer.cooltime.domain.CoolTime;
 import malangcute.bellytime.bellytimeCustomer.global.domain.common.BaseTimeEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -68,6 +69,15 @@ public class User extends BaseTimeEntity implements UserDetails {
     //mappedby = 반대쪽에 매핑되는 필드값
     @OneToMany(mappedBy = "userId", cascade = CascadeType.PERSIST, orphanRemoval = true) //정보만 맵핑
     private List<CoolTime> coolTime = new ArrayList<>();
+
+    /**
+     * 채팅 설정
+     */
+    @OneToMany(mappedBy = "roomOwner", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Chat> owner = new ArrayList<>();
+
+    @OneToMany(mappedBy = "consumer")
+    private List<Chat> consumer = new ArrayList<>();
 
 
 

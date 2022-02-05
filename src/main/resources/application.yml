@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: deploy
+    active: local
 
   security:
     user:
@@ -17,6 +17,12 @@ spring:
             scope:
               - email
               - profile
+
+
+  # 엘라스틱 서치 설정
+#  elasticsearch:
+#    username: root
+#    password: Malangcute121!
 
 
   #  #flyway setting
@@ -46,12 +52,13 @@ logging:
           EC2MetadataUtils: error
     org:
       hibernate.SQL: debug
+      # 엘리스틱 서치 로깅 레벨
+      springframework:
+        data:
+          elasticsearch:
+            client:
+              WIRE: TRACE
 
-  #aws 에러
-
-
-
-# custom
 
 
 

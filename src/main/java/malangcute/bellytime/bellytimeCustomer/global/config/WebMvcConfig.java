@@ -48,8 +48,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     //더미 로그인 리졸버는 db에서 test 유저만 항상 반환한다!
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        //resolvers.add(createLoginArgumentResolve());
-        resolvers.add(createDummyLoginArgResolver());
+        resolvers.add(createLoginArgumentResolve());
+        //resolvers.add(createDummyLoginArgResolver());
     }
 
     @Bean

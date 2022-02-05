@@ -1,9 +1,16 @@
+#spring:
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/test
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://belly.cgf7zom8wu6z.ap-northeast-2.rds.amazonaws.com:3306/belly
+    username: root
+    password: malangcute121!
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
 
 sec:
