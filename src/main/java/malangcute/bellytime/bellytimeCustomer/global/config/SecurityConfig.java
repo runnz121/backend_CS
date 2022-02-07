@@ -77,11 +77,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
         String frontEndDomain = securityProperties.getCors().getFrontEndDomain();
 
-
-        configuration.addAllowedOrigin(frontEndDomain);
+        //배포시 아래 2개로 바꿀것
+        //configuration.addAllowedOriginPattern("*");
+       // configuration.addAllowedOrigin(frontEndDomain);
+        configuration.addAllowedOrigin("http://192.168.0.26:3000/");
+        configuration.setAllowCredentials(true);
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-        configuration.setAllowCredentials(true);
         configuration.setMaxAge(MAX_AGES);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
