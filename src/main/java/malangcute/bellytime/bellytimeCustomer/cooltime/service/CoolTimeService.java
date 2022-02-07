@@ -70,7 +70,7 @@ public class CoolTimeService {
 
         List<GetMyCoolTimeList> myList = listFromRepo
                 .stream()
-               .map(it -> GetMyCoolTimeList.builder()
+                .map(it -> GetMyCoolTimeList.builder()
                        .foodId(it.getFoodId())
                        .foodName(it.getFoodName())
                        .gauge(it.getGauge())
