@@ -23,15 +23,28 @@ public class CustomShopSearchRepositoryImpl implements CustomShopSearchRepositor
     private final ElasticsearchOperations elasticsearchOperations;
 
     @Override
-    public List<Shop> searchByName(String name, Pageable pageable) {
+    public List<Shop> searchByName(String name) {
 
         //엘라스틱 서치 크리테리아 임포트
         Criteria criteria = Criteria.where("name").contains(name);
-        Query query = new CriteriaQuery(criteria).setPageable(pageable);
+        Query query = new CriteriaQuery(criteria);
         SearchHits<Shop> search = elasticsearchOperations.search(query, Shop.class);
 
         return search.stream()
                 .map(SearchHit::getContent)
                 .collect(Collectors.toList());
     }
+//
+//    @Override
+//    public List<Shop> searchByName(String name, Pageable pageable) {
+//
+//        //엘라스틱 서치 크리테리아 임포트
+//        Criteria criteria = Criteria.where("name").contains(name);
+//        Query query = new CriteriaQuery(criteria).setPageable(pageable);
+//        SearchHits<Shop> search = elasticsearchOperations.search(query, Shop.class);
+//
+//        return search.stream()
+//                .map(SearchHit::getContent)
+//                .collect(Collectors.toList());
+//    }
 }

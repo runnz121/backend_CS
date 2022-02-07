@@ -1,6 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer.search.controller;
 
 import lombok.RequiredArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.shop.dto.ResultListDto;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSaveRequest;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResponse;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListDto;
@@ -23,16 +24,25 @@ public class ShopSearchController {
 //    Type 1 => http://127.0.0.1?index=1&page=2 -> @RequestParam
 //    Type 2 => http://127.0.0.1/index/1 -> @PathVariable
 
-
-    //식당 이름으로 음식 검색
     @GetMapping("/shop/{name}")
-    public ResponseEntity<?> searchShop(@PathVariable String name, Pageable pageable) {
-        List<ShopSearchResponse> shopList = shopService.searchByName(name, pageable)
-                .stream()
-                .map(ShopSearchResponse::from)
-                .collect(Collectors.toList());
+    public ResponseEntity<?> searchShop(@PathVariable String name) {
+        List<ResultListDto> shopList = shopService.searchByName(name);
         return ResponseEntity.ok(shopList);
     }
+
+
+    //식당 이름으로 음식 검색
+//    @GetMapping("/shop/{name}")
+//    public ResponseEntity<?> searchShop(@PathVariable String name, Pageable pageable) {
+//        List<ShopSearchResponse> shopList = shopService.searchByName(name, pageable)
+//                .stream()
+//                .map(ShopSearchResponse::from)
+//                .collect(Collectors.toList());
+//        return ResponseEntity.ok(shopList);
+//    }
+//
+//    @PostMapping("/resultlist")
+//    public ResponseEntity<?> searchList
 
 
     //새로운 가게 저장
