@@ -65,10 +65,6 @@ dependencies {
 	// 밸리데이션 설정
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	// 통신 설정
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'org.springframework.kafka:spring-kafka'
-
 
 	// 롬복 설정
 	annotationProcessor 'org.projectlombok:lombok'
@@ -103,6 +99,27 @@ dependencies {
 
 	//cloudfront, s3 설정
 	implementation "org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE"
+
+
+
+	//rabbitMQ 설정
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty', version: '2.4.6'
+
+	//jackson2json에서 LocalDateTime을 handling 하기 위해
+	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.12.4'
+
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	testImplementation 'org.springframework.amqp:spring-rabbit-test'
+
+	// 통신 설정
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	implementation group: 'org.webjars', name: 'sockjs-client', version: '1.1.2'
+	implementation group: 'org.webjars', name: 'stomp-websocket', version: '2.3.3-1'
+
+	//netty macos dns 설정
+	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.72.Final:osx-aarch_64'
 
 
 }

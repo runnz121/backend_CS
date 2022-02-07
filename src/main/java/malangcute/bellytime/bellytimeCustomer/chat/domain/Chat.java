@@ -8,9 +8,9 @@ import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"roomOwner", "consumer"})
 @ToString
+@Getter
 public class Chat extends BaseTimeEntity {
 
     @Id
@@ -19,12 +19,23 @@ public class Chat extends BaseTimeEntity {
 
     private String roomName;
 
-    @ManyToOne
-    @JoinColumn(name = "owner")
+    private String groupId;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn
     private User roomOwner;
 
 
-    @ManyToOne
-    @JoinColumn(name = "consumer")
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn
     private User consumer;
+
+    @Builder
+    public Chat (Long id, String roomName, String groupId, User roomOwner, User consumer) {
+        this.id = id;
+        this.roomName = roomName;
+        this.groupId = groupId;
+        this.roomOwner = roomOwner;
+        this.consumer = consumer;
+    }
 }
