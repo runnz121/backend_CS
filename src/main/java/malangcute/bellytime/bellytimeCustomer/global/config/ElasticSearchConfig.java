@@ -1,21 +1,30 @@
 package malangcute.bellytime.bellytimeCustomer.global.config;
 
+import malangcute.bellytime.bellytimeCustomer.food.repository.elastic.FoodSearchRepository;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.elastic.ShopSearchRepository;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.RestClients;
 import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackageClasses = {ShopSearchRepository.class}) //빈 중복 문제로 엘라스틱 서치 리포만 스캔하게끔 설정
+@EnableElasticsearchRepositories(basePackageClasses = {ShopSearchRepository.class, FoodSearchRepository.class}) //빈 중복 문제로 엘라스틱 서치 리포만 스캔하게끔 설정
 public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
+
+
+    @Value("${spring.elasticsearch.username}")
+    private String username;
+    @Value("${spring.elasticsearch.password}")
+    private String password;
 
 
     /**
@@ -29,9 +38,12 @@ public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
     public RestHighLevelClient elasticsearchClient() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
                 .connectedTo("localhost:9200")
+                .withBasicAuth(username, password)
                 .build();
         return RestClients.create(clientConfiguration).rest();
     }
+
+
 }
 
 

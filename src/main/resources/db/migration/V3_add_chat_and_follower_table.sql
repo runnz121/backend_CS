@@ -22,3 +22,4 @@ ALTER TABLE `chat`
     CHANGE `consumer`   `consumer_id`   BIGINT,
     CHANGE `room_owner` `room_owner_id` BIGINT;
 
+

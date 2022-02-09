@@ -1,20 +1,20 @@
 package malangcute.bellytime.bellytimeCustomer.shop.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import malangcute.bellytime.bellytimeCustomer.food.dto.ResultFoodListDto;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 
 import java.util.List;
 
 @Getter
-@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ResultListDto {
 
-    private List<String> resultList;
+    private List<String> resultList1;
 
-    public static ResultListDto of (Shop resultList) {
+
+    public static ResultListDto of (String resultList) {
         return new ResultListDto();
     }
 }

@@ -1,19 +1,14 @@
 package malangcute.bellytime.bellytimeCustomer.cooltime.controller;
 
-import io.micrometer.core.instrument.search.Search;
 import lombok.AllArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.*;
 import malangcute.bellytime.bellytimeCustomer.cooltime.service.CoolTimeService;
-import malangcute.bellytime.bellytimeCustomer.food.repository.FoodRepository;
-import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.util.List;
 

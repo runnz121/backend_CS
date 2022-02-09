@@ -1,12 +1,8 @@
-package malangcute.bellytime.bellytimeCustomer.shop.repository.elastic;
+package malangcute.bellytime.bellytimeCustomer.food.repository.elastic;
 
 
-import io.micrometer.core.instrument.search.Search;
 import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.food.domain.Food;
-import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
-
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -20,19 +16,20 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Repository
-public class CustomShopSearchRepositoryImpl implements CustomShopSearchRepository{
+public class CustomFoodSearchRepositoryImpl implements CustomFoodSearchRepository {
 
     private final ElasticsearchOperations elasticsearchOperations;
 
     @Override
-    public List<Shop> searchByName(String name) {
+    public List<Food> searchByName(String name) {
 
         //엘라스틱 서치 크리테리아 임포트
         Criteria criteria = Criteria.where("name").contains(name);
         Query query = new CriteriaQuery(criteria);
-        SearchHits<Shop> searchShop = elasticsearchOperations.search(query, Shop.class);
+        //SearchHits<Shop> searchShop = elasticsearchOperations.search(query, Shop.class);
+        SearchHits<Food> searchFood = elasticsearchOperations.search(query, Food.class);
 
-        return searchShop.stream()
+        return searchFood.stream()
                 .map(SearchHit::getContent)
                 .collect(Collectors.toList());
     }

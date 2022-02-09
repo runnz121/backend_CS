@@ -7,13 +7,14 @@ import malangcute.bellytime.bellytimeCustomer.cooltime.dto.SearchFoodRequest;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.SearchResultResponse;
 import malangcute.bellytime.bellytimeCustomer.food.domain.Food;
 import malangcute.bellytime.bellytimeCustomer.food.dto.FoodResultDto;
+import malangcute.bellytime.bellytimeCustomer.food.dto.ResultFoodListDto;
 import malangcute.bellytime.bellytimeCustomer.food.repository.FoodRepository;
+import malangcute.bellytime.bellytimeCustomer.food.repository.elastic.FoodSearchRepository;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoFoodException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,9 +24,11 @@ import java.util.stream.Collectors;
 @ToString
 public class FoodService {
 
+    private final FoodSearchRepository foodSearchRepository;
+
     private final FoodRepository foodRepository;
 
-    //음식 검색하기
+    //음식 검색하기 -> list반환
     public List<SearchResultResponse> findFood(SearchFoodRequest request) {
         String findFood = request.getSearch();
         List<FoodResultDto> dtoList = foodRepository.findByNameContaining(findFood);
@@ -35,7 +38,7 @@ public class FoodService {
         return resultList;
     }
 
-    //food name으로 food 반환
+    //food name으로 food 반환 -> 단일반환
     public Food findFoodFromName(String foodName) {
         try {
             Optional<Food> findFood = foodRepository.findByName(foodName);
@@ -51,7 +54,21 @@ public class FoodService {
         Food registerNew = Food.builder()
                 .name(foodName)
                 .build();
+        foodSearchRepository.save(registerNew);
         foodRepository.save(registerNew);
         return registerNew;
+    }
+
+
+    //엘라스틱 서치 사용 -> mysql 사용
+    public List<String> searchByName(String name) {
+        //List<String> deList = Collections.synchronizedList(new ArrayList<>(Arrays.asList()));
+        List<String> getList = foodRepository.findByNameContaining(name).stream().map(it -> it.getName()).collect(Collectors.toList());
+
+        //System.out.println(deList);
+        System.out.println(getList);
+
+        //return  getList.parallelStream().collect(Collectors.toCollection(() -> deList));
+        return getList;
     }
 }

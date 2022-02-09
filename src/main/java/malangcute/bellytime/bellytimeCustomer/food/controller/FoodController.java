@@ -26,4 +26,9 @@ public class FoodController {
         List<SearchResultResponse> searchResults = foodService.findFood(searchFoodRequest);
         return ResponseEntity.status(HttpStatus.OK).body(searchResults);
     }
+
+    @PostMapping("/savefood")
+    public void saveFood(@RequestBody SearchFoodRequest searchFoodRequest) {
+        foodService.registerFood(searchFoodRequest.getSearch());
+    }
 }

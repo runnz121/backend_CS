@@ -48,6 +48,11 @@ spring:
     host: localhost
     port: 5672
 
+  elasticsearch:
+    username: elastic
+    password: Malangcute121!
+
+
 
 
 

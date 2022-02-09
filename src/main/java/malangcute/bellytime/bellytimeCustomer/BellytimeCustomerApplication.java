@@ -1,5 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer;
 
+import malangcute.bellytime.bellytimeCustomer.food.repository.FoodRepository;
+import malangcute.bellytime.bellytimeCustomer.food.repository.elastic.FoodSearchRepository;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.elastic.ShopSearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -17,7 +19,7 @@ import java.util.Arrays;
 @EnableJpaAuditing
 @EnableJpaRepositories(excludeFilters = @ComponentScan.Filter( //jpa가 2중으로 확인함으로 엘라스틱 리포지토리는 제외시킴
 		type = FilterType.ASSIGNABLE_TYPE,
-		classes = ShopSearchRepository.class
+		classes = {ShopSearchRepository.class, FoodSearchRepository.class}
 ))
 public class BellytimeCustomerApplication  {
 

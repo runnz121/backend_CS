@@ -3,7 +3,7 @@ CREAtE TABLE `shop`
     `id`            BIGINT          NOT NULL AUTO_INCREMENT,
     `name`          VARCHAR(255)    NOT NULL ,
     `image`         VARCHAR(255)             ,
-    `score`         BIGINT                   ,
+    `bellscore`         BIGINT                   ,
     `latitude`      DECIMAL                  ,
     `longitude`     DECIMAL                  ,
     `address`       VARCHAR(255)             ,
@@ -40,12 +40,16 @@ CREATE TABLE `follow_shop`
     FOREIGN KEY (`shop_id`) REFERENCES `shop` (id)
 )   DEFAULT CHARSET = UTF8MB4;
 
-CREATE TABLE `shop_info`
+CREATE TABLE `shop_menu`
 (
     `id`                BIGINT          NOT NULL AUTO_INCREMENT ,
-    `food_id`           BIGINT          NOT NULL,
+    `food_id`           BIGINT          NOT NULL ,
+    `shop_id`           BIGINT          NOT NULL ,
+    `menu`              VARCHAR(255)    NOT NULL ,
+    `price`             BIGINT          NOT NULL ,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`food_id`) REFERENCES `food`  (id)
+    FOREIGN KEY (`food_id`) REFERENCES `food`  (id),
+    FOREIGN KEY (`shop_id`) REFERENCES `shop`  (id)
 )   DEFAULT CHARSET = UTF8MB4;
 
 CREATE TABLE `feed_post`
