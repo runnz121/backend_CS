@@ -26,6 +26,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final AwsS3uploader awsS3uploader;
 
+    // 유저 정보 업데이트
     public void userUpdate(UserUpdateRequest userUpdateRequest) throws FailedToConvertImgFileException {
         Optional<User> userId = userRepository.findByEmail(new Email(userUpdateRequest.getEmail()));
         User user = userId.orElseThrow(() -> new NoUserException("해당하는 유저가 없습니다"));
@@ -38,8 +39,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-
-
+    // 프로필 이미지 업데이트
     public String updateImg(MultipartFile userImg) throws FailedToConvertImgFileException {
         String fileUrl = awsS3uploader.upload(userImg);
         return fileUrl;

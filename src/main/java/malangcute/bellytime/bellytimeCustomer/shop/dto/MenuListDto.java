@@ -26,6 +26,7 @@ public class MenuListDto {
 
 
     public static MenuListDto of (ShopMenu menu){
+        //return new MenuListDto(menu.getId(), menu.getMenu(), menu.getPrice());
         return new MenuListDto(menu.getId(), menu.getMenu(), menu.getPrice(), menu.getFoodId());
     }
 

@@ -7,16 +7,15 @@ import malangcute.bellytime.bellytimeCustomer.search.dto.SearchShopRequest;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.*;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopRepository;
+import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopSortStrategyFactory;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.elastic.ShopSearchRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -32,13 +31,16 @@ public class ShopService {
     //elastic
     private final ShopSearchRepository shopSearchRepository;
 
+
+    private final ShopSortStrategyFactory shopSortStrategyFactory;
+
     //음식점 저장
     @Transactional
     public void saveShop(ShopSaveRequest shopSaveRequest) {
         String name = shopSaveRequest.getName();
-        String address =shopSaveRequest.getAddress();
+        String address = shopSaveRequest.getAddress();
         String img = shopSaveRequest.getImg();
-        Shop newshop =  Shop.builder()
+        Shop newshop = Shop.builder()
                 .name(name)
                 .address(address)
                 .image(img)
@@ -55,16 +57,68 @@ public class ShopService {
         return getList;
     }
 
-    public List<ShopSearchResultListDto> searchBySpecificName(String name) {
-        //List<ShopDetailDto> list = shopRepository.findNameDetail(name);
-
-        List<Shop> list = shopRepository.findAllByName(name);
-        System.out.println("in list " + list);
-        List<ShopSearchResultListDto> all = list.stream()
-                .map(ShopSearchResultListDto::of)
-                .collect(Collectors.toList());
-        return all;
+    // 전략 패턴 적용
+    public List<ShopSearchResultListDto> searchBySpecificName(String name, String sortType) {
+        return shopSortStrategyFactory.findStrategy(sortType).SortedList(name);
     }
+
+
+
+
+
+//    //기본형
+//    public List<ShopSearchResultListDto> searchBySpecificName(String name) {
+//        //List<ShopDetailDto> list = shopRepository.findNameDetail(name);
+//
+//        List<Shop> list = shopRepository.findAllByNameContaining(name);
+//        System.out.println("in list " + list);
+//        List<ShopSearchResultListDto> all = list.stream()
+//                .map(ShopSearchResultListDto::of)
+//                .collect(Collectors.toList());
+//        return all;
+//    }
+//
+//
+//    //팔로워순
+//    public List<ShopSearchResultListDto> searchBySpecificName1(String name) {
+//        //List<ShopDetailDto> list = shopRepository.findNameDetail(name);
+//
+//        List<Shop> list = shopRepository.findAllByNameContaining(name);
+//        System.out.println("in list " + list);
+//        List<ShopSearchResultListDto> all = list.stream()
+//                .sorted(Comparator.comparing(Shop::getFollower).reversed())
+//                .map(ShopSearchResultListDto::of)
+//                .collect(Collectors.toList());
+//        return all;
+//    }
+//
+//
+//    //벨스코어순
+//    public List<ShopSearchResultListDto> searchBySpecificName2(String name) {
+//        //List<ShopDetailDto> list = shopRepository.findNameDetail(name);
+//
+//        List<Shop> list = shopRepository.findAllByNameContaining(name);
+//        System.out.println("in list " + list);
+//        List<ShopSearchResultListDto> all = list.stream()
+//                .sorted(Comparator.comparing(Shop::getBellscore).reversed())
+//                .map(ShopSearchResultListDto::of)
+//                .collect(Collectors.toList());
+//        return all;
+//    }
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -88,4 +142,4 @@ public class ShopService {
 //                .filter(it -> it.getId())
 //
 //    }
-}
+

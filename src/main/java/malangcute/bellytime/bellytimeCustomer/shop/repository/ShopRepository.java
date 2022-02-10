@@ -38,7 +38,13 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
 
 
 
-    List<Shop> findAllByName(String name);
+    List<Shop> findAllByNameContaining(String name);
+
+    //List<Shop>findAllByNameContainingAndOrderByFollowerAsc(String name);
+
+ //   List<Shop> findAllByNameContainingAndOrderByBellscore(String name);
+
+   // List<Shop> findAllByNameOrderContainingByBellscore(String name);
 
 
 

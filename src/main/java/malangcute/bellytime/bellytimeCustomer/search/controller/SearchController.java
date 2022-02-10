@@ -37,13 +37,15 @@ public class SearchController {
         return ResponseEntity.ok(returnList);
     }
 
+
+    //score, follow순으로 반환
     @PostMapping("/resultlist")
     public ResponseEntity<?> searchshop(@RequestBody SearchShopRequest request) {
-        System.out.println("controller "+request.getName());
-        //List<ShopSearchResultListDto> list = searchService.specificSearch(request);
-        List<ShopSearchResultListDto> list  =  shopService.searchBySpecificName(request.getName());
+        List<ShopSearchResultListDto> list  =  searchService.specificSearch(request);
         return ResponseEntity.ok(list);
     }
+
+
 
 
 

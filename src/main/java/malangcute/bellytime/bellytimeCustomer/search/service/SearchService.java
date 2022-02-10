@@ -49,8 +49,7 @@ public class SearchService {
 
 
     public List<ShopSearchResultListDto> specificSearch(SearchShopRequest request) {
-        System.out.println("searchservice name " + request.getName());
-        return shopService.searchBySpecificName(request.getName());
+        return shopService.searchBySpecificName(request.getName(), request.getSortBy());
     }
 
 }
