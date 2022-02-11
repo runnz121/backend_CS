@@ -2,20 +2,26 @@ package malangcute.bellytime.bellytimeCustomer.user.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import malangcute.bellytime.bellytimeCustomer.follow.dto.FindMyFriendSearchRequest;
+import malangcute.bellytime.bellytimeCustomer.follow.dto.MyFriendSearchResponse;
+import malangcute.bellytime.bellytimeCustomer.follow.repository.FollowShopRepository;
 import malangcute.bellytime.bellytimeCustomer.global.aws.AwsS3uploader;
 import malangcute.bellytime.bellytimeCustomer.global.exception.FailedToConvertImgFileException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoUserException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.NotFoundException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
 import malangcute.bellytime.bellytimeCustomer.user.domain.NickName;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
+import malangcute.bellytime.bellytimeCustomer.follow.dto.MyFollowShopResponse;
 import malangcute.bellytime.bellytimeCustomer.user.dto.UserUpdateRequest;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -25,6 +31,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final AwsS3uploader awsS3uploader;
+
+
 
     // 유저 정보 업데이트
     public void userUpdate(UserUpdateRequest userUpdateRequest) throws FailedToConvertImgFileException {
@@ -45,4 +53,11 @@ public class UserService {
         return fileUrl;
     }
 
+    //닉네임으로 친구 찾기
+    public MyFriendSearchResponse findUserByNickname(FindMyFriendSearchRequest request) {
+        return userRepository.findByNickname(new NickName(request.getName()))
+                .stream()
+                .map(MyFriendSearchResponse::from)
+                .findFirst().orElseThrow(() -> new NotFoundException("유저가 없습니다"));
+    }
 }

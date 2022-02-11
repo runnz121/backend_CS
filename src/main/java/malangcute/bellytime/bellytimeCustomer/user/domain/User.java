@@ -5,6 +5,7 @@ import lombok.*;
 import malangcute.bellytime.bellytimeCustomer.chat.domain.Chat;
 import malangcute.bellytime.bellytimeCustomer.cooltime.domain.CoolTime;
 import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowShop;
+import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowUser;
 import malangcute.bellytime.bellytimeCustomer.global.domain.common.BaseTimeEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -82,6 +83,15 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<FollowShop> followShops = new ArrayList<>();
+    //private Set<FollowShop> followShops = new LinkedHashSet<>();
+    //private List<FollowShop> followShops = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "hostId", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<FollowUser> hostId = new ArrayList<>();
+
+    @OneToMany(mappedBy = "friendId", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<FollowUser> friendId = new ArrayList<>();
 
 
 

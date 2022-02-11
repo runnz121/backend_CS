@@ -53,4 +53,6 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
     @Query(nativeQuery = true, value = "SELECT s.id AS id, sm.menu AS menu FROM shop_menu sm RIGHT JOIN shop s ON sm.shop_id=s.id WHERE sm.shop_id in (SELECT s.id from shop s where s.id=?1) ")
     List<ShopMenu> findMenus(Long id);
 
+
+
 }
