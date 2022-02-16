@@ -2,6 +2,9 @@ package malangcute.bellytime.bellytimeCustomer.user.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalListResponse1;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalRequest;
+import malangcute.bellytime.bellytimeCustomer.cooltime.service.CoolTimeService;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.*;
 import malangcute.bellytime.bellytimeCustomer.follow.service.FollowService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
@@ -30,6 +33,8 @@ public class UserController {
     private final FollowService followService;
 
     private final UserRepository userRepository;
+
+    private final CoolTimeService coolTimeService;
 
     // 유저 정보 업데이트
     @GetMapping("/update")
@@ -93,6 +98,16 @@ public class UserController {
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 
+    /*
+     * cooltime cal 서비스
+     *
+     */
 
 
+    //달력 요청시 갖고오기 -> year, month 받아 요청마다 데이터 조회 반환
+    @PostMapping("/cal")
+    public ResponseEntity<?> myCoolTimeCalender(@RequireLogin User user, @RequestBody CoolTimeCalRequest request) {
+        CoolTimeCalListResponse1 list = coolTimeService.getMyCoolTimeCal(user, request);
+        return ResponseEntity.status(HttpStatus.OK).body(list);
+    }
 }

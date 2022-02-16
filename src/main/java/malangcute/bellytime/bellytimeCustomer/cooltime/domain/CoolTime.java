@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@ToString
-@EqualsAndHashCode
 @Table(name = "cooltime")
 public class CoolTime extends BaseTimeEntity {
 
@@ -32,6 +30,8 @@ public class CoolTime extends BaseTimeEntity {
 
     private Integer duration;
 
+    private Boolean eat;
+
     //@ManyToOne은 항상 연관관계의 주인이 되므로 mappedBy 설정이 불가 !
     //출처: https://data-make.tistory.com/611 [Data Makes Our Future]
     @ManyToOne
@@ -44,7 +44,7 @@ public class CoolTime extends BaseTimeEntity {
     private Food foodId;
 
     @Builder
-    public CoolTime(Long id, LocalDateTime startDate, Integer duration, LocalDateTime endDate, String gauge, User userId, Food foodId) {
+    public CoolTime(Long id, LocalDateTime startDate, Integer duration, LocalDateTime endDate, String gauge, User userId, Food foodId, Boolean eat) {
         this.id= id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -52,5 +52,6 @@ public class CoolTime extends BaseTimeEntity {
         this.foodId = foodId;
         this.userId = userId;
         this.duration = duration;
+        this.eat = eat;
     }
 }

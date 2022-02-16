@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 //@NoRepositoryBean
-public interface FoodSearchRepository extends ElasticsearchRepository<Food,Long>, CustomFoodSearchRepository {
-//
-//    List<FoodResultDto> findByNameContaining(String findFood);
-//
-//    Optional<Food> findByName(String foodName);
-}
+//public interface FoodSearchRepository extends ElasticsearchRepository<Food,Long>, CustomFoodSearchRepository {
+////
+////    List<FoodResultDto> findByNameContaining(String findFood);
+////
+////    Optional<Food> findByName(String foodName);
+//}

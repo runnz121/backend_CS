@@ -2,8 +2,7 @@ package malangcute.bellytime.bellytimeCustomer.search.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import malangcute.bellytime.bellytimeCustomer.food.repository.elastic.CustomFoodSearchRepository;
-import malangcute.bellytime.bellytimeCustomer.food.repository.elastic.FoodSearchRepository;
+
 import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
 import malangcute.bellytime.bellytimeCustomer.search.dto.SearchShopRequest;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResponse;

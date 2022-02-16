@@ -1,7 +1,6 @@
 package malangcute.bellytime.bellytimeCustomer.cooltime.service;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.cooltime.domain.CoolTime;
@@ -12,32 +11,17 @@ import malangcute.bellytime.bellytimeCustomer.food.domain.Food;
 import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenAuthentication;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
-import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
 import malangcute.bellytime.bellytimeCustomer.global.domain.DateFormatter;
 import malangcute.bellytime.bellytimeCustomer.global.exception.*;
-import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
-import org.apache.tomcat.jni.Local;
-import org.elasticsearch.index.engine.Engine;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.html.Option;
-
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -177,5 +161,61 @@ public class CoolTimeService {
             gauge = "0";
         }
         return gauge;
+    }
+
+    // 쿨타임 달력 조회해서 달력결과 리스트로 반환(해당년, 달)
+    public CoolTimeCalListResponse1 getMyCoolTimeCal(User user, CoolTimeCalRequest request) {
+//        List<Food> list = foodService.findFoodWithUserIdInCoolTime(user);
+//        for(Food food : list) {
+//            System.out.println("inlist" + food.getName());
+//        }
+        int today = LocalDateTime.now().getDayOfMonth();
+
+        List<GetMyCoolTimeListIF> listFromRepo = coolTimeRepository.findMyCoolTime(user.getId());
+        CoolTimeCalListResponse1 totalList = new CoolTimeCalListResponse1();
+
+//        Set<CoolTimeCalDayList2> list2 = new HashSet<>();
+        //달이 31일까지
+        for (int i = 1; i <= 31; i++) {
+            int finalI = i;
+
+            //food관련된 정보들
+            List<CoolTimeCalFoodList3> list3 = listFromRepo.stream()
+                    .filter(it -> it.getEndDate().getDayOfMonth() == finalI &&
+                            it.getEndDate().getMonthValue() == request.getMonth())
+                    .map(CoolTimeCalFoodList3::from)
+                    .collect(Collectors.toList());
+          //  System.out.println("sorting " +  i + "몇일?" + dataList);
+
+            List<CoolTimeCalTodayFoodList3> todayList2 = listFromRepo.stream()
+                    .filter(it -> it.getEndDate().getDayOfMonth() == today)
+                    .map(CoolTimeCalTodayFoodList3::from)
+                    .collect(Collectors.toList());
+
+
+
+            CoolTimeCalDayList2 list2 = new CoolTimeCalDayList2(finalI, list3);
+            if (list2.getData().size()>0 && finalI != today){
+                totalList.addList(list2);
+            }
+
+            CoolTimeCalTodayFoodList2 todayList = new CoolTimeCalTodayFoodList2(todayList2);
+            if (list2.getDay() == today) {
+                totalList.addToday(todayList);
+            }
+
+
+
+
+            //day, 와 푸드 같이 있는 것
+//            List<CoolTimeCalDayList2> list2 = list3.stream()
+//                    .distinct()
+//                    .map(it -> new CoolTimeCalDayList2(finalI,list3))
+//                    .collect(Collectors.toList());
+
+
+
+            }
+        return totalList;
     }
 }

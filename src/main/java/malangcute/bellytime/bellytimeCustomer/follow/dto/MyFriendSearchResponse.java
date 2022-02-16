@@ -16,14 +16,14 @@ public class MyFriendSearchResponse {
 
     private Long id;
 
-    private String name;
+    private String nickName;
 
     private String profileImg;
 
     public static MyFriendSearchResponse from (User user) {
         return new MyFriendSearchResponse(
                 user.getId(),
-                user.getUsername(),
+                user.getNickname().getNickName(),
                 user.getProfileImg()
         );
     }

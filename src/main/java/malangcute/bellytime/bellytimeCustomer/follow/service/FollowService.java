@@ -72,7 +72,7 @@ public class FollowService {
     public void toFollowFriend(User user, List<FollowFriendsRequest> requests){
         Set<FollowUser> saveList = new HashSet<>();
         for(FollowFriendsRequest request : requests) {
-            User userResult  = userRepository.findById(request.getId()).orElseThrow(() -> new NotFoundException("유저가 없습니다"));
+            User userResult  = userRepository.findById(request.getFriendId()).orElseThrow(() -> new NotFoundException("유저가 없습니다"));
             saveList.add(FollowUser.create(user, userResult));
         }
         followUserRepository.saveAll(saveList);
@@ -81,7 +81,7 @@ public class FollowService {
 
     public void toUnFollowFriend(User user, List<FollowFriendsRequest> requests){
         for(FollowFriendsRequest request : requests) {
-            followUserRepository.deleteFollowShopId(user.getId(), request.getId());
+            followUserRepository.deleteFollowShopId(user.getId(), request.getFriendId());
         }
     }
 

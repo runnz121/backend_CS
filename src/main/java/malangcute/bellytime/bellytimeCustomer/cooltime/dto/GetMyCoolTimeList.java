@@ -25,6 +25,8 @@ public class GetMyCoolTimeList {
     // 현재 날짜 기준으로 남은 일
     private  Long leftDays;
 
+    }
+
 
 
 //    public static GetMyCoolTimeList create(GetMyCoolTimeListIF list) {
@@ -46,5 +48,4 @@ public class GetMyCoolTimeList {
 //        this.foodImg = foodImg;
 //        this.predictDate = predictDate;
 //        this.leftDays = leftDays;
-    }
 

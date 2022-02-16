@@ -32,7 +32,7 @@ public class SearchController {
 
     //음식과 샵을 동시에 조회 및 반환
     @GetMapping("name/{name}")
-    public ResponseEntity<?> serarchAny(@PathVariable String name) {
+    public ResponseEntity<?> searchAny(@PathVariable String name) {
         List<String> returnList = searchService.searching(name);
         return ResponseEntity.ok(returnList);
     }
@@ -40,7 +40,7 @@ public class SearchController {
 
     //score, follow순으로 반환
     @PostMapping("/resultlist")
-    public ResponseEntity<?> searchshop(@RequestBody SearchShopRequest request) {
+    public ResponseEntity<?> searchShop(@RequestBody SearchShopRequest request) {
         List<ShopSearchResultListDto> list  =  searchService.specificSearch(request);
         return ResponseEntity.ok(list);
     }

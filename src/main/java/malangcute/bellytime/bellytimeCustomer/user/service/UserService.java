@@ -55,9 +55,11 @@ public class UserService {
 
     //닉네임으로 친구 찾기
     public MyFriendSearchResponse findUserByNickname(FindMyFriendSearchRequest request) {
-        return userRepository.findByNickname(new NickName(request.getName()))
+        return userRepository.findByNickname(new NickName(request.getNickName()))
                 .stream()
                 .map(MyFriendSearchResponse::from)
                 .findFirst().orElseThrow(() -> new NotFoundException("유저가 없습니다"));
     }
+
+
 }

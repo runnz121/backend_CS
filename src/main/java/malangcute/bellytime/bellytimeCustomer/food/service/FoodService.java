@@ -9,8 +9,10 @@ import malangcute.bellytime.bellytimeCustomer.food.domain.Food;
 import malangcute.bellytime.bellytimeCustomer.food.dto.FoodResultDto;
 import malangcute.bellytime.bellytimeCustomer.food.dto.ResultFoodListDto;
 import malangcute.bellytime.bellytimeCustomer.food.repository.FoodRepository;
-import malangcute.bellytime.bellytimeCustomer.food.repository.elastic.FoodSearchRepository;
+
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoFoodException;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
+import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +26,11 @@ import java.util.stream.Collectors;
 @ToString
 public class FoodService {
 
-    private final FoodSearchRepository foodSearchRepository;
+ //   private final FoodSearchRepository foodSearchRepository;
 
     private final FoodRepository foodRepository;
+
+    private final UserService userService;
 
     //음식 검색하기 -> list반환
     public List<SearchResultResponse> findFood(SearchFoodRequest request) {
@@ -54,7 +58,7 @@ public class FoodService {
         Food registerNew = Food.builder()
                 .name(foodName)
                 .build();
-        foodSearchRepository.save(registerNew);
+       // foodSearchRepository.save(registerNew);
         foodRepository.save(registerNew);
         return registerNew;
     }
@@ -70,5 +74,12 @@ public class FoodService {
 
         //return  getList.parallelStream().collect(Collectors.toCollection(() -> deList));
         return getList;
+    }
+
+
+
+    //유저로 쿨타임 필터링 후 음식 찾아 반환하기 (리포지토리 확인)
+    public List<Food> findFoodWithUserIdInCoolTime(User user) {
+        return foodRepository.findByFoodWithUser(user.getId());
     }
 }

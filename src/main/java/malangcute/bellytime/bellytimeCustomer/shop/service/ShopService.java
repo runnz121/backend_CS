@@ -8,7 +8,7 @@ import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.*;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopRepository;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopSortStrategyFactory;
-import malangcute.bellytime.bellytimeCustomer.shop.repository.elastic.ShopSearchRepository;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,7 +29,7 @@ public class ShopService {
     private final ShopRepository shopRepository;
 
     //elastic
-    private final ShopSearchRepository shopSearchRepository;
+   // private final ShopSearchRepository shopSearchRepository;
 
 
     private final ShopSortStrategyFactory shopSortStrategyFactory;
@@ -46,7 +46,7 @@ public class ShopService {
                 .image(img)
                 .build();
         shopRepository.save(newshop);
-        shopSearchRepository.save(newshop);
+       // shopSearchRepository.save(newshop);
     }
 
 

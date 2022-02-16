@@ -37,7 +37,9 @@ public class ShopSearchResultListDto {
 
     private int followCount;
 
-    private List<MenuListDto> menu;
+   // private List<MenuListDto> menu; -> 상세장보 반환
+
+    private List<String> menu;
 
     //private List<MenuListDto> menu; -> 인터페이스 렙퍼용
 
@@ -45,9 +47,17 @@ public class ShopSearchResultListDto {
 
     public static ShopSearchResultListDto of (Shop shop) {
 
-        List<MenuListDto> menus = shop.getShopId()
+        // 메뉴 상세 정보 반환
+//        List<MenuListDto> menus = shop.getShopId()
+//                .stream()
+//                .map(MenuListDto::of)
+//                .collect(Collectors.toList());
+
+
+        // 메뉴 스트링 리스트로 반환
+        List<String> menus = shop.getShopId()
                 .stream()
-                .map(MenuListDto::of)
+                .map(ShopMenu::getMenu)
                 .collect(Collectors.toList());
 
         return new ShopSearchResultListDto(shop.getId(), shop.getName(), shop.getImage(), shop.getBellscore(),
