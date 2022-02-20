@@ -89,6 +89,14 @@ public class LoginController {
         return token;
     }
 
+
+    //로그아웃
+    @GetMapping("/logout")
+    public void logOutUSer(@RequireLogin User user) {
+
+    }
+
+
 //    @PostMapping("/cookie")
 //    public String cookies(HttpServletResponse response)
 //    {   createCookie(response, "cookie");

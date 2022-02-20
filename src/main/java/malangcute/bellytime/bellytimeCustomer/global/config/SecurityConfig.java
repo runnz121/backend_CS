@@ -80,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //배포시 아래 2개로 바꿀것
         //configuration.addAllowedOriginPattern("*");
        // configuration.addAllowedOrigin(frontEndDomain);
-        configuration.addAllowedOrigin("http://192.168.0.26:3000/");
+        configuration.addAllowedOrigin("http://localhost:3000/");
         configuration.setAllowCredentials(true);
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");

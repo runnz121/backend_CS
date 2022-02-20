@@ -5,6 +5,7 @@ import malangcute.bellytime.bellytimeCustomer.cooltime.dto.*;
 import malangcute.bellytime.bellytimeCustomer.cooltime.service.CoolTimeService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
+import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,8 @@ import java.util.List;
 public class CoolTimeController {
 
     private final CoolTimeService coolTimeService;
+
+    private final UserService userService;
 
 
     //마이리스트 불러오기
@@ -42,7 +45,16 @@ public class CoolTimeController {
         return new ResponseEntity<>("삭제완료", HttpStatus.OK);
     }
 
+    //친구 쿨타입 갖고오기
+    @PostMapping("/cal")
+    public ResponseEntity<?> getMyFriendCoolTime(@RequestBody CoolTimeCalFriendRequest request) {
+        User friend = userService.findUserById(request.getFriendId());
+        CoolTimeCalListResponse1 list = coolTimeService.getMyCoolTimeCal(friend, request.getMonth(), request.getYear());
+        return ResponseEntity.status(HttpStatus.OK).body(list);
+    }
 
+
+    //health check
     @GetMapping("/check")
     public String check(@RequireLogin User user) {
         System.out.println("check"+user.getId());

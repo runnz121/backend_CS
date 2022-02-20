@@ -15,7 +15,7 @@ public class CoolTimeCalListResponse1 {
 
     private List<CoolTimeCalDayList2> dateList = new ArrayList<>();
 
-    private List<CoolTimeCalTodayFoodList2> todayList = new ArrayList<>();
+    private List<CoolTimeCalTodayFoodList2> today = new ArrayList<>();
 
 
 
@@ -33,6 +33,6 @@ public class CoolTimeCalListResponse1 {
     }
 
     public void addToday (CoolTimeCalTodayFoodList2 list) {
-         todayList.add(list);
+         today.add(list);
     }
 }

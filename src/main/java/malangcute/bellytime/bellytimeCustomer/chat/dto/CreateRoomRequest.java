@@ -1,20 +1,16 @@
 package malangcute.bellytime.bellytimeCustomer.chat.dto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class MessageDto {
+public class CreateRoomRequest {
 
-    private String roomId;
+    private Long inviteId;
 
-    private String content;
-
-    //private String message;
-
+    private String type;
 }

@@ -3,12 +3,15 @@ package malangcute.bellytime.bellytimeCustomer.search.controller;
 import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.SearchFoodRequest;
 import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
+import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.search.dto.SearchDto;
+import malangcute.bellytime.bellytimeCustomer.search.dto.SearchResultList;
 import malangcute.bellytime.bellytimeCustomer.search.dto.SearchShopRequest;
 import malangcute.bellytime.bellytimeCustomer.search.service.SearchService;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSaveRequest;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListDto;
 import malangcute.bellytime.bellytimeCustomer.shop.service.ShopService;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +34,10 @@ public class SearchController {
 
 
     //음식과 샵을 동시에 조회 및 반환
-    @GetMapping("name/{name}")
-    public ResponseEntity<?> searchAny(@PathVariable String name) {
-        List<String> returnList = searchService.searching(name);
+    @GetMapping("/name/{name}")
+    public ResponseEntity<?> searchAny(@RequireLogin User user, @PathVariable String name) {
+       // List<String> returnList = searchService.searching(user, name);
+        SearchResultList returnList = searchService.searching(user, name);
         return ResponseEntity.ok(returnList);
     }
 
@@ -44,11 +48,6 @@ public class SearchController {
         List<ShopSearchResultListDto> list  =  searchService.specificSearch(request);
         return ResponseEntity.ok(list);
     }
-
-
-
-
-
 
 
         //예시코드

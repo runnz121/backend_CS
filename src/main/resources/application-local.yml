@@ -5,6 +5,8 @@ spring:
     username: root
     password: 123456
 
+
+
 sec:
   auth:
     secretkey: malangcute!
@@ -18,3 +20,4 @@ sec:
 
   reuris:
     google: http://localhost:3000/oauth2/redirect?
+

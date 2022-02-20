@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -48,6 +49,11 @@ public interface CoolTimeRepository extends JpaRepository<CoolTime, Long> {
                         @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate,
                         @Param("gauge") String gauge, @Param("duration") Integer duration);
 
+
+
+    @Modifying
+    @Query("UPDATE CoolTime c SET c.eat=:status WHERE c.foodId.id=:foodId AND c.userId.id=:userId ")
+    void updateEatByUserId(@Param("status") Boolean status, @Param("userId") Long userId, @Param("foodId") Long FoodId);
 
 
 

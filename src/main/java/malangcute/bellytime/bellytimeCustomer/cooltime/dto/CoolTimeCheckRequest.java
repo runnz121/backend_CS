@@ -1,16 +1,15 @@
 package malangcute.bellytime.bellytimeCustomer.cooltime.dto;
 
-
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
-public class CoolTimeCalRequest {
-    private Long year;
+public class CoolTimeCheckRequest {
 
-    private Long month;
+    private Long foodId;
+
+    private boolean eat;
 }

@@ -75,11 +75,11 @@ public class User extends BaseTimeEntity implements UserDetails {
     /**
      * 채팅 설정
      */
-    @OneToMany(mappedBy = "roomOwner", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<Chat> owner = new ArrayList<>();
+    @OneToMany(mappedBy = "makerId", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Chat> makerId = new ArrayList<>();
 
-    @OneToMany(mappedBy = "consumer")
-    private List<Chat> consumer = new ArrayList<>();
+    @OneToMany(mappedBy = "inviteId")
+    private List<Chat> inviteId = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<FollowShop> followShops = new ArrayList<>();

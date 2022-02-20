@@ -164,7 +164,8 @@ public class CoolTimeService {
     }
 
     // 쿨타임 달력 조회해서 달력결과 리스트로 반환(해당년, 달)
-    public CoolTimeCalListResponse1 getMyCoolTimeCal(User user, CoolTimeCalRequest request) {
+    public CoolTimeCalListResponse1 getMyCoolTimeCal(User user, Long month, Long year)//)CoolTimeCalRequest request)
+     {
 //        List<Food> list = foodService.findFoodWithUserIdInCoolTime(user);
 //        for(Food food : list) {
 //            System.out.println("inlist" + food.getName());
@@ -182,25 +183,25 @@ public class CoolTimeService {
             //food관련된 정보들
             List<CoolTimeCalFoodList3> list3 = listFromRepo.stream()
                     .filter(it -> it.getEndDate().getDayOfMonth() == finalI &&
-                            it.getEndDate().getMonthValue() == request.getMonth())
+                            it.getEndDate().getMonthValue() == month)
                     .map(CoolTimeCalFoodList3::from)
                     .collect(Collectors.toList());
           //  System.out.println("sorting " +  i + "몇일?" + dataList);
 
             List<CoolTimeCalTodayFoodList3> todayList2 = listFromRepo.stream()
-                    .filter(it -> it.getEndDate().getDayOfMonth() == today)
+                    .filter(it -> it.getEndDate().getDayOfMonth() == today && it.getEndDate().getMonthValue() == month)
                     .map(CoolTimeCalTodayFoodList3::from)
                     .collect(Collectors.toList());
 
 
 
             CoolTimeCalDayList2 list2 = new CoolTimeCalDayList2(finalI, list3);
-            if (list2.getData().size()>0 && finalI != today){
+            if (list2.getData().size() > 0 && finalI != today){
                 totalList.addList(list2);
             }
 
             CoolTimeCalTodayFoodList2 todayList = new CoolTimeCalTodayFoodList2(todayList2);
-            if (list2.getDay() == today) {
+            if (list2.getDay() == today && list2.getData().size() > 0) {
                 totalList.addToday(todayList);
             }
 
@@ -217,5 +218,12 @@ public class CoolTimeService {
 
             }
         return totalList;
+    }
+
+    //쿨타임 eat, 상태 업데이트
+    public void updateCoolTimeEatCheck(User user, List<CoolTimeCheckRequest> request) {
+        for (CoolTimeCheckRequest request1 : request) {
+            coolTimeRepository.updateEatByUserId(request1.isEat(), user.getId(), request1.getFoodId());
+        }
     }
 }
