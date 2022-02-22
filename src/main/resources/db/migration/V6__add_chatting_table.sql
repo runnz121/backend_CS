@@ -12,3 +12,13 @@ CREATE TABLE `chat`
     FOREIGN KEY (`maker_id`)    REFERENCES `users`  (id),
     FOREIGN KEY (`invite_id`)   REFERENCES `users`  (id)
 ) DEFAULT CHARSET = UTF8MB4;
+
+
+CREATE TABLE `chat_log`
+(
+    `id`            BIGINT          NOT NULL AUTO_INCREMENT,
+    `room_id`       VARCHAR(255)    NOT NULL ,
+    `sender`        BIGINT          NOT NULL ,
+    `message`       VARCHAR(255)             ,
+    PRIMARY KEY (`id`)
+) DEFAULT CHARSET = UTF8MB4;

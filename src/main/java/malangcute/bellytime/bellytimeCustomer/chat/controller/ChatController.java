@@ -1,41 +1,45 @@
 package malangcute.bellytime.bellytimeCustomer.chat.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.client.*;
 import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.chat.dto.*;
 import malangcute.bellytime.bellytimeCustomer.chat.service.ChatService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
+import net.minidev.json.JSONArray;
+import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.util.SerializationUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequiredArgsConstructor
 public class ChatController {
 
-    private final SimpMessagingTemplate template;
-
     private final ChatService chatService;
 
-
-    //heatlh check
-//    @MessageMapping("/")
-//    @SendTo("/topic/roomId")
-//    public Message boradCast(Message message){
-//        return message;
-//    }
+    private final SimpMessagingTemplate template;
 
 
-    //채팅 컨트롤러
-    @MessageMapping("/chat/chatting") //클라이언트에서 수신되는 곳
+//        //채팅 컨트롤러 (stomp)
+    @MessageMapping(value = "/chat/chatting") //클라이언트에서 수신되는 곳
     public void chatController(MessageDto messageDto) {
-        System.out.println(messageDto.getContent());
-        template.convertAndSend("/sub/chatting/room" + messageDto.getRoomId(), messageDto); // 클이언트로 전송
+        //로그를 저장
+        chatService.saveLog(messageDto);
+        template.convertAndSend("/sub/chatting/room/" + messageDto.getRoomId(), messageDto); // 클이언트로 전송
     }
 
 
@@ -68,4 +72,11 @@ public class ChatController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("삭제완료");
     }
 
+
+    //채팅 로그 갖고오기
+    @PostMapping("/chat/chatlog")
+    public ResponseEntity<?> chatLog(@RequireLogin User user, @RequestBody RoomIdRequest request) {
+        List<MessageDto> list = chatService.getChatLog(user, request);
+        return ResponseEntity.ok(list);
+    }
 }

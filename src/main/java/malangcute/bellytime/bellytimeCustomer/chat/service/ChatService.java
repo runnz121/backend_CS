@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.chat.domain.Chat;
-import malangcute.bellytime.bellytimeCustomer.chat.dto.ChatRoomFriendListResponse;
-import malangcute.bellytime.bellytimeCustomer.chat.dto.ChatRoomShopListResponse;
-import malangcute.bellytime.bellytimeCustomer.chat.dto.CreateRoomRequest;
-import malangcute.bellytime.bellytimeCustomer.chat.dto.RoomIdResponse;
+import malangcute.bellytime.bellytimeCustomer.chat.domain.ChatLog;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.*;
+import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatLogRepository;
 import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatRepository;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
@@ -15,6 +14,7 @@ import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,6 +29,8 @@ public class ChatService {
     private final ChatRepository chatRepository;
 
     private final UserRepository userRepository;
+
+    private final ChatLogRepository chatLogRepository;
 
     private final UserService userService;
 
@@ -94,4 +96,20 @@ public class ChatService {
     public void deleteRoomService(User user, String roomId) {
         chatRepository.deleteByRoomId(roomId);
     }
+
+
+    //채팅 로그 저장
+    public void saveLog(MessageDto messageDto) {
+        ChatLog log = ChatLog.create(messageDto);
+        chatLogRepository.save(log);
+    }
+
+    //채팅방 로그 반환하기
+    public List<MessageDto> getChatLog(User user, RoomIdRequest request) {
+        return chatLogRepository.findBySenderAndRoomId(user.getId(), request.getRoomId()).stream()
+                .sorted(Comparator.comparing(ChatLog::getCreatedAt))
+                .map(MessageDto::of)
+                .collect(Collectors.toList());
+    }
+
 }

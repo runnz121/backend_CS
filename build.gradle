@@ -102,7 +102,7 @@ dependencies {
 
 
 
-	//rabbitMQ 설정
+	//rabbitMQ 설정(외부 브로커 핸들링용)
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty', version: '2.4.6'
 
 	//jackson2json에서 LocalDateTime을 handling 하기 위해

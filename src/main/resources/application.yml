@@ -57,6 +57,17 @@ spring:
     password: Malangcute121!
 
 
+#  kafka:
+#
+#    consumer:
+#      max-poll-records: 1
+#      auto-offset-reset: earliest
+##      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+##      properties: org.springframework.kafka.support.serializer.JsonDeserializer
+#
+
+
+
 
 
 

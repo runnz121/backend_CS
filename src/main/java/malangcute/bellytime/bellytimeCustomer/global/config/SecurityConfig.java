@@ -78,9 +78,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         String frontEndDomain = securityProperties.getCors().getFrontEndDomain();
 
         //배포시 아래 2개로 바꿀것
-        //configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedOriginPattern("*"); // 이거 다시 비활성화
        // configuration.addAllowedOrigin(frontEndDomain);
-        configuration.addAllowedOrigin("http://localhost:3000/");
+       // configuration.addAllowedOrigin("http://localhost:3000/"); -> 추후 다시 바꾸기
         configuration.setAllowCredentials(true);
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
