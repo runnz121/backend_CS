@@ -57,4 +57,8 @@ public interface CoolTimeRepository extends JpaRepository<CoolTime, Long> {
 
 
 
+    //배치용
+    List<CoolTime> findByEat(boolean b);
+
+
 }

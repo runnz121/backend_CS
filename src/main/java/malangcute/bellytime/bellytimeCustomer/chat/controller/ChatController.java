@@ -42,7 +42,6 @@ public class ChatController {
         template.convertAndSend("/sub/chatting/room/" + messageDto.getRoomId(), messageDto); // 클이언트로 전송
     }
 
-
     // 방생성 api -> roomId 반환
     @PostMapping("/chat/create")
     public ResponseEntity<?> createRoom(@RequireLogin User user, @RequestBody CreateRoomRequest createRoomRequest) {
@@ -74,9 +73,9 @@ public class ChatController {
 
 
     //채팅 로그 갖고오기
-    @PostMapping("/chat/chatlog")
-    public ResponseEntity<?> chatLog(@RequireLogin User user, @RequestBody RoomIdRequest request) {
-        List<MessageDto> list = chatService.getChatLog(user, request);
+    @GetMapping("/chat/chatlog")
+    public ResponseEntity<?> chatLog(@RequestBody RoomIdRequest request) {
+        List<MessageDto> list = chatService.getChatLog(request);
         return ResponseEntity.ok(list);
     }
 }

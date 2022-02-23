@@ -29,14 +29,17 @@ public class ChatLog extends BaseTimeEntity {
 
     private String message;
 
+    private String nickName;
 
-    public ChatLog(String roomId, Long sender, String content) {
+
+    public ChatLog(String roomId, Long sender, String content, String nickName) {
         this.roomId = roomId;
         this.sender = sender;
         this.message = content;
+        this.nickName = nickName;
     }
 
     public static ChatLog create(MessageDto messageDto) {
-        return new ChatLog(messageDto.getRoomId(), messageDto.getSender(), messageDto.getContent());
+        return new ChatLog(messageDto.getRoomId(), messageDto.getSender(), messageDto.getContent(), messageDto.getNickName());
     }
 }

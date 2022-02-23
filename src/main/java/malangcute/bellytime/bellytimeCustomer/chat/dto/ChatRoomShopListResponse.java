@@ -14,6 +14,8 @@ public class ChatRoomShopListResponse {
 
     private Long shopId;
 
+    private String roomName;
+
     private String profileImg;
 
   //  private String recentContent;

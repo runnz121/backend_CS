@@ -16,12 +16,14 @@ public class MessageDto {
 
     private Long sender;
 
+    private String nickName;
+
     private String content;
 
     //private String message;
 
     public static MessageDto of (ChatLog log) {
-        return new MessageDto(log.getRoomId(), log.getSender(), log.getMessage());
+        return new MessageDto(log.getRoomId(), log.getSender(),  log.getNickName(),log.getMessage());
     }
 
 }

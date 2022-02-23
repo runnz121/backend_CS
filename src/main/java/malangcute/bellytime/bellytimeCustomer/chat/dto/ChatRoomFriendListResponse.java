@@ -15,11 +15,13 @@ public class ChatRoomFriendListResponse {
 
     private Long customerId;
 
+    private String roomName;
+
     private String profileImg;
 
    // private String recentContent;
 
-    public static ChatRoomFriendListResponse of(String chatRoomId, Long customerId, String profileImg) {
-        return new ChatRoomFriendListResponse(chatRoomId, customerId, profileImg);
+    public static ChatRoomFriendListResponse of(String chatRoomId, Long customerId, String roomName,String profileImg) {
+        return new ChatRoomFriendListResponse(chatRoomId, customerId, roomName, profileImg);
     }
 }

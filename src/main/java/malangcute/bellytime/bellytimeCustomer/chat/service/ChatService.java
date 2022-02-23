@@ -74,6 +74,7 @@ public class ChatService {
                 .map(it -> new ChatRoomFriendListResponse(
                         it.getRoomId(),
                         it.getInviteId().getId(),
+                        it.getRoomName(),
                         it.getInviteId().getProfileImg()
                 ))
                 .collect(Collectors.toList());
@@ -86,6 +87,7 @@ public class ChatService {
                 .map(it -> new ChatRoomShopListResponse(
                         it.getRoomId(),
                         it.getInviteId().getId(),
+                        it.getRoomName(),
                         it.getInviteId().getProfileImg()
                 ))
                 .collect(Collectors.toList());
@@ -105,8 +107,8 @@ public class ChatService {
     }
 
     //채팅방 로그 반환하기
-    public List<MessageDto> getChatLog(User user, RoomIdRequest request) {
-        return chatLogRepository.findBySenderAndRoomId(user.getId(), request.getRoomId()).stream()
+    public List<MessageDto> getChatLog(RoomIdRequest request) {
+        return chatLogRepository.findByRoomId(request.getRoomId()).stream()
                 .sorted(Comparator.comparing(ChatLog::getCreatedAt))
                 .map(MessageDto::of)
                 .collect(Collectors.toList());

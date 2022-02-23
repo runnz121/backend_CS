@@ -13,4 +13,6 @@ public interface ChatLogRepository extends JpaRepository<ChatLog, Long> {
 
 
     List<ChatLog> findBySenderAndRoomId(Long id, String request);
+
+    List<ChatLog> findByRoomId(String roomId);
 }

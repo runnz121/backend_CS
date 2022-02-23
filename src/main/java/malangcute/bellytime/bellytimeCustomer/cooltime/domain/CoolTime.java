@@ -54,4 +54,11 @@ public class CoolTime extends BaseTimeEntity {
         this.duration = duration;
         this.eat = eat;
     }
+
+
+    //하루 더해서 반환
+    public CoolTime endDateUpdate(LocalDateTime endDate) {
+        this.endDate = endDate.plusDays(1);
+        return this; //클래스를 반환
+    }
 }
