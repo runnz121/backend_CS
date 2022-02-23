@@ -121,6 +121,9 @@ dependencies {
 	//netty macos dns 설정
 	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.72.Final:osx-aarch_64'
 
+	//quartz 스케쥴러 추가
+	implementation 'org.springframework.boot:spring-boot-starter-quartz'
+
 
 }
 

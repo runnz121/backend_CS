@@ -1,9 +1,10 @@
-package malangcute.bellytime.bellytimeCustomer.global.batch;
+package malangcute.bellytime.bellytimeCustomer.global.schedule.batch;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.cooltime.domain.CoolTime;
 import malangcute.bellytime.bellytimeCustomer.cooltime.repository.CoolTimeRepository;
+import org.quartz.JobDataMap;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -15,6 +16,8 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
+import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,21 +34,26 @@ public class CoolTimeBatchConfig {
 
     private final CoolTimeRepository coolTimeRepository;
 
+
+
     //쿨타임 업데이트
     @Bean
-    public Job coolTimeUpdateJob(JobBuilderFactory jobBuilderFactory, Step coolTimeStep) {
+   // public Job coolTimeUpdateJob(JobBuilderFactory jobBuilderFactory, Step coolTimeStep) {
+    public Job coolTimeUpdateJob() {
         log.info("************** CoolTimeUpdateJob ***************");
         return jobBuilderFactory.get("coolTimeUpdateJob") //해당 job의 이름을 지정
               //  .preventRestart()
-                .start(coolTimeStep)
+               // .start(coolTimeStep)
+                .start(coolTimeStep())
                 .build();
     }
 
     @Bean
     @JobScope
-    public Step coolTimeStep(StepBuilderFactory stepBuilderFactory) {
+    //public Step coolTimeStep(StepBuilderFactory stepBuilderFactory) {
+    public Step coolTimeStep() {
         log.info("************** CoolTimeUpdateJob ***************");
-        return stepBuilderFactory.get("coolTimeStep4")//해당 step의 이름을 지정
+        return stepBuilderFactory.get("coolTimeUpdateStep")//해당 step의 이름을 지정
                 .<CoolTime, CoolTime> chunk(10)
                 .reader(coolTimeListItemReader())
                 .processor(this.coolTimeItemProcessor())
