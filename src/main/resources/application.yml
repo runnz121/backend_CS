@@ -1,0 +1,113 @@
+spring:
+  profiles:
+    active: local
+
+  redis:
+    port: 6379
+    host: 127.0.0.1
+
+  security:
+    user:
+      name: esanghaesee
+      password: 1234
+
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 71318484453-sn62ah5b0rdiktov48jesea0us3vauph.apps.googleusercontent.com
+            client-secret: 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
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+
+
+  # 엘라스틱 서치 설정
+#  elasticsearch:
+#    username: root
+#    password: Malangcute121!
+
+
+  #  #flyway setting
+  flyway:
+    sql-migration-suffixes: .sql
+    locations: classpath:/db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
+
+
+  # bean name 충돌
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+
+  # jackson serialization off
+#  jackson:
+#    serialization:
+#      FAIL_ON_EMPTY_BEANS : false
+  rabbitmq:
+    username: guest
+    password: guest
+    host: localhost
+    port: 5672
+
+  elasticsearch:
+    username: elastic
+    password: Malangcute121!
+
+
+#  kafka:
+#
+#    consumer:
+#      max-poll-records: 1
+#      auto-offset-reset: earliest
+##      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+##      properties: org.springframework.kafka.support.serializer.JsonDeserializer
+#
+
+
+
+
+
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
+    org:
+      hibernate.SQL: debug
+      # 엘리스틱 서치 로깅 레벨
+      springframework:
+        data:
+          elasticsearch:
+            client:
+              WIRE: TRACE
+
+
+
+
+# aws 설정
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      access-key: AKIAUN4P5GCX5AF6AS5E
+      secret-key: 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
+
+
+  # jpa setting
+  #  jpa:
+  #    hibernate:
+  #      ddl-auto: create-drop
+  # 네이밍 언더바 변경 없이 사용
+#  jpa:
+#    hibernate:
+#      naming:
+#        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

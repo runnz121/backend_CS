@@ -1,0 +1,1 @@
+ALTER TABLE `cooltime` ADD `duration` BIGINT AFTER `gauge`;

@@ -4,14 +4,19 @@ import io.jsonwebtoken.*;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
 import malangcute.bellytime.bellytimeCustomer.global.config.SecurityProperties;
+import malangcute.bellytime.bellytimeCustomer.global.exception.NoCookieException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -19,6 +24,8 @@ import java.util.List;
 public class TokenProvider {
 
     private SecurityProperties securityProperties;
+
+    private static final String REFRESH_TOKEN = "refreshToken";
 
 
     //리프레시 토큰 생성(100일)
@@ -105,4 +112,14 @@ public class TokenProvider {
                     .getBody();
             return claims.getSubject();
     }
+
+
+
+    //쿠키로부터 리프레시 토큰 파싱
+//    public String getTokenFromCookie(HttpServletRequest httpServletRequest){
+//        Optional<Cookie> cookie = CookieUtils.getCookie(httpServletRequest, REFRESH_TOKEN);
+//        Cookie getCookie = cookie.orElseThrow(() -> new NoCookieException("쿠키가 없습니다"));
+//        String refreshToken = getCookie.getValue();
+//        return refreshToken;
+//    }
 }

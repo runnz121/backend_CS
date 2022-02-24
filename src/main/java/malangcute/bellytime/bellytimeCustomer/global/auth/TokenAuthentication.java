@@ -39,6 +39,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Slf4j
+@Component
 public class TokenAuthentication extends OncePerRequestFilter {
 
 //public class TokenAuthentication {

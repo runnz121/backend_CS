@@ -77,11 +77,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
         String frontEndDomain = securityProperties.getCors().getFrontEndDomain();
 
-
-        configuration.addAllowedOrigin(frontEndDomain);
+        //배포시 아래 2개로 바꿀것
+        configuration.addAllowedOriginPattern("*"); // 이거 다시 비활성화
+       // configuration.addAllowedOrigin(frontEndDomain);
+       // configuration.addAllowedOrigin("http://localhost:3000/"); -> 추후 다시 바꾸기
+        configuration.setAllowCredentials(true);
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-        configuration.setAllowCredentials(true);
         configuration.setMaxAge(MAX_AGES);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -116,8 +118,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/login",
                         "/join",
                         "/cookie",
-                        "/",
-                        "/check"
+                        "/**", // 배포시 바꿈
+//                        "/check",
+                        "/cooltime/check",
+                        "/cooltime/**",
+                        "/searchby/**"
                 ).permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
@@ -136,6 +141,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .successHandler(oAuth2SuccessHandler)
                 .failureHandler(oAuth2FailureHandler)
+        //배포시 다시 설정할것
                 .and()
                 .addFilterBefore(new TokenAuthentication(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTExceptionFilter(tokenProvider, userDetailsService, objectMapper), TokenAuthentication.class);

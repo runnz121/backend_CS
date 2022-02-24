@@ -1,9 +1,13 @@
 package malangcute.bellytime.bellytimeCustomer.user.domain;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoOAuthProviderException;
 
 import java.util.Arrays;
 
+@Getter
+@RequiredArgsConstructor
 public enum AuthProvider {
     IDPASS("idpass"),
     GOOGLE("google"),
@@ -12,9 +16,6 @@ public enum AuthProvider {
 
     private final String authprovider;
 
-    AuthProvider(String authprovider){
-        this.authprovider = authprovider;
-    }
 
     public static AuthProvider of(String authprovider) throws NoOAuthProviderException {
         return Arrays.stream(AuthProvider.values())

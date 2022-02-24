@@ -66,9 +66,18 @@ public class JWTExceptionFilter extends OncePerRequestFilter {
     }
 
 
+
+
+    //더미데이터용 패스
+//    @Override
+//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+//
+//    }
+
+
+    //실제 배포시 사용할 메소드
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//        String accessToken = getJwtFromRequest(request);
         String refreshToken = getRefreshFromRequest(request);
         String userPk = null;
 
@@ -88,6 +97,8 @@ public class JWTExceptionFilter extends OncePerRequestFilter {
             sendNewToken(response, newAccess);
         }
     }
+
+
 
     // 엑세스 토큰 생성 및 응답
     public void sendNewToken(HttpServletResponse res, String token) throws IOException {
