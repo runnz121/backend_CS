@@ -2,6 +2,9 @@ package malangcute.bellytime.bellytimeCustomer.user.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.comment.dto.CommentDto;
+import malangcute.bellytime.bellytimeCustomer.comment.dto.CommentWriteRequest;
+import malangcute.bellytime.bellytimeCustomer.comment.service.CommentService;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalListResponse1;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalRequest;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCheckRequest;
@@ -11,6 +14,10 @@ import malangcute.bellytime.bellytimeCustomer.follow.service.FollowService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.global.exception.FailedToConvertImgFileException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NotFoundException;
+import malangcute.bellytime.bellytimeCustomer.reservation.domain.Reservation;
+import malangcute.bellytime.bellytimeCustomer.reservation.dto.ReservationShopInfoResponse;
+import malangcute.bellytime.bellytimeCustomer.reservation.dto.ReservationStateDto;
+import malangcute.bellytime.bellytimeCustomer.reservation.service.ReservationService;
 import malangcute.bellytime.bellytimeCustomer.user.domain.NickName;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.dto.UserProfileResponse;
@@ -37,6 +44,10 @@ public class UserController {
     private final UserRepository userRepository;
 
     private final CoolTimeService coolTimeService;
+
+    private final ReservationService reservationService;
+
+    private final CommentService commentService;
 
     // 유저 정보 업데이트
     @GetMapping("/update")
@@ -119,7 +130,7 @@ public class UserController {
 
     //달력 요청시 갖고오기 -> year, month 받아 요청마다 데이터 조회 반환
     @PostMapping("/cal")
-    public ResponseEntity<?> myCoolTimeCalender(@RequireLogin User user,
+    public ResponseEntity<CoolTimeCalListResponse1> myCoolTimeCalender(@RequireLogin User user,
                                                 @RequestBody CoolTimeCalRequest request) {
         CoolTimeCalListResponse1 list = coolTimeService.getMyCoolTimeCal(user, request.getMonth(), request.getYear());
         return ResponseEntity.status(HttpStatus.OK).body(list);
@@ -128,7 +139,7 @@ public class UserController {
 
     //쿨타임 먹은 음식 체크
     @PostMapping("/cal/check")
-    public ResponseEntity<?> checkMyCoolTime(@RequireLogin User user,
+    public ResponseEntity checkMyCoolTime(@RequireLogin User user,
                                              @RequestBody List<CoolTimeCheckRequest> requests) {
         coolTimeService.updateCoolTimeEatCheck(user, requests);
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
@@ -138,5 +149,37 @@ public class UserController {
      * reservaiton 서비스
      *
      */
-    //@PostMapping("/reservation")
+    @GetMapping("/reservation/list")
+    public ResponseEntity<List<ReservationShopInfoResponse>> myReservationList(@RequireLogin User user) {
+        List<ReservationShopInfoResponse> list = reservationService.myReservationList(user);
+        return ResponseEntity.ok(list);
+    }
+
+    //애약 상태 반환 -> 수정 필요(상의)
+//    public ResponseEntity<ReservationShopInfoResponse> myReservationState(@RequireLogin User user,
+//                                                @RequestBody ReservationStateDto) {
+//        return reservationService.
+//    }
+
+
+    /**
+     * comment 서비스
+     */
+
+    //내가 작성한 후기 모두 갖고오기
+    @GetMapping("/comment/list")
+    public ResponseEntity<List<CommentDto>> getMyCommentList(@RequireLogin User user) {
+        List<CommentDto> list = commentService.getMyComment(user);
+        return ResponseEntity.ok(list);
+    }
+
+    //후기 작성하기
+    @PostMapping("/comment/write")
+    public ResponseEntity writeComment(@RequireLogin User user,
+                                       @ModelAttribute CommentWriteRequest request) {
+        commentService.updateMyComment(user, request);
+        return ResponseEntity.ok(HttpStatus.ACCEPTED);
+    }
+
+
 }

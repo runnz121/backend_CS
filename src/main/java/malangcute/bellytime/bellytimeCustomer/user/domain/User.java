@@ -3,10 +3,12 @@ package malangcute.bellytime.bellytimeCustomer.user.domain;
 
 import lombok.*;
 import malangcute.bellytime.bellytimeCustomer.chat.domain.Chat;
+import malangcute.bellytime.bellytimeCustomer.comment.domain.Comment;
 import malangcute.bellytime.bellytimeCustomer.cooltime.domain.CoolTime;
 import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowShop;
 import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowUser;
 import malangcute.bellytime.bellytimeCustomer.global.domain.common.BaseTimeEntity;
+import malangcute.bellytime.bellytimeCustomer.reservation.domain.Reservation;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,8 +20,6 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode
-@ToString
 @Table(name ="users")
 //@Table(name= "users")
 public class User extends BaseTimeEntity implements UserDetails {
@@ -86,12 +86,29 @@ public class User extends BaseTimeEntity implements UserDetails {
     //private Set<FollowShop> followShops = new LinkedHashSet<>();
     //private List<FollowShop> followShops = new ArrayList<>();
 
-
+    /**
+     * follower
+     */
     @OneToMany(mappedBy = "hostId", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<FollowUser> hostId = new ArrayList<>();
 
     @OneToMany(mappedBy = "friendId", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<FollowUser> friendId = new ArrayList<>();
+
+    /**
+     *  reservaiton
+     */
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Reservation> userId = new ArrayList<>();
+
+    /**
+     *
+     */
+    @OneToMany(mappedBy = "userId")
+    private List<Comment> commentId = new ArrayList<>();
+
+
+
 
 
 
