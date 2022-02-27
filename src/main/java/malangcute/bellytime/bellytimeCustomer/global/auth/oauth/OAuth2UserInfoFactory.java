@@ -7,7 +7,8 @@ import malangcute.bellytime.bellytimeCustomer.global.auth.domain.NaverOAuth2User
 import malangcute.bellytime.bellytimeCustomer.global.auth.domain.OAuth2UserInfo;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoOAuthProviderException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider;
-import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Map;
 

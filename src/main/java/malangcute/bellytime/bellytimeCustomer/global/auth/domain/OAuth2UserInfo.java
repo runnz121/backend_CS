@@ -1,6 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.domain;
 
-import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -11,6 +12,7 @@ public abstract class OAuth2UserInfo {
     public OAuth2UserInfo(Map<String , Object> attribute){
         this.attribute = attribute;
     }
+
 
     public abstract String getId() throws JSONException;
 
