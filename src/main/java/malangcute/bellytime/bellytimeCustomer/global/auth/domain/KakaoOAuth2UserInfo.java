@@ -1,7 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.domain;
 
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Map;
 
