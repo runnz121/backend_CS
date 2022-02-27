@@ -102,7 +102,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .email(oAuth2UserInfo.getEmail())
                 .passWord(oAuth2UserInfo.getId())
                 .phoneNumber("")
-                .nickName("USER")
+                .nickName(oAuth2UserInfo.getNickName())
                 .profileImg(null)
                 .build();
 

@@ -73,18 +73,6 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 
 
-
-	// 테스트 설정
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.batch:spring-batch-test'
-	testImplementation 'org.springframework.kafka:spring-kafka-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testCompileOnly 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
-
-	// RestDocs 관련
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-
 	// swagger 설정
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
@@ -111,7 +99,6 @@ dependencies {
 	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.12.4'
 
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
-	testImplementation 'org.springframework.amqp:spring-rabbit-test'
 
 	// 통신 설정
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
@@ -127,6 +114,43 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 
 
+	/**
+	 * testImplementation
+	 */
+
+	// rabbitmq test
+	testImplementation 'org.springframework.amqp:spring-rabbit-test'
+
+	// RestDocs 관련
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//batch test
+	testImplementation 'org.springframework.batch:spring-batch-test'
+
+	//kafka test
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+	//security test
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+}
+//snippets 설정
+ext {
+	snippetsDir = file('build/generated-snippets')
+}
+
+// rest docs 생성
+asciidoctor {
+	sourceDir file('src/docs/asciidoc')
+	outputDir file('build/html5')
+	attributes 'snippets': snippetsDir
+	mustRunAfter test
+	dependsOn test
 }
 
 

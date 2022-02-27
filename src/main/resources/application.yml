@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: dev
 
   redis:
     port: 6379
@@ -53,9 +53,9 @@ spring:
             user_name_attribute: response
 
           kakao:
-            authorization_uri: https://kauth.kakao.com/oauth/authorize
-            token_uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
+            authorization_uri: https://kauth.kakao.com/oauth/authorize # 유저의 카카오 로그인을 요청하는 곳
+            token_uri: https://kauth.kakao.com/oauth/token # 엑세스 토큰을 요청하는 곳
+            user-info-uri: https://kapi.kakao.com/v2/user/me # 엑세스 토큰 바탕으로 유저정보를 요청하는 곳
             user_name_attribute: id
 
 

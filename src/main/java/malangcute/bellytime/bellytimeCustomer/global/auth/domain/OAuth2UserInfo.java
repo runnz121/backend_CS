@@ -17,4 +17,6 @@ public abstract class OAuth2UserInfo {
     public abstract String getNickName() throws JSONException;
 
     public abstract String getEmail() throws JSONException;
+
+    public abstract String getPhone() throws JSONException;
 }

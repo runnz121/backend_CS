@@ -39,4 +39,9 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
     public String getEmail() throws JSONException {
         return (String) parsing(attribute).get("email");
     }
+
+    @Override
+    public String getPhone() throws JSONException {
+        return (String) parsing(attribute).get("phone");
+    }
 }
