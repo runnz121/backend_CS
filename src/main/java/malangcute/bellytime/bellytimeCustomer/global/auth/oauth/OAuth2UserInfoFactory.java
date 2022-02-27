@@ -7,13 +7,14 @@ import malangcute.bellytime.bellytimeCustomer.global.auth.domain.NaverOAuth2User
 import malangcute.bellytime.bellytimeCustomer.global.auth.domain.OAuth2UserInfo;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoOAuthProviderException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 
 import java.util.Map;
 
 @Slf4j
 public class OAuth2UserInfoFactory {
 
-    public static OAuth2UserInfo getOAuth2UserInfo(String registrationId, Map<String, Object> attributes) throws NoOAuthProviderException {
+    public static OAuth2UserInfo getOAuth2UserInfo(String registrationId, Map<String, Object> attributes) throws NoOAuthProviderException, JSONException {
         if (AuthProvider.GOOGLE.findAuth(registrationId)) {
             return new GoogleOAuth2UserInfo(attributes);
         }

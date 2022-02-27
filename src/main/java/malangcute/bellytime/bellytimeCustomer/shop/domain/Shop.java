@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowShop;
 import malangcute.bellytime.bellytimeCustomer.global.domain.common.BaseTimeEntity;
+import malangcute.bellytime.bellytimeCustomer.reservation.domain.Reservation;
 import org.hibernate.annotations.Formula;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -48,12 +49,15 @@ public class Shop { // 엘라스틱 서치는 localdatetime 컨버터시 에러�
 
 
     @OneToMany(mappedBy = "shopId", cascade = CascadeType.ALL)
-    private List<ShopMenu> ShopId = new ArrayList<>();
+    private List<ShopMenu> shopId = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private List<FollowShop> followShops = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "shopId", cascade = CascadeType.ALL)
+    private List<Reservation> reservationShop = new ArrayList<>();
 
     @Builder
     @PersistenceConstructor //ES DB에 저장된 document가 aggregate로 재구성됨 (생성자에 붙여야함)

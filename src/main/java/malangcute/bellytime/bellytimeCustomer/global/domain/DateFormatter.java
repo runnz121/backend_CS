@@ -87,4 +87,11 @@ public class DateFormatter {
         LocalDateTime localDateTime = localDate.atStartOfDay();
         return localDateTime;
     }
+
+    //오늘날짜(localdate)와 비교 날짜군 (localdatetime)을 받아서 남은일 수 반환
+    public Long leftDays(LocalDateTime compare) {
+        LocalDate today = LocalDate.now();
+        LocalDateTime todayLocal = LocalDateToLocalDateTime(today);
+        return minusDateLocalDateTime(compare, todayLocal);
+    }
 }
