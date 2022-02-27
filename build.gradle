@@ -216,3 +216,7 @@ test {
 	useJUnitPlatform()
 	finalizedBy 'jacocoTestReport'
 }
+
+jar {
+	enabled = false
+}
