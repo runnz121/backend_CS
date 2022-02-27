@@ -1,17 +1,14 @@
 package malangcute.bellytime.bellytimeCustomer.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import malangcute.bellytime.bellytimeCustomer.global.auth.CookieAuthRepositories;
 import malangcute.bellytime.bellytimeCustomer.global.auth.JWTExceptionFilter;
-import malangcute.bellytime.bellytimeCustomer.global.auth.controller.LoginController;
 import malangcute.bellytime.bellytimeCustomer.global.auth.service.CustomUserService;
-import malangcute.bellytime.bellytimeCustomer.global.auth.service.LoginService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenAuthentication;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
-import malangcute.bellytime.bellytimeCustomer.global.auth.service.CustomOAuth2UserService;
+import malangcute.bellytime.bellytimeCustomer.global.auth.service.CustomOAuth2UsersServices;
 import malangcute.bellytime.bellytimeCustomer.global.auth.oauth.OAuth2FailureHandler;
 import malangcute.bellytime.bellytimeCustomer.global.auth.oauth.OAuth2SuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,18 +31,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 @EnableWebSecurity
-@AllArgsConstructor
 @Slf4j
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+public class SecurityConfigsList extends WebSecurityConfigurerAdapter {
 
     private final SecurityProperties securityProperties;
 
-    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOAuth2UsersServices customOAuth2UsersServices;
 
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-    private final OAuth2FailureHandler oAuth2FailureHandler;
+    private  final OAuth2FailureHandler oAuth2FailureHandler;
 
     private final TokenProvider tokenProvider;
 
@@ -53,7 +48,44 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final ObjectMapper objectMapper;
 
-    private final long MAX_AGES = 3600;
+    public SecurityConfigsList(
+            SecurityProperties securityProperties,
+            CustomOAuth2UsersServices customOAuth2UsersServices,
+            OAuth2SuccessHandler oAuth2SuccessHandler,
+            OAuth2FailureHandler oAuth2FailureHandler,
+            TokenProvider tokenProvider,
+            CustomUserService userDetailsService,
+            ObjectMapper objectMapper
+    ) {
+
+        this.securityProperties = securityProperties;
+        this.customOAuth2UsersServices = customOAuth2UsersServices;
+        this.oAuth2SuccessHandler = oAuth2SuccessHandler;
+        this.oAuth2FailureHandler = oAuth2FailureHandler;
+        this.tokenProvider = tokenProvider;
+        this.userDetailsService = userDetailsService;
+        this.objectMapper = objectMapper;
+    }
+
+
+
+
+//    private final SecurityProperties securityProperties;
+//
+//    private final CustomOAuth2UserService customOAuth2UserService;
+//
+//    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+//
+//    private final OAuth2FailureHandler oAuth2FailureHandler;
+//
+//    private final TokenProvider tokenProvider;
+//
+//    private final CustomUserService userDetailsService;
+//
+//    private final ObjectMapper objectMapper;
+//
+//
+//    private final long MAX_AGES = 3600;
 
 
 
@@ -84,7 +116,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowCredentials(true);
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-        configuration.setMaxAge(MAX_AGES);
+       // configuration.setMaxAge(MAX_AGES);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -137,7 +169,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .baseUri("/oauth2/callback/**")
                 .and()
                 .userInfoEndpoint()
-                .userService(customOAuth2UserService)
+                .userService(customOAuth2UsersServices)
                 .and()
                 .successHandler(oAuth2SuccessHandler)
                 .failureHandler(oAuth2FailureHandler)
