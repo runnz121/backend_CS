@@ -24,7 +24,6 @@ import java.util.Map;
 
 @Configuration
 @EnableRedisRepositories
-//@AllArgsConstructor -> value값 인식 못함 -> 생성시 비어있는 원시 변수값으로 초기화 하려다 보니 에러남
 @RequiredArgsConstructor // 이것을 사용하게되면 있는 값들 바탕으로 생성자 생성 후
 @EnableCaching // 캐시 어노테이션 사용
 public class RedisConfig {
@@ -34,8 +33,6 @@ public class RedisConfig {
 
     @Value("${spring.redis.port}") // 빈 등록시 적용됨
     private int port;
-
-
 
 
     //redis 연결 및, lettuce 사용
@@ -65,7 +62,8 @@ public class RedisConfig {
 
         //캐시별 디폴트 유효기간 설정
         Map<String, RedisCacheConfiguration> cacheConfigurationMap = new HashMap<>();
-        cacheConfigurationMap.put(CacheElements.RECENT_SEARCH, RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(CacheElements.EXPIRE_DURATION_HOUR)));
+        cacheConfigurationMap.put(CacheElements.RECENT_SEARCH,
+                RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(CacheElements.EXPIRE_DURATION_HOUR)));
 
         return RedisCacheManager.RedisCacheManagerBuilder
                 .fromConnectionFactory(redisConnectionFactory())

@@ -6,6 +6,9 @@ import malangcute.bellytime.bellytimeCustomer.user.domain.NickName;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.apache.kafka.common.quota.ClientQuotaAlteration;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +23,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(Email email);
 
     Optional<User> findByNickname(NickName name);
+
+    @Modifying
+    @Query("UPDATE User u SET u.refreshToken=:status WHERE u.userId=:userId ")
+    void logOutByUserId(@Param("userId") Long user, @Param("status") String status);
 }

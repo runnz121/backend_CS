@@ -7,41 +7,33 @@ import java.util.Map;
 
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
-    public KakaoOAuth2UserInfo(Map<String, Object> attribute) throws JSONException {
+    private final static String KAKAO_KEY="kakao_account";
+
+    public KakaoOAuth2UserInfo(Map<String, Object> attribute) {
         super(attribute);
-        System.out.println("in kakao auth!!!!!!!!!!!!:" + attribute);
         parsing(attribute);
     }
 
-
-    public JSONObject parsing(Map<String, Object> at) throws JSONException {
-        JSONObject jsonObject = new JSONObject((Map) at.get("kakao_account"));
-        System.out.println(jsonObject);
-        JSONObject parsed = jsonObject;
-        System.out.println(parsed);
-
-        return parsed;
+    public JSONObject parsing(Map<String, Object> at) {
+        return new JSONObject((Map) at.get(KAKAO_KEY));
     }
 
 
 
     @Override
-    public String getId() throws JSONException {
+    public String getId() {
         return (String) parsing(attribute).get("id");
     }
 
     @Override
-    public String getNickName() throws JSONException {
+    public String getNickName() {
         return (String) parsing(attribute).get("profile.nickname");
     }
 
     @Override
-    public String getEmail() throws JSONException {
+    public String getEmail() {
         return (String) parsing(attribute).get("email");
     }
 
-    @Override
-    public String getPhone() throws JSONException {
-        return (String) parsing(attribute).get("phone");
-    }
+
 }

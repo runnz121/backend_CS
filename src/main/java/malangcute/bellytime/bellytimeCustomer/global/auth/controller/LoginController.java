@@ -12,6 +12,7 @@ import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
 import malangcute.bellytime.bellytimeCustomer.global.exception.FailedToConvertImgFileException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
+import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +33,9 @@ public class LoginController {
     private static final int MAX_AGE = 24 * 60 * 60 * 100;
     private static final String DOMAIN = "bellytime.kr";
 
-
-    //기본적으로 리프레시 토큰만 발급해줌으로(Oauth도) 프론트에서 해당 토큰을 받아서 쿠키에 저장 해서 처음 보내줘야된다
     private final LoginService loginService;
+
+    private final UserService userService;
 
     @GetMapping("/")
     public ResponseEntity<?> healthCheck(){
@@ -43,21 +44,24 @@ public class LoginController {
 
     // id 로 로그인 했을 때 -> httpresponesdp 쿠키 담아서 보냄
     @PostMapping("/login")
-    public ResponseEntity<AccessTokenResponseDto> loginWithIdController(@RequestBody LoginWithIdAndPassRequest loginWithIdAndPassRequest
-            , HttpServletResponse response) throws Exception {
+    public ResponseEntity<AccessTokenResponseDto> loginWithIdController(
+            @RequestBody LoginWithIdAndPassRequest loginWithIdAndPassRequest
+            , HttpServletResponse response) {
 
         RefreshAndAccessTokenResponse token = loginService.validUser(loginWithIdAndPassRequest);
         createCookie(response, token.getRefreshToken());
-        return ResponseEntity.status(HttpStatus.OK).body(new AccessTokenResponseDto(token.getAccessToken()));
-        //return ResponseEntity.status(HttpStatus.OK).body("ok");
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new AccessTokenResponseDto(token.getAccessToken()));
     }
 
     //새로운 유저 가입
     @PostMapping("/join")
-    public ResponseEntity<?> registerNewUser(@ModelAttribute RegisterWithIdPassRequest registerWithIdPassRequest) throws FailedToConvertImgFileException {
+    public ResponseEntity<RegisterCompleteResponse> registerNewUser(
+            @ModelAttribute RegisterWithIdPassRequest registerWithIdPassRequest)
+            throws FailedToConvertImgFileException {
         loginService.registerNewUser(registerWithIdPassRequest);
-        System.out.println(registerWithIdPassRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(RegisterCompleteResponse.of(true,"등록되었습니다"));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(RegisterCompleteResponse.of(true,"등록되었습니다"));
     }
 
     //권한 기반 로그인 확인용 -> 토큰으로부터 user 객체 갖고오기 완료
@@ -68,50 +72,19 @@ public class LoginController {
         return "check";
     }
 
+    //헬스 체크
     @GetMapping("/check")
     public String check2(){
         return "check";
     }
 
-    //엑세스 토큰 재발급
-//    @ExceptionHandler(ExpiredJwtException.class)
-    @PostMapping("/regenaccess")
-    //public ResponseEntity<?> checkAccessToken(@RequestBody RequestAccessTokenCheck requestAccessTokenCheck, HttpServletRequest httpServletRequest) {
-    //public ResponseEntity<AccessTokenResponseDto> checkAccessToken(String token) {
-    public String checkAccessToken(String token){
-        System.out.println("controller");
-        //AccessTokenResponseDto accessTokenResponseDto = loginService.checkAccessToken(requestAccessTokenCheck, httpServletRequest);
-//        AccessTokenResponseDto accessTokenResponseDto = AccessTokenResponseDto.of(token);
-//        System.out.println(accessTokenResponseDto);
-//        AccessTokenResponseDto newToken = loginService.refreshAccess(token);
-        //System.out.println("token COntroller " + newToken);
-        System.out.println("controller Token " + token);
-        return token;
-    }
-
 
     //로그아웃
     @GetMapping("/logout")
-    public void logOutUSer(@RequireLogin User user) {
-
+    public ResponseEntity logOutUSer(@RequireLogin User user) {
+        userService.userLogOut(user);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
-
-
-//    @PostMapping("/cookie")
-//    public String cookies(HttpServletResponse response)
-//    {   createCookie(response, "cookie");
-//        return "OK";
-//    }
-//
-//    @GetMapping("/cookie")
-//    public String getcookies(HttpServletRequest request){
-//
-//        Optional<Cookie> cookie = CookieUtils.getCookie(request, "refreshToken");
-//        System.out.println(cookie);
-//        Cookie refreshCookie = cookie.orElseThrow(() -> new NotValidTokenException("쿠기가 없음"));
-//        return refreshCookie.getValue();
-//    }
-
 
     private void createCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)

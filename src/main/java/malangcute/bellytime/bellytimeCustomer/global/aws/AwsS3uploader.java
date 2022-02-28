@@ -43,7 +43,6 @@ public class AwsS3uploader {
     // 멀티파트파일을 파일로 변경
     private File convertToFile(MultipartFile multipartFile) throws FailedToConvertImgFileException {
         File file = new File(multipartFile.getOriginalFilename());
-
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(multipartFile.getBytes());
         } catch (IOException e) {
@@ -66,6 +65,5 @@ public class AwsS3uploader {
     private void uploadToS3(File uploadFile, String filename){
         amazonS3.putObject(new PutObjectRequest(BUCKET, filename, uploadFile)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-//        return CLOUDFRONT_URL + "/" + amazonS3.getUrl(BUCKET, filename).toString();
     }
 }

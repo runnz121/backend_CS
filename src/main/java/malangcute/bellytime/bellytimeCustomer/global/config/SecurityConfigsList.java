@@ -57,10 +57,6 @@ public class SecurityConfigsList extends WebSecurityConfigurerAdapter {
     private final ObjectMapper objectMapper;
 
 
-    private final long MAX_AGES = 3600;
-
-
-
     // 인증 메니저
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
@@ -123,7 +119,6 @@ public class SecurityConfigsList extends WebSecurityConfigurerAdapter {
                         "/join",
                         "/cookie",
                         "/**", // 배포시 바꿈
-//                        "/check",
                         "/cooltime/check",
                         "/cooltime/**",
                         "/searchby/**"
@@ -145,10 +140,9 @@ public class SecurityConfigsList extends WebSecurityConfigurerAdapter {
                 .and()
                 .successHandler(oAuth2SuccessHandler)
                 .failureHandler(oAuth2FailureHandler)
-        //배포시 다시 설정할것
                 .and()
                 .addFilterBefore(new TokenAuthentication(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTExceptionFilter(tokenProvider, userDetailsService, objectMapper), TokenAuthentication.class);
+                .addFilterBefore(new JWTExceptionFilter(tokenProvider, objectMapper), TokenAuthentication.class);
     }
 
     @Override

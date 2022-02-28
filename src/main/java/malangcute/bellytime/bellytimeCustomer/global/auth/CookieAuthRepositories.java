@@ -30,7 +30,9 @@ public class CookieAuthRepositories implements AuthorizationRequestRepository<OA
 
     // 쿠키에 권한에 대한 응답내용을 저장하여 리다이렉트 uri로 보내줌
     @Override
-    public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request, HttpServletResponse response) {
+    public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest,
+                                         HttpServletRequest request,
+                                         HttpServletResponse response) {
         if (authorizationRequest == null){
             CookieUtils.deleteCookie(request, response, OAUTH_COOKIE);
             CookieUtils.deleteCookie(request, response, REDIRECT_COOKIE);
@@ -50,7 +52,8 @@ public class CookieAuthRepositories implements AuthorizationRequestRepository<OA
     }
 
 
-    public void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
+    public void removeAuthorizationRequestCookies(HttpServletRequest request,
+                                                  HttpServletResponse response) {
         CookieUtils.deleteCookie(request, response, OAUTH_COOKIE);
         CookieUtils.deleteCookie(request,response,REDIRECT_COOKIE);
     }

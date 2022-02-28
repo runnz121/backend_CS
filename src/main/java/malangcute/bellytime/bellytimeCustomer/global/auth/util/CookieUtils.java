@@ -20,8 +20,6 @@ public class CookieUtils {
                 }
             }
         }
-        // 쿠키가 있으면 위에서 반환
-        // 없으면 optional 빈객체 생성해서 빈객체 반환
         return Optional.empty();
     }
 
