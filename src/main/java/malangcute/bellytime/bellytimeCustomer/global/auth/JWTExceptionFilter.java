@@ -3,6 +3,7 @@ package malangcute.bellytime.bellytimeCustomer.global.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.global.auth.controller.LoginController;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.AccessTokenResponseDto;
 import malangcute.bellytime.bellytimeCustomer.global.auth.service.CustomUserService;
@@ -26,26 +27,13 @@ import java.io.PrintWriter;
 import java.util.Optional;
 
 @AllArgsConstructor
+@Slf4j
 public class JWTExceptionFilter extends OncePerRequestFilter {
 
-    public static final String AUTHORIZATION = "Authorization";
-    public static String BEARER = "Bearer ";
     public static final String REFRESH = "refreshToken";
-
-
     private final TokenProvider tokenprovider ;
-    private final CustomUserService userDetailsService;
     private final ObjectMapper objectMapper;
 
-
-    // 헤더에서 유효토큰 있는지 확인
-    public String getJwtFromRequest(HttpServletRequest request){
-        String token = request.getHeader(AUTHORIZATION);
-        if (StringUtils.hasText(token) && token.startsWith(BEARER)){
-            return token.substring(BEARER.length(), token.length());
-        }
-        return null;
-    }
 
     // 쿠키에서 리프레시 토큰값을 반환
     public String getRefreshFromRequest(HttpServletRequest request) {
@@ -57,56 +45,34 @@ public class JWTExceptionFilter extends OncePerRequestFilter {
         return null;
     }
 
-    // 토큰으로 부터 아이디 찾아서(이메일) 권한 부여
-    public Authentication getAuthentication(String token){
-        String userEmail = tokenprovider.getUserIdFromToken(token);
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
-
-
-
-
-    //더미데이터용 패스
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//
-//    }
-
 
     //실제 배포시 사용할 메소드
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
         String refreshToken = getRefreshFromRequest(request);
         String userPk = null;
-
         if (refreshToken != null){
             userPk = tokenprovider.getUserIdFromToken(refreshToken);
         }
-
         try {
             //TokenAuthentication 필터로 진행
             filterChain.doFilter(request, response);
-
             //유효토큰 만료 예외처리 발생시 -> 컨트롤러로 토큰 보내서 엑세스 토큰 반환
         } catch(JwtException ex) {
             String newAccess = tokenprovider.createAccessToken(userPk,refreshToken);
-           // String newAccess = tokenprovider.createRefreshToken(refreshToken);
-            System.out.println("token dofilter " + newAccess);
             sendNewToken(response, newAccess);
         }
     }
-
 
 
     // 엑세스 토큰 생성 및 응답
     public void sendNewToken(HttpServletResponse res, String token) throws IOException {
         res.setContentType("application/json; charset=UTF-8");
         AccessTokenResponseDto acc = new AccessTokenResponseDto(token);
-        System.out.println(acc);
         String result = objectMapper.writeValueAsString(acc);
         res.getWriter().write(result);
-        System.out.println("result " + result);
     }
 }

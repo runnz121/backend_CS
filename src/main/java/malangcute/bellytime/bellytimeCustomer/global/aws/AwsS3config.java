@@ -14,11 +14,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
-//@Configuration
+
+
 @Configuration
 @NoArgsConstructor
-//@AllArgsConstructor
-//@RequiredArgsConstructor
 public class AwsS3config {
 
     @Value("${cloud.aws.region.static}")

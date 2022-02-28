@@ -23,30 +23,31 @@ import java.util.Optional;
 @Slf4j
 public class TokenProvider {
 
-    private SecurityProperties securityProperties;
-
-    private static final String REFRESH_TOKEN = "refreshToken";
+    private final SecurityProperties securityProperties;
 
 
     //리프레시 토큰 생성(100일)
     public String createRefreshToken(String userPk){
         Date now = new Date();
-
         Claims claims = Jwts.claims().setSubject(userPk);
-        Date validate = new Date(now.getTime() + securityProperties.getAuth().getValidtimeforRefresh());
-
-        return generateJwt(claims, now, validate, securityProperties.getAuth().getSecretkey());
+        Date validate = new Date(now.getTime() + securityProperties
+                .getAuth()
+                .getValidtimeforRefresh());
+        return generateJwt(claims, now, validate, securityProperties.
+                getAuth()
+                .getSecretkey());
     }
 
     //엑세스 토큰 생성(1일) 역할도 같이 넣음
     public String createAccessToken(String userPk, String refreshToken){
         Date now = new Date();
-
         Claims claims = Jwts.claims().setSubject(userPk);
-//        claims.put("roles", roles);
-        Date validate = new Date(now.getTime() + securityProperties.getAuth().getValidtimeforAccess());
-
-        return generateJwt(claims, now, validate, securityProperties.getAuth().getSecretkey());
+        Date validate = new Date(now.getTime() + securityProperties
+                .getAuth()
+                .getValidtimeforAccess());
+        return generateJwt(claims, now, validate, securityProperties
+                .getAuth()
+                .getSecretkey());
     }
 
     //jwt 토큰 생성
@@ -62,14 +63,14 @@ public class TokenProvider {
     //리프레시 토큰검증 확인
     public boolean validateRefreshToken(String token){
         try{
-            Jws<Claims> claims = Jwts.parser().setSigningKey(securityProperties.getAuth().getSecretkey()).parseClaimsJws(token);
-
-            // 비교시간.before(기준시간) -> 기준시간을 지남 -> true를 반환
-            // expirdate 기준 시간보다 커야됨
+            Jws<Claims> claims
+                    = Jwts.parser().setSigningKey(securityProperties
+                    .getAuth()
+                    .getSecretkey())
+                    .parseClaimsJws(token);
             if (claims.getBody().getExpiration().before(new Date())) {
                 throw new NotValidTokenException("유효기간 만료된 리프레시토큰입니다");
             }
-
             return true;
         } catch (JwtException ex){
             log.trace("validate RefreshToken ex : ", ex);
@@ -81,27 +82,32 @@ public class TokenProvider {
     public boolean validateAccessToken(String accessToken, String refreshToken){
         try {
 
-            Jws<Claims> claimsAccess = Jwts.parser().setSigningKey(securityProperties.getAuth().getSecretkey()).parseClaimsJws(accessToken);
-            Date expirationRefresh = Jwts.parser().setSigningKey(securityProperties.getAuth().getSecretkey()).parseClaimsJws(refreshToken).getBody().getExpiration();
+            Jws<Claims> claimsAccess
+                    = Jwts.parser().setSigningKey(securityProperties
+                    .getAuth()
+                    .getSecretkey())
+                    .parseClaimsJws(accessToken);
 
+            Date expirationRefresh
+                    = Jwts.parser().setSigningKey(securityProperties
+                    .getAuth()
+                    .getSecretkey())
+                    .parseClaimsJws(refreshToken)
+                    .getBody()
+                    .getExpiration();
 
             log.trace("claimAccess : ", claimsAccess);
             log.trace("expirationRefresh : ", expirationRefresh);
-            // 비교시간.before(기준시간) -> 기준시간을 지남 -> true를 반환
-            // expirdate 기준 시간보다 커야됨
-            // if (claimsAccess.getBody().getExpiration().before(expirationRefresh)) {
             if (expirationRefresh.before(claimsAccess.getBody().getExpiration())) {
-                //throw new NotValidTokenException("유효기간 만료된 엑세스토큰입니다");
                 return false;
             }
             return true;
         } catch (JwtException ex){
             log.trace("validate AccessToken ex : ", ex);
-            System.out.println(ex);
-            //throw new NotValidTokenException("유효하지 않은 엑세스토큰입니다");
             return false;
         }
     }
+
 
 
     //토큰 갖고와서 유저 아이디 찾기(이메일 반환)
@@ -112,14 +118,4 @@ public class TokenProvider {
                     .getBody();
             return claims.getSubject();
     }
-
-
-
-    //쿠키로부터 리프레시 토큰 파싱
-//    public String getTokenFromCookie(HttpServletRequest httpServletRequest){
-//        Optional<Cookie> cookie = CookieUtils.getCookie(httpServletRequest, REFRESH_TOKEN);
-//        Cookie getCookie = cookie.orElseThrow(() -> new NoCookieException("쿠키가 없습니다"));
-//        String refreshToken = getCookie.getValue();
-//        return refreshToken;
-//    }
 }

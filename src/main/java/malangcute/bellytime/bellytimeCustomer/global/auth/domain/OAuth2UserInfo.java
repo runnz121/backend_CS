@@ -1,8 +1,5 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.domain;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Map;
 
 public abstract class OAuth2UserInfo {
@@ -14,11 +11,10 @@ public abstract class OAuth2UserInfo {
     }
 
 
-    public abstract String getId() throws JSONException;
+    public abstract String getId();
 
-    public abstract String getNickName() throws JSONException;
+    public abstract String getNickName();
 
-    public abstract String getEmail() throws JSONException;
+    public abstract String getEmail();
 
-    public abstract String getPhone() throws JSONException;
 }

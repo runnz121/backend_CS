@@ -18,9 +18,9 @@ import malangcute.bellytime.bellytimeCustomer.user.dto.UserProfileResponse;
 import malangcute.bellytime.bellytimeCustomer.user.dto.UserUpdateRequest;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,8 +34,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final AwsS3uploader awsS3uploader;
+    private static final String ERASE_TOKEN ="";
 
     //유저 아이디로 유저 찾기(유저 반환)
+    @Transactional(readOnly = true)
     public User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .stream()
@@ -45,6 +47,7 @@ public class UserService {
     }
 
     //유저 이메일로 유저 찾기(유저반환
+    @Transactional(readOnly = true)
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(new Email(email))
                 .stream()
@@ -55,6 +58,7 @@ public class UserService {
 
 
     //나의 프로필 찾기
+    @Transactional(readOnly = true)
     public UserProfileResponse userProfile(User user) {
             return userRepository.findById(user.getId())
                 .stream()
@@ -67,20 +71,15 @@ public class UserService {
 
     // 유저 정보 업데이트
     public void userUpdate(UserUpdateRequest userUpdateRequest) throws FailedToConvertImgFileException {
-//        Optional<User> userId = userRepository.findByEmail(new Email(userUpdateRequest.getEmail()));
-//        User user = userId.orElseThrow(() -> new NoUserException("해당하는 유저가 없습니다"));
         User user = findUserByEmail(userUpdateRequest.getEmail());
-        String updateFileUrl = updateImg(userUpdateRequest.getProfileImg());
-        String updateNickName = userUpdateRequest.getNickname();
-        user.setProfileImg(updateFileUrl);
-        user.setNickname(updateNickName);
+        user.setProfileImg(updateImg(userUpdateRequest.getProfileImg()));
+        user.setNickname(userUpdateRequest.getNickname());
         userRepository.save(user);
     }
 
     // 프로필 이미지 업데이트
     public String updateImg(MultipartFile userImg) throws FailedToConvertImgFileException {
-        String fileUrl = awsS3uploader.upload(userImg);
-        return fileUrl;
+        return awsS3uploader.upload(userImg);
     }
 
     //닉네임으로 친구 찾기
@@ -89,5 +88,10 @@ public class UserService {
                 .stream()
                 .map(MyFriendSearchResponse::from)
                 .findFirst().orElseThrow(() -> new NotFoundException("유저가 없습니다"));
+    }
+
+    //유저 로그아웃
+    public void userLogOut(User user) {
+        userRepository.logOutByUserId(user.getId(), ERASE_TOKEN);
     }
 }

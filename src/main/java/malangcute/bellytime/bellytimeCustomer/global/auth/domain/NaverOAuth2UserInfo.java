@@ -1,47 +1,37 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.domain;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
 
 public class NaverOAuth2UserInfo extends OAuth2UserInfo {
 
-    public NaverOAuth2UserInfo(Map<String, Object> attribute) throws JSONException {
+    private final static String NAVER_KEY = "response";
+
+    public NaverOAuth2UserInfo(Map<String, Object> attribute) {
         super(attribute);
-        System.out.println("in naver auth!!!!!!!!!!!!:" + attribute);
-        System.out.println(attribute.get("response"));
         parsing(attribute);
     }
 
-    public JSONObject parsing(Map<String, Object> at) throws JSONException {
-        JSONObject jsonObject = new JSONObject((Map) at.get("response"));
-        System.out.println(jsonObject);
-        JSONObject parsed = jsonObject;
-        System.out.println("in json" + parsed.get("id"));
-        return parsed;
+    public JSONObject parsing(Map<String, Object> at) {
+        return new JSONObject((Map) at.get(NAVER_KEY));
     }
 
 
-
     @Override
-    public String getId() throws JSONException {
-        System.out.println(parsing(attribute).get("id"));
+    public String getId() {
         return (String) parsing(attribute).get("id");
     }
 
     @Override
-    public String getNickName() throws JSONException {
+    public String getNickName() {
         return (String) parsing(attribute).get("name");
     }
 
     @Override
-    public String getEmail() throws JSONException {
+    public String getEmail() {
         return (String) parsing(attribute).get("email");
     }
 
-    @Override
-    public String getPhone() throws JSONException {
-        return (String) parsing(attribute).get("mobile");
-    }
+
 }

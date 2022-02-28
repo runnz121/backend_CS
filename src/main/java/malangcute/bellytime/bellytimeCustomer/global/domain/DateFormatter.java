@@ -15,30 +15,16 @@ import java.util.Date;
 @Component
 public class DateFormatter {
 
-    // 2018-08-04T10:11:30 형식으로 들어옴
     public String localToStringPattern(LocalDateTime localDateTime) {
-
-        //String dateString = "2018-08-04T10:11:30";
-
-        //LocalDateTime parsedLocalDateTime = LocalDateTime.parse(localDateTime);
-
-
-        String yyyyMMdd = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//        String yyyy = parsedLocalDateTime.format(DateTimeFormatter.ofPattern("yyyy"));
-//        String MM = parsedLocalDateTime.format(DateTimeFormatter.ofPattern("MM"));
-    return yyyyMMdd;
+        return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
 
-    // yyyy-MM-dd로 들어옴
     public LocalDateTime stringToLocal(String stringDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-       // LocalDateTime localDateTime = LocalDateTime.parse(stringDate, formatter).toLocalDate().atStartOfDay();
-        //LocalDateTime d = LocalDateTime.parse("2016-10-31 23:59:59", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDate localDateTime = LocalDate.parse(stringDate, formatter);
     return LocalDateToLocalDateTime(localDateTime);
     }
-
 
     //LocalDateTime to Date
     public Date localDateTimeToDate(LocalDateTime localDateTime) {
@@ -46,7 +32,6 @@ public class DateFormatter {
         return date;
     }
 
-    //
     public Date stringToDate(String stringDate) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = format.parse(stringDate);

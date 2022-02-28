@@ -37,21 +37,17 @@ import java.util.List;
 import java.util.Optional;
 
 
-@AllArgsConstructor
+
 @Slf4j
 @Component
+@AllArgsConstructor
 public class TokenAuthentication extends OncePerRequestFilter {
-
-//public class TokenAuthentication {
 
     public static final String AUTHORIZATION = "Authorization";
     public static String BEARER = "Bearer ";
     public static final String REFRESH = "refreshToken";
-
     private final TokenProvider tokenprovider ;
     private final CustomUserService userDetailsService;
-//    private final LoginService loginService;
-//    private final LoginController loginController;
 
 
     // 헤더에서 유효토큰 있는지 확인
@@ -84,49 +80,22 @@ public class TokenAuthentication extends OncePerRequestFilter {
 
     //권한 갖고와서 securitycontextholder에 저장(유저 인증 정보 저장) -> accesstoken처리
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        //System.out.println("here?1");
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         String refreshToken = getRefreshFromRequest(request);
-
-        //System.out.println("here2?");
         String accessToken = getJwtFromRequest(request);
-
-        //System.out.println("here3?");
-
 
         // 리프레시 토큰도 없고, 유효하지도 않은 경우
         if (refreshToken != null && !tokenprovider.validateRefreshToken(refreshToken)) {
             log.trace("dofilter TokenAuthentication : " , refreshToken);
-           // System.out.println("111");
             throw new NotValidTokenException("리프레시토큰이 만료되었음으로 다시 로그인 해주세요");
         }
-//        else if (!tokenprovider.validateAccessToken(refreshToken, accessToken)){
-//            try {
-//
-//            } catch (ExpiredJwtException ex) {
-//
-//            }
-//        }
-
-
-        // 리프레시 토큰은 유효한데, 엑세스 토큰이 유효하지 않은 경우
-//        else if(refreshToken != null && tokenprovider.validateRefreshToken(refreshToken))
-//            if (!tokenprovider.validateAccessToken(accessToken, refreshToken)) {
-//            String regenerateToken = tokenprovider.createAccessToken(tokenprovider.getUserIdFromToken(refreshToken),refreshToken);
-//            tokenprovider.validateAccessToken(regenerateToken, refreshToken);
-//                System.out.println(regenerateToken);
-//                System.out.println("222");
-//                System.out.println(tokenprovider.validateAccessToken(accessToken, refreshToken));
-//        }
-        // 둘다 유효한 토큰이면 인증객체 저장
-        //else if (refreshToken != null && StringUtils.hasText(accessToken) && tokenprovider.validateAccessToken(accessToken, refreshToken)){
         else if (refreshToken != null && StringUtils.hasText(accessToken)){
                 Authentication authentication = getAuthentication(accessToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        //System.out.println("here4");
         filterChain.doFilter(request, response);
     }
 }
