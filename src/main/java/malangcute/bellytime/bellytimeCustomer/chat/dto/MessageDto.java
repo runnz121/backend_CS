@@ -30,6 +30,7 @@ public class MessageDto {
         this.nickName = nickName;
         this.content = message;
 
+
     }
 
 
