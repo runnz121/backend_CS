@@ -29,6 +29,8 @@ public class MessageDto {
         this.sender = sender;
         this.nickName = nickName;
         this.content = message;
+
+
     }
 
 
