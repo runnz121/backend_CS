@@ -36,8 +36,6 @@ public class ChatService {
 
     private static final String DELIMITER = "_";
 
-    private static final String POST_FIX = "의 채팅방";
-
     private static final String CUSTOMER = "customer";
 
     private static final String SHOP = "shop";
@@ -47,7 +45,7 @@ public class ChatService {
     public RoomIdResponse createRoomService(User user, CreateRoomRequest createRoomRequest) {
         Chat makeRoom = Chat.create(
                 generateRoom(user),
-                generateRoomName(user),
+                generateRoomName(userService.findUserById(createRoomRequest.getInviteId())),
                 createRoomRequest.getType(),
                 user,
                 userService.findUserById(createRoomRequest.getInviteId())
@@ -63,13 +61,13 @@ public class ChatService {
 
     //방 이름 생성
     private String generateRoomName(User user) {
-        return user.getNickname().getNickName() + POST_FIX;
+        return user.getNickname().getNickName();
     }
 
 
     //내가 주인인 방의 친구 목록 반환
     public List<ChatRoomFriendListResponse> friendChatRoomList(User user) {
-        return chatRepository.findByMakerIdAndType(user, CUSTOMER)
+        return chatRepository.findByMakerIdOrInviteIdAndType(user, user, CUSTOMER)
                 .stream()
                 .map(it -> new ChatRoomFriendListResponse(
                         it.getRoomId(),
@@ -82,7 +80,7 @@ public class ChatService {
 
     //내가 주인인 방의 샵 목록 반환
     public List<ChatRoomShopListResponse> shopChatRoomList(User user) {
-        return chatRepository.findByMakerIdAndType(user, SHOP)
+        return chatRepository.findByMakerIdOrInviteIdAndType(user, user, SHOP)
                 .stream()
                 .map(it -> new ChatRoomShopListResponse(
                         it.getRoomId(),

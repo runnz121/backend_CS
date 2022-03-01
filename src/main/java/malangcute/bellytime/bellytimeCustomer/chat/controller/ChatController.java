@@ -4,6 +4,7 @@ package malangcute.bellytime.bellytimeCustomer.chat.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.chat.dto.*;
 import malangcute.bellytime.bellytimeCustomer.chat.service.ChatService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class ChatController {
 
     private final ChatService chatService;

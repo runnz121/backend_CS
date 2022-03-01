@@ -1,1 +1,7 @@
 # test container 설정
+spring:
+  profiles:
+    active: test
+
+  datasource:
+    driver-class-name: org.testcontainers.jdbc

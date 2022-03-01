@@ -9,7 +9,6 @@ import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 @Getter
 @AllArgsConstructor
 public class Chat extends BaseTimeEntity {

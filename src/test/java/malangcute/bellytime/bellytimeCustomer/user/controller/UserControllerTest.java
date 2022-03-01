@@ -23,18 +23,7 @@ class UserControllerTest extends BaseSetup {
     @Autowired
     private AwsS3uploader awsS3uploader;
 
-    @BeforeEach
-    public void setUpUser() {
-        user = User.builder()
-                .id(1L)
-                .passWord("test")
-                .email("test@test.com")
-                .nickName("testnickname")
-                .profileImg("cloudfront_img")
-                .phoneNumber("010-0000-0000")
-                .build();
-        userRepository.save(user);
-    }
+
 
 
     @DisplayName("유저 사진 업데이트")
