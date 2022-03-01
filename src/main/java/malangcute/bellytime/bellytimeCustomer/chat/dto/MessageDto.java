@@ -3,6 +3,7 @@ package malangcute.bellytime.bellytimeCustomer.chat.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.chat.domain.ChatLog;
 
 import java.time.LocalDate;
@@ -11,7 +12,6 @@ import java.util.Date;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class MessageDto {
 
     private String roomId;
@@ -24,13 +24,21 @@ public class MessageDto {
 
     private String sendTime;
 
+
+    public MessageDto(String roomId, Long sender, String nickName, String message, String sendTime) {
+        this.roomId = roomId;
+        this.sender = sender;
+        this.nickName = nickName;
+        this.content = message;
+        this.sendTime = sendTime;
+    }
+
+
     public MessageDto(String roomId, Long sender, String nickName, String message) {
         this.roomId = roomId;
         this.sender = sender;
         this.nickName = nickName;
         this.content = message;
-
-
     }
 
 
@@ -38,4 +46,7 @@ public class MessageDto {
         return new MessageDto(log.getRoomId(), log.getSender(), log.getNickName(),log.getMessage());
     }
 
+    public static MessageDto send (MessageDto send) {
+        return new MessageDto(send.getRoomId(), send.getSender(), send.getNickName(), send.getContent(), send.getSendTime());
+    }
 }
