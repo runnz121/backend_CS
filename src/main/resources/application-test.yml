@@ -1,7 +1,5 @@
 # test container 설정
 spring:
-  profiles:
-    active: test
-
   datasource:
-    driver-class-name: org.testcontainers.jdbc
+    url: jdbc:tc:mysql:5.7.22://localhost:3306/test
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
