@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.chat.domain.ChatLog;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -20,10 +22,18 @@ public class MessageDto {
 
     private String content;
 
-    //private String message;
+    private String sendTime;
+
+    public MessageDto(String roomId, Long sender, String nickName, String message) {
+        this.roomId = roomId;
+        this.sender = sender;
+        this.nickName = nickName;
+        this.content = message;
+    }
+
 
     public static MessageDto of (ChatLog log) {
-        return new MessageDto(log.getRoomId(), log.getSender(),  log.getNickName(),log.getMessage());
+        return new MessageDto(log.getRoomId(), log.getSender(), log.getNickName(),log.getMessage());
     }
 
 }
