@@ -144,9 +144,9 @@ dependencies {
 
 
 	//test container 설정
-	testImplementation "org.testcontainers:testcontainers:1.15.3"
-	testImplementation "org.testcontainers:junit-jupiter:1.15.3"
-	testImplementation "org.testcontainers:mysql:1.15.3"
+	testImplementation 'org.testcontainers:testcontainers:1.16.3'
+	testImplementation 'org.testcontainers:junit-jupiter:1.16.3'
+	testImplementation 'org.testcontainers:mysql:1.16.3'
 
 }
 //snippets 설정

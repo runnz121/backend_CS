@@ -75,7 +75,7 @@ public class ChatController {
 
 
     //채팅 로그 갖고오기
-    @GetMapping("/chat/chatlog")
+    @PostMapping("/chat/chatlog")
     public ResponseEntity<?> chatLog(@RequestBody RoomIdRequest request) {
         List<MessageDto> list = chatService.getChatLog(request);
         return ResponseEntity.ok(list);
