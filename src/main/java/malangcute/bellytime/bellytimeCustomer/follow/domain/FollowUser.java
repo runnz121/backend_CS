@@ -8,16 +8,14 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-//@EqualsAndHashCode(exclude = {"hostId", "friendId"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class FollowUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    //한곳에서 같은거 바라보면 joincolumn 비워두기
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "hostId")
     private User hostId;

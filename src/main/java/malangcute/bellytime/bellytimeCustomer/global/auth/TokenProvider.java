@@ -39,7 +39,7 @@ public class TokenProvider {
     }
 
     //엑세스 토큰 생성(1일) 역할도 같이 넣음
-    public String createAccessToken(String userPk, String refreshToken){
+    public String createAccessToken(String userPk){
         Date now = new Date();
         Claims claims = Jwts.claims().setSubject(userPk);
         Date validate = new Date(now.getTime() + securityProperties
@@ -118,4 +118,5 @@ public class TokenProvider {
                     .getBody();
             return claims.getSubject();
     }
+
 }

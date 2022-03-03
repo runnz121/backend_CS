@@ -1,0 +1,1 @@
+ALTER TABLE `chat_log` ADD `nick_name` DATETIME AFTER `sender`;

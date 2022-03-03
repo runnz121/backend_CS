@@ -42,6 +42,12 @@ public class LoginController {
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
+    //권한 기반 로그인 확인용 -> 토큰으로부터 user 객체 갖고오기 완료
+    @PostMapping("/check")
+    public String check(@RequireLogin User userId){
+        return "check";
+    }
+
     // id 로 로그인 했을 때 -> httpresponesdp 쿠키 담아서 보냄
     @PostMapping("/login")
     public ResponseEntity<AccessTokenResponseDto> loginWithIdController(
@@ -63,21 +69,6 @@ public class LoginController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(RegisterCompleteResponse.of(true,"등록되었습니다"));
     }
-
-    //권한 기반 로그인 확인용 -> 토큰으로부터 user 객체 갖고오기 완료
-    @PostMapping("/check")
-    public String check(@RequireLogin User userId){
-
-        System.out.println(userId);
-        return "check";
-    }
-
-    //헬스 체크
-    @GetMapping("/check")
-    public String check2(){
-        return "check";
-    }
-
 
     //로그아웃
     @GetMapping("/logout")

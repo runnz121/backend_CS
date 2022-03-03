@@ -62,7 +62,7 @@ public class JWTExceptionFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             //유효토큰 만료 예외처리 발생시 -> 컨트롤러로 토큰 보내서 엑세스 토큰 반환
         } catch(JwtException ex) {
-            String newAccess = tokenprovider.createAccessToken(userPk,refreshToken);
+            String newAccess = tokenprovider.createAccessToken(userPk);
             sendNewToken(response, newAccess);
         }
     }

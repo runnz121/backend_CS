@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @AllArgsConstructor
 public class MyFriendListResponse {
 
-    // 나의 친구 아이디(내거 말고)
     private Long id;
 
     private String name;
