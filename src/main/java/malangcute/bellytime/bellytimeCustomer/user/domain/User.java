@@ -107,10 +107,6 @@ public class User extends BaseTimeEntity implements UserDetails {
     private List<Comment> commentId = new ArrayList<>();
 
 
-
-
-
-
     @Builder
     public User (Long id, String nickName, String email, String passWord, String phoneNumber, String profileImg){
         this.id = id;

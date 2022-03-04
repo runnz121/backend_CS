@@ -1,6 +1,6 @@
 package malangcute.bellytime.bellytimeCustomer.user.service;
 
-import malangcute.bellytime.bellytimeCustomer.config.RestDocsSupport;
+import malangcute.bellytime.bellytimeCustomer.config.TestSupport;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayName("유저 컨트롤러 테스트")
-class UserServiceTest extends RestDocsSupport {
+class UserServiceTest extends TestSupport {
 
     @Autowired
     private UserRepository userRepository;
