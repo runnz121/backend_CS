@@ -1,0 +1,1 @@
+ALTER TABLE `cooltime` ADD `eat` BOOLEAN AFTER `duration`;

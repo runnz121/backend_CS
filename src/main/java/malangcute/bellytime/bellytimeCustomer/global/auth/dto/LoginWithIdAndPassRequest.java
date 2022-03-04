@@ -7,12 +7,13 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class LoginWithIdAndPassRequest {
 
-
+    @NotBlank
     private String email;
 
+    @NotBlank
     private String password;
 
 

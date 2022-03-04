@@ -41,7 +41,6 @@ public class SearchService {
 
     //food, shop 전체조회
     @Transactional(readOnly = true)
-   // public List<String> searching(User user, String name) {
     public SearchResultList searching(User user, String name) {
 
         List<String> food = foodService.searchByName(name);
@@ -49,16 +48,9 @@ public class SearchService {
 
         // redis에 저장
         saveRecentSearch(user, name);
-
-
         List<String> result = listAssemble(food, shop);
         Set<String> recent = recentSearch(user);
         SearchResultList list = SearchResultList.of(recent, result);
-        System.out.println("totlalist"+list);
-        System.out.println("recent" + recent);
-
-
-       // return listAssemble(food, shop);
         return list;
     }
 
@@ -85,21 +77,6 @@ public class SearchService {
         savelist.add(key, name);
 
     }
-
-//    ListOperations<String, PostDto.ListResponse> listOperations = redisTemplate.opsForList();
-//    Post post = postRepository.findById(postIdx)
-//            .orElseThrow(() -> new EntityNullException(ErrorInfo.POST_NULL));
-//    PostDto.ListResponse postDto = postMapper.postToListResponse(post, userIdx);
-//    String key = "userIdx::"+ userIdx;
-//        listOperations.leftPush(key, postDto);
-//        redisTemplate.expireAt(key, Date.from(ZonedDateTime.now().plusDays(7).toInstant())); // 유
-//
-
-//    @Cacheable(value = CacheElements.RECENT_SEARCH, key = "#name")
-//    public List<String> recentSearch(String name) {
-//
-//    }
-
 
 
     //이름과 정렬 기준으로 shop 찾기

@@ -52,7 +52,7 @@ public class CoolTimeService {
 
         List<GetMyCoolTimeListIF> listFromRepo = coolTimeRepository.findMyCoolTime(userId);
 
-        List<GetMyCoolTimeList> myList = listFromRepo
+        return listFromRepo
                 .stream()
                 .map(it -> GetMyCoolTimeList.builder()
                        .foodId(it.getFoodId())
@@ -64,19 +64,8 @@ public class CoolTimeService {
                        .predictDate(dateFormatter.localToStringPattern(it.getEndDate()))
                        .leftDays(dateFormatter.minusDateLocalDateTime(now,it.getEndDate()))
                        .build()
-
-//                       new GetMyCoolTimeList(
-//                        it.getFoodId(),
-//                        it.getFoodName(),
-//                        it.getGauge(),
-//                        it.getDuration(),
-//                        it.get
-//                        it.getFoodImg(),
-//                        dateFormatter.localToStringPattern(it.getEndDate()), // yyyy-mm-dd 형식으로 변환 -> string
-//                        dateFormatter.minusDateLocalDateTime(now,it.getEndDate())
                 )
                 .collect(Collectors.toList());
-        return myList;
     }
 
     //쿨타임 업데이터, 생성
@@ -166,16 +155,11 @@ public class CoolTimeService {
     // 쿨타임 달력 조회해서 달력결과 리스트로 반환(해당년, 달)
     public CoolTimeCalListResponse1 getMyCoolTimeCal(User user, Long month, Long year)//)CoolTimeCalRequest request)
      {
-//        List<Food> list = foodService.findFoodWithUserIdInCoolTime(user);
-//        for(Food food : list) {
-//            System.out.println("inlist" + food.getName());
-//        }
         int today = LocalDateTime.now().getDayOfMonth();
 
         List<GetMyCoolTimeListIF> listFromRepo = coolTimeRepository.findMyCoolTime(user.getId());
         CoolTimeCalListResponse1 totalList = new CoolTimeCalListResponse1();
 
-//        Set<CoolTimeCalDayList2> list2 = new HashSet<>();
         //달이 31일까지
         for (int i = 1; i <= 31; i++) {
             int finalI = i;
@@ -186,14 +170,11 @@ public class CoolTimeService {
                             it.getEndDate().getMonthValue() == month)
                     .map(CoolTimeCalFoodList3::from)
                     .collect(Collectors.toList());
-          //  System.out.println("sorting " +  i + "몇일?" + dataList);
 
             List<CoolTimeCalTodayFoodList3> todayList2 = listFromRepo.stream()
                     .filter(it -> it.getEndDate().getDayOfMonth() == today && it.getEndDate().getMonthValue() == month)
                     .map(CoolTimeCalTodayFoodList3::from)
                     .collect(Collectors.toList());
-
-
 
             CoolTimeCalDayList2 list2 = new CoolTimeCalDayList2(finalI, list3);
             if (list2.getData().size() > 0 && finalI != today){
@@ -204,19 +185,7 @@ public class CoolTimeService {
             if (list2.getDay() == today && list2.getData().size() > 0) {
                 totalList.addToday(todayList);
             }
-
-
-
-
-            //day, 와 푸드 같이 있는 것
-//            List<CoolTimeCalDayList2> list2 = list3.stream()
-//                    .distinct()
-//                    .map(it -> new CoolTimeCalDayList2(finalI,list3))
-//                    .collect(Collectors.toList());
-
-
-
-            }
+        }
         return totalList;
     }
 

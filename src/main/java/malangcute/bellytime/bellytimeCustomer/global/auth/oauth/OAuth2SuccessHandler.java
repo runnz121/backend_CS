@@ -48,7 +48,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         String refreshToken = tokenProvider.createRefreshToken(userPrincipal.getEmail());
-        String accessToken = tokenProvider.createAccessToken(userPrincipal.getEmail(), refreshToken);
+        String accessToken = tokenProvider.createAccessToken(userPrincipal.getEmail());
         User user = userService.findUserByEmail(userPrincipal.getEmail());
         user.setRefreshToken(refreshToken);
         userRepository.save(user);

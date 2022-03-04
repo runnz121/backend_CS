@@ -36,7 +36,7 @@ public class LoginService {
         User requestLoginUser = userService.findUserByEmail(loginWithIdAndPassRequest.getEmail());
         checkPassword(requestLoginUser, loginWithIdAndPassRequest.getPassword());
         String refreshToken = tokenProvider.createRefreshToken(loginWithIdAndPassRequest.getEmail());
-        String accessToken = tokenProvider.createAccessToken(loginWithIdAndPassRequest.getEmail(), refreshToken);
+        String accessToken = tokenProvider.createAccessToken(loginWithIdAndPassRequest.getEmail());
         requestLoginUser.setRefreshToken(refreshToken);
         userRepository.save(requestLoginUser);
         return RefreshAndAccessTokenResponse.of(accessToken, refreshToken);
@@ -75,4 +75,6 @@ public class LoginService {
             throw new UserPassWordException("비밀번호가 잘못되었습니다");
         }
     }
+
+
 }

@@ -47,7 +47,6 @@ public class Shop { // 엘라스틱 서치는 localdatetime 컨버터시 에러�
     private int follower;
 
 
-
     @OneToMany(mappedBy = "shopId", cascade = CascadeType.ALL)
     private List<ShopMenu> shopId = new ArrayList<>();
 
