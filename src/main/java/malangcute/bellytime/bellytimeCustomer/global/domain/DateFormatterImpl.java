@@ -13,33 +13,32 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Component
-public class DateFormatter {
+public class DateFormatterImpl implements DataFormatter{
 
+    @Override
     public String localToStringPattern(LocalDateTime localDateTime) {
         return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
-
+    @Override
     public LocalDateTime stringToLocal(String stringDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDateTime = LocalDate.parse(stringDate, formatter);
     return LocalDateToLocalDateTime(localDateTime);
     }
 
-    //LocalDateTime to Date
+    @Override
     public Date localDateTimeToDate(LocalDateTime localDateTime) {
-        Date date = java.sql.Timestamp.valueOf(localDateTime);
-        return date;
+        return java.sql.Timestamp.valueOf(localDateTime);
     }
 
+    @Override
     public Date stringToDate(String stringDate) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = format.parse(stringDate);
-        return date;
+        return format.parse(stringDate);
     }
 
-
-    //날짜 더하기
+    @Override
     public String plusDate(Date startDate, String duration) {
         Integer appendDays = Integer.valueOf(duration);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -47,33 +46,27 @@ public class DateFormatter {
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
         cal.add(Calendar.DATE, appendDays);
-        String plusdates = simpleDateFormat.format(cal.getTime());
-        return plusdates;
+        return simpleDateFormat.format(cal.getTime());
     }
 
-    // localdatetime으로 두 날짜 사이 계산 -> long days 반환
+    @Override
     public Long minusDateLocalDateTime(LocalDateTime longer, LocalDateTime shorter) {
-        Long days = ChronoUnit.DAYS.between(longer, shorter);
-        return days;
+        return ChronoUnit.DAYS.between(longer, shorter);
     }
 
+    @Override
     public LocalDateTime dateToLocal(Date date) {
-        LocalDate localDate = date.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-
-        LocalDateTime localDateTime = date.toInstant()
+        return date.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
-        return localDateTime;
     }
 
+    @Override
     public LocalDateTime LocalDateToLocalDateTime(LocalDate localDate){
-        LocalDateTime localDateTime = localDate.atStartOfDay();
-        return localDateTime;
+        return localDate.atStartOfDay();
     }
 
-    //오늘날짜(localdate)와 비교 날짜군 (localdatetime)을 받아서 남은일 수 반환
+    @Override
     public Long leftDays(LocalDateTime compare) {
         LocalDate today = LocalDate.now();
         LocalDateTime todayLocal = LocalDateToLocalDateTime(today);

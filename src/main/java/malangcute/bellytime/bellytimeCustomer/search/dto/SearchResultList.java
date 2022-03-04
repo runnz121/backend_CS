@@ -13,11 +13,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class SearchResultList {
 
-    private Set<String> recentSearch;
-
     private List<String> searchResult;
 
-    public static SearchResultList of (Set<String> recent, List<String> result) {
-        return new SearchResultList(recent, result);
+    public static SearchResultList of (List<String> result) {
+        return new SearchResultList(result);
     }
 }

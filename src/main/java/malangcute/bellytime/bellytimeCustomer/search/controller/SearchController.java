@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.SearchFoodRequest;
 import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
-import malangcute.bellytime.bellytimeCustomer.search.dto.SearchDto;
-import malangcute.bellytime.bellytimeCustomer.search.dto.SearchResultList;
-import malangcute.bellytime.bellytimeCustomer.search.dto.SearchShopRequest;
+import malangcute.bellytime.bellytimeCustomer.search.dto.*;
 import malangcute.bellytime.bellytimeCustomer.search.service.SearchService;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSaveRequest;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListDto;
@@ -33,7 +31,7 @@ public class SearchController {
 //    Type 2 => http://127.0.0.1/index/1 -> @PathVariable
 
 
-    //음식과 샵을 동시에 조회 및 반환
+    // 음식과 샵을 동시에 조회 및 반환
     @GetMapping("/name/{name}")
     public ResponseEntity<?> searchAny(@RequireLogin User user, @PathVariable String name) {
        // List<String> returnList = searchService.searching(user, name);
@@ -42,25 +40,23 @@ public class SearchController {
     }
 
 
-    //score, follow순으로 반환
+    // score, follow순으로 반환
     @PostMapping("/resultlist")
     public ResponseEntity<?> searchShop(@RequestBody SearchShopRequest request) {
         List<ShopSearchResultListDto> list  =  searchService.specificSearch(request);
         return ResponseEntity.ok(list);
     }
 
-
-        //예시코드
-
+    // 가게 이름으로 찾기
     @GetMapping("/shop/{name}")
     public ResponseEntity<?> searchShop1(@PathVariable String name) {
         List<String> shopList = shopService.searchByName(name);
         return ResponseEntity.ok(shopList);
     }
 
+    // 음식 찾기
     @GetMapping("/food")
     public ResponseEntity<?> searchfood(@RequestBody SearchDto searchDto) {
-        System.out.println(searchDto.getSearch());
         List<String> shopList = foodService.searchByName(searchDto.getSearch());
         return ResponseEntity.ok(shopList);
     }
@@ -70,6 +66,18 @@ public class SearchController {
     public ResponseEntity<?> saveShop(@RequestBody ShopSaveRequest shopSaveRequest) {
         shopService.saveShop(shopSaveRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("저장되었습니다");
+    }
+
+    //최근 음식 검색어 반환
+    @GetMapping("/recent")
+    public ResponseEntity<SearchRecentListResponse> recentSearchList(@RequireLogin User user) {
+        SearchRecentListResponse list = searchService.recentSearch(user);
+        return ResponseEntity.ok(list);
+    }
+
+    @DeleteMapping("/recent")
+    public void deleteRecentSearch(@RequireLogin User user, @RequestBody SearchDeleteRecentListRequest request) {
+        searchService.deleteRecentSearch(user, request);
     }
 }
 
