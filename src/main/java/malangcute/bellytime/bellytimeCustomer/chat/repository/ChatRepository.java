@@ -13,7 +13,11 @@ import java.util.Optional;
 
 public interface ChatRepository extends JpaRepository<Chat, Long> {
 
-    List<Chat> findByMakerIdOrInviteIdAndType(User inMakerId, User inInviteId, String type);
+    //List<Chat> findByMakerIdOrInviteIdAndType(User inMakerId, User inInviteId, String type);
+
+    List<Chat> findByMakerIdAndType(User MakerId, String type);
+
+    Chat findByMakerId(User makerId);
 
 
     @Modifying

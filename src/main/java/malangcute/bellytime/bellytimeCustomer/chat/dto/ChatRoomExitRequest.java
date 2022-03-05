@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @AllArgsConstructor
-public class ChatRoomDeleteRequest {
+public class ChatRoomExitRequest {
 
     private String chatRoomId;
 }

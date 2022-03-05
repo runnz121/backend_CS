@@ -1,6 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer.chat.controller;
 
 
+import com.amazonaws.Response;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,9 @@ public class ChatController {
     @PostMapping("/chat/create")
     public ResponseEntity<?> createRoom(@RequireLogin User user, @RequestBody CreateRoomRequest createRoomRequest) {
         RoomIdResponse response =  chatService.createRoomService(user, createRoomRequest);
+        System.out.println("incontroller");
+        System.out.println(user.getEmail());
+        System.out.println(createRoomRequest.getInviteId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -67,17 +71,25 @@ public class ChatController {
 
 
     //채팅방 삭제
-    @DeleteMapping("/chat/delete")
-    public ResponseEntity<?> deleteRoom(@RequireLogin User user, @RequestBody ChatRoomDeleteRequest request) {
-        chatService.deleteRoomService(user, request.getRoomId());
+    @DeleteMapping("/chat/exit")
+    public ResponseEntity deleteRoom(@RequireLogin User user, @RequestBody ChatRoomDeleteRequest request) {
+        chatService.deleteRoomService(user, request.getChatRoomId());
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("삭제완료");
     }
 
 
     //채팅 로그 갖고오기
     @PostMapping("/chat/chatlog")
-    public ResponseEntity<?> chatLog(@RequestBody RoomIdRequest request) {
+    public ResponseEntity<List<MessageDto>> chatLog(@RequestBody RoomIdRequest request) {
         List<MessageDto> list = chatService.getChatLog(request);
         return ResponseEntity.ok(list);
     }
+
+    //친구 초대하기
+    @PostMapping("/chat/add/friend")
+    public ResponseEntity addFriend(@RequireLogin User user, @RequestBody ChatRoomFriendAddRequest request) {
+        chatService.addFriend(user, request);
+        return ResponseEntity.ok().body("초대완료");
+    }
+
 }

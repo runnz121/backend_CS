@@ -11,7 +11,7 @@ import malangcute.bellytime.bellytimeCustomer.food.domain.Food;
 import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenAuthentication;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
-import malangcute.bellytime.bellytimeCustomer.global.domain.DateFormatter;
+import malangcute.bellytime.bellytimeCustomer.global.domain.DateFormatterImpl;
 import malangcute.bellytime.bellytimeCustomer.global.exception.*;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
@@ -36,7 +36,7 @@ public class CoolTimeService {
 
     private final FoodService foodService;
 
-    private final DateFormatter dateFormatter;
+    private final DateFormatterImpl dateFormatterImpl;
 
     private final UserRepository userRepository;
 
@@ -59,10 +59,10 @@ public class CoolTimeService {
                        .foodName(it.getFoodName())
                        .gauge(it.getGauge())
                        .foodImg(it.getFoodImg())
-                       .startDate(dateFormatter.localToStringPattern(it.getStartDate()))
+                       .startDate(dateFormatterImpl.localToStringPattern(it.getStartDate()))
                        .duration(it.getDuration())
-                       .predictDate(dateFormatter.localToStringPattern(it.getEndDate()))
-                       .leftDays(dateFormatter.minusDateLocalDateTime(now,it.getEndDate()))
+                       .predictDate(dateFormatterImpl.localToStringPattern(it.getEndDate()))
+                       .leftDays(dateFormatterImpl.minusDateLocalDateTime(now,it.getEndDate()))
                        .build()
                 )
                 .collect(Collectors.toList());
@@ -71,19 +71,19 @@ public class CoolTimeService {
     //쿨타임 업데이터, 생성
     @Transactional
     public void settingCoolTime(User user, CoolTimeSettingRequest request) throws ParseException {
-        Date startDate = dateFormatter.stringToDate(request.getStartDate());
+        Date startDate = dateFormatterImpl.stringToDate(request.getStartDate());
         String duration = String.valueOf(request.getDuration());
-        String endDate = dateFormatter.plusDate(startDate, duration);
+        String endDate = dateFormatterImpl.plusDate(startDate, duration);
         Long userId = user.getId();
         Long getFoodId= request.getFoodId();
 
         Food foodId = foodService.findFoodFromName(request.getFoodName());
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime enddate = dateFormatter.stringToLocal(endDate);
-        LocalDateTime startdate = dateFormatter.dateToLocal(startDate);
-        Long leftDays = dateFormatter.minusDateLocalDateTime(startdate,now);
-        Long coolTimeDays = dateFormatter.minusDateLocalDateTime(startdate,enddate);
+        LocalDateTime enddate = dateFormatterImpl.stringToLocal(endDate);
+        LocalDateTime startdate = dateFormatterImpl.dateToLocal(startDate);
+        Long leftDays = dateFormatterImpl.minusDateLocalDateTime(startdate,now);
+        Long coolTimeDays = dateFormatterImpl.minusDateLocalDateTime(startdate,enddate);
 
        String gaugeInit = calGauge(coolTimeDays,leftDays);
 
@@ -106,9 +106,9 @@ public class CoolTimeService {
         CoolTime createCoolTime = CoolTime.builder()
                 .userId(user)
                 .foodId(foodId)
-                .startDate(dateFormatter.dateToLocal(startDate))
+                .startDate(dateFormatterImpl.dateToLocal(startDate))
                 .gauge(gauge)
-                .endDate(dateFormatter.stringToLocal(endDate))
+                .endDate(dateFormatterImpl.stringToLocal(endDate))
                 .duration(duration)
                 .build();
 
@@ -117,13 +117,13 @@ public class CoolTimeService {
 
     //쿨타임 업데이트하기
     private void  updateCoolTime(Long userId, Long foodId, Date startDate, String endDate, Integer duration) {
-        LocalDateTime enddate = dateFormatter.stringToLocal(endDate);
-        LocalDateTime startdate = dateFormatter.dateToLocal(startDate);
+        LocalDateTime enddate = dateFormatterImpl.stringToLocal(endDate);
+        LocalDateTime startdate = dateFormatterImpl.dateToLocal(startDate);
 
         LocalDateTime now = LocalDateTime.now();
-        Long coolTimeDays = dateFormatter.minusDateLocalDateTime(startdate,enddate);
+        Long coolTimeDays = dateFormatterImpl.minusDateLocalDateTime(startdate,enddate);
         System.out.println("cooltimesdays"+coolTimeDays);
-        Long leftDays = dateFormatter.minusDateLocalDateTime(startdate,now);
+        Long leftDays = dateFormatterImpl.minusDateLocalDateTime(startdate,now);
         System.out.println("leftDays" + leftDays);
         String calgauge = calGauge(coolTimeDays, leftDays);
         System.out.println(calgauge);

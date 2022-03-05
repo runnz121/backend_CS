@@ -101,7 +101,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     private List<Reservation> userId = new ArrayList<>();
 
     /**
-     *
+     * comment
      */
     @OneToMany(mappedBy = "userId")
     private List<Comment> commentId = new ArrayList<>();

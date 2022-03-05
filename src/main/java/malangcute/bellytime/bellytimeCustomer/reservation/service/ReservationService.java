@@ -1,7 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer.reservation.service;
 
 import lombok.AllArgsConstructor;
-import malangcute.bellytime.bellytimeCustomer.global.domain.DateFormatter;
+import malangcute.bellytime.bellytimeCustomer.global.domain.DateFormatterImpl;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NoReservationException;
 import malangcute.bellytime.bellytimeCustomer.reservation.domain.Reservation;
 import malangcute.bellytime.bellytimeCustomer.reservation.dto.ReservationShopInfoResponse;
@@ -10,8 +10,6 @@ import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +20,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
 
-    private final DateFormatter dateFormatter;
+    private final DateFormatterImpl dateFormatterImpl;
 
     //예약 아이디로 예약 반환
     public Reservation findByReservationId(Long id) {
@@ -51,7 +49,7 @@ public class ReservationService {
                 .filter(it -> it.getReservedState().equals("complete"))
                 .map(it -> ReservationShopInfoResponse.state(
                         ReservationShopInfoResponse.of(it),
-                        dateFormatter.leftDays(it.getReservedDate())))
+                        dateFormatterImpl.leftDays(it.getReservedDate())))
                 .collect(Collectors.toList());
     }
     //예약상태가 pending이나 cancle일 경우

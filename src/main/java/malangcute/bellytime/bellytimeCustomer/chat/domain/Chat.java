@@ -8,8 +8,8 @@ import org.apache.kafka.common.protocol.types.Field;
 import javax.persistence.*;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Chat extends BaseTimeEntity {
 
@@ -31,6 +31,7 @@ public class Chat extends BaseTimeEntity {
     @JoinColumn(name ="inviteId")
     private User inviteId;
 
+    @Builder
     public Chat(String roomId, String roomName, String type, User makerId, User inviteId) {
         this.roomId = roomId;
         this.roomName = roomName;
@@ -44,5 +45,7 @@ public class Chat extends BaseTimeEntity {
         return new Chat(roomId,roomName, type, makerId, inviteId);
     }
 
-
+    public void setInviteId(User inviteId) {
+        this.inviteId = inviteId;
+    }
 }

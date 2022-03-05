@@ -11,12 +11,13 @@ import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatRepository;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
+import net.minidev.json.JSONUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,15 +44,20 @@ public class ChatService {
 
     //채팅방생성
     public RoomIdResponse createRoomService(User user, CreateRoomRequest createRoomRequest) {
-        Chat makeRoom = Chat.create(
-                generateRoom(user),
-                generateRoomName(userService.findUserById(createRoomRequest.getInviteId())),
-                createRoomRequest.getType(),
-                user,
-                userService.findUserById(createRoomRequest.getInviteId())
-        );
-        chatRepository.save(makeRoom);
-        return RoomIdResponse.of(makeRoom);
+        List<Chat> makeRooms = new ArrayList<>();
+        String roomId = generateRoom(user);
+        for (Long invitedId : createRoomRequest.getInviteId()) {
+          Chat makeRoom = Chat.builder()
+                  .roomId(roomId)
+                  .roomName(generateRoomName(userService.findUserById(invitedId)))
+                  .type(createRoomRequest.getType())
+                  .makerId(user)
+                  .inviteId(userService.findUserById(invitedId))
+                  .build();
+            makeRooms.add(makeRoom);
+        }
+        chatRepository.saveAll(makeRooms);
+        return RoomIdResponse.of(roomId);
     }
 
     //roomID uuid로 생성
@@ -67,27 +73,25 @@ public class ChatService {
 
     //내가 주인인 방의 친구 목록 반환
     public List<ChatRoomFriendListResponse> friendChatRoomList(User user) {
-        return chatRepository.findByMakerIdOrInviteIdAndType(user, user, CUSTOMER)
+        return chatRepository.findByMakerIdAndType(user, CUSTOMER)
                 .stream()
-                .map(it -> new ChatRoomFriendListResponse(
-                        it.getRoomId(),
-                        it.getInviteId().getId(),
-                        it.getRoomName(),
-                        it.getInviteId().getProfileImg()
-                ))
+                .filter(distinctByKey(Chat::getRoomId))
+                .map(it -> ChatRoomFriendListResponse.of(it, getLastContent(user,it.getRoomId())))
                 .collect(Collectors.toList());
     }
 
+    //중복제거
+    private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
+        Map<Object, Boolean> map = new HashMap<>();
+        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null; }
+
+
     //내가 주인인 방의 샵 목록 반환
     public List<ChatRoomShopListResponse> shopChatRoomList(User user) {
-        return chatRepository.findByMakerIdOrInviteIdAndType(user, user, SHOP)
+        return chatRepository.findByMakerIdAndType(user, SHOP)
                 .stream()
-                .map(it -> new ChatRoomShopListResponse(
-                        it.getRoomId(),
-                        it.getInviteId().getId(),
-                        it.getRoomName(),
-                        it.getInviteId().getProfileImg()
-                ))
+                .filter(distinctByKey(Chat::getRoomId))
+                .map(it -> ChatRoomShopListResponse.of(it, getLastContent(user,it.getRoomId())))
                 .collect(Collectors.toList());
     }
 
@@ -112,4 +116,30 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
+    //채팅방 마지막 로그 반환하기
+    @Transactional(readOnly = true)
+    public String getLastContent(User user, String roomId) {
+
+        ChatLog log = chatLogRepository.findBySenderAndRoomId(user.getId(), roomId)
+                .stream().sorted(Comparator.comparing(ChatLog::getCreatedAt))
+                .findAny().orElseGet(ChatLog::empty);
+        return log.getMessage();
+    }
+
+    //친구추가하기
+    public void addFriend(User user, ChatRoomFriendAddRequest request) {
+        List<Chat> makeRooms = new ArrayList<>();
+        String roomId = generateRoom(user);
+        for (Long invitedId : request.getInviteId()) {
+            Chat makeRoom = Chat.builder()
+                    .roomId(roomId)
+                    .roomName(generateRoomName(userService.findUserById(invitedId)))
+                    .type(CUSTOMER)
+                    .makerId(user)
+                    .inviteId(userService.findUserById(invitedId))
+                    .build();
+            makeRooms.add(makeRoom);
+        }
+        chatRepository.saveAll(makeRooms);
+    }
 }
