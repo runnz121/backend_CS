@@ -20,6 +20,17 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     Chat findByMakerId(User makerId);
 
 
+    @Query( nativeQuery = true,
+            value = " SELECT * FROM ( " +
+                    " SELECT COUNT(c1.room_id) cnt FROM chat AS c1 WHERE c1.roomId in " +
+                    "(SELECT c2.room_id from chat AS c2 WHERE c2.maker_id =:userId AND c2.invite_id=:inviteId AND c2.type=:types) " +
+                    " GROUP BY c1.room_id) c3 WHERE c3.pnt = 1")
+    Chat findSingleRoomIdExist(@Param("makerId")Long makerId, @Param("inviteId")Long inviteId, @Param("types") String types);
+
+
+
     @Modifying
     void deleteByRoomId(String roomId);
 }
+
+

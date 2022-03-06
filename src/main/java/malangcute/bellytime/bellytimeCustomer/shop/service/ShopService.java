@@ -2,21 +2,16 @@ package malangcute.bellytime.bellytimeCustomer.shop.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import malangcute.bellytime.bellytimeCustomer.search.dto.AssembleListDto;
-import malangcute.bellytime.bellytimeCustomer.search.dto.SearchShopRequest;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
-import malangcute.bellytime.bellytimeCustomer.shop.dto.*;
+import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopResultDto;
+import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSaveRequest;
+import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListDto;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopRepository;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopSortStrategyFactory;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,9 +47,8 @@ public class ShopService {
 
     // Shop형태로 결과값을 받아 shopsearchreusltlistdto로 맵핑한다
     public List<String> searchByName(String name) {
-        List<String> getList = shopRepository.findByNameContaining(name)
-                .stream().map(it -> it.getName()).collect(Collectors.toList());
-        return getList;
+        return shopRepository.findByNameContaining(name)
+                .stream().map(ShopResultDto::getName).collect(Collectors.toList());
     }
 
     // 전략 패턴 적용
