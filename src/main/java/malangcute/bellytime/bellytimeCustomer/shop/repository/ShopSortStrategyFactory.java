@@ -13,7 +13,9 @@ public class ShopSortStrategyFactory {
 
     private final List<ShopSortStrategy> shopSortStrategies;
 
+
     public ShopSortStrategy findStrategy(String type) {
+
         return shopSortStrategies.stream()
                 .filter(strategy -> !Objects.isNull(type) && strategy.sortedBy(type))
                 .findAny()

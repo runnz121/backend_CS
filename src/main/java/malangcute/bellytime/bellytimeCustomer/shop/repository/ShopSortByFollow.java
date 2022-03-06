@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+// 특별 기능 서술
 @Component
 @RequiredArgsConstructor
 public class ShopSortByFollow implements ShopSortStrategy{

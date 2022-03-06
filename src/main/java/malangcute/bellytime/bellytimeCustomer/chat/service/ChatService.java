@@ -20,9 +20,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.*;
+
 @Service
 @AllArgsConstructor
-@ToString
 @Transactional
 @Slf4j
 public class ChatService {
@@ -42,8 +43,22 @@ public class ChatService {
     private static final String SHOP = "shop";
 
 
+
+    public boolean checkExistsRoomId(User user, CreateRoomRequest createRoomRequest) {
+        try {
+
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+
     //채팅방생성
     public RoomIdResponse createRoomService(User user, CreateRoomRequest createRoomRequest) {
+
         List<Chat> makeRooms = new ArrayList<>();
         String roomId = generateRoom(user);
         for (Long invitedId : createRoomRequest.getInviteId()) {
@@ -60,38 +75,34 @@ public class ChatService {
         return RoomIdResponse.of(roomId);
     }
 
-    //roomID uuid로 생성
-    private String generateRoom(User user) {
-        return user.getId() + DELIMITER + UUID.randomUUID();
-    }
-
-    //방 이름 생성
-    private String generateRoomName(User user) {
-        return user.getNickname().getNickName();
-    }
-
 
     //내가 주인인 방의 친구 목록 반환
     public List<ChatRoomFriendListResponse> friendChatRoomList(User user) {
-        return chatRepository.findByMakerIdAndType(user, CUSTOMER)
-                .stream()
-                .filter(distinctByKey(Chat::getRoomId))
-                .map(it -> ChatRoomFriendListResponse.of(it, getLastContent(user,it.getRoomId())))
-                .collect(Collectors.toList());
-    }
+        Map<String, List<ChatContactIdAndImgDto>> friendList = chatRepository.findByMakerIdAndType(user, CUSTOMER).stream()
+                .collect(Collectors.groupingBy(
+                        Chat::getRoomId,
+                        Collectors.mapping(ChatContactIdAndImgDto::of, Collectors.toList())));
 
-    //중복제거
-    private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
-        Map<Object, Boolean> map = new HashMap<>();
-        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null; }
+        return chatRepository.findByMakerIdAndType(user, CUSTOMER)
+                .stream().filter(distinctByKey(Chat::getRoomId))
+                .map(it -> ChatRoomFriendListResponse.of(friendList, it, getLastContent(user,it.getRoomId())))
+                .collect(Collectors.toList());
+
+    }
 
 
     //내가 주인인 방의 샵 목록 반환
     public List<ChatRoomShopListResponse> shopChatRoomList(User user) {
+
+        Map<String, List<ChatContactIdAndImgDto>> shopList = chatRepository.findByMakerIdAndType(user, SHOP).stream()
+                .collect(Collectors.groupingBy(
+                        Chat::getRoomId,
+                        Collectors.mapping(ChatContactIdAndImgDto::of, Collectors.toList())));
+
         return chatRepository.findByMakerIdAndType(user, SHOP)
                 .stream()
                 .filter(distinctByKey(Chat::getRoomId))
-                .map(it -> ChatRoomShopListResponse.of(it, getLastContent(user,it.getRoomId())))
+                .map(it -> ChatRoomShopListResponse.of(shopList,it, getLastContent(user,it.getRoomId())))
                 .collect(Collectors.toList());
     }
 
@@ -142,4 +153,22 @@ public class ChatService {
         }
         chatRepository.saveAll(makeRooms);
     }
+
+    //중복제거
+    private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
+        Map<Object, Boolean> map = new HashMap<>();
+        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null; }
+
+    //roomID uuid로 생성
+    private String generateRoom(User user) {
+        return user.getId() + DELIMITER + UUID.randomUUID();
+    }
+
+    //방 이름 생성
+    private String generateRoomName(User user) {
+        return user.getNickname().getNickName();
+    }
+
+
+
 }
