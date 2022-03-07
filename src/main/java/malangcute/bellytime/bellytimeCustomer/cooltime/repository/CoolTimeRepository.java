@@ -1,6 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer.cooltime.repository;
 
 import malangcute.bellytime.bellytimeCustomer.cooltime.domain.CoolTime;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeGetMyFriendsIF;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.GetMyCoolTimeList;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.GetMyCoolTimeListIF;
 import malangcute.bellytime.bellytimeCustomer.food.domain.Food;
@@ -18,16 +19,6 @@ import java.util.Optional;
 
 @Repository
 public interface CoolTimeRepository extends JpaRepository<CoolTime, Long> {
-
-
-//    @Query("SELECT f.id, f.name, f.image, c.gauge, c.startDate, c.endDate  FROM Food f, CoolTime c "
-//    + "WHERE c.userId=:kk ")
-//    List<Object[]> findMyCoolTime(@Param("kk") User userId);
-
-    //N+1 문제로 join fetch로 변경
-//    @Query("SELECT f.id AS foodId, f.name AS foodName, f.image AS foodImg, c.gauge AS gauge, c.startDate AS startDate, c.endDate AS endDate  FROM Food f , CoolTime c "
-//            + "WHERE c.userId=:kk ")
-//    List<GetMyCoolTimeListIF> findMyCoolTime(@Param("kk") User userId);
 
     @Query("SELECT f.id AS foodId, f.name AS foodName, f.image AS foodImg, c.gauge AS gauge, c.startDate AS startDate, c.endDate AS endDate, c.duration AS duration, c.eat AS eat FROM CoolTime c LEFT JOIN FETCH Food f ON c.foodId.id= f.id "
             + "WHERE c.userId.id=:kk ")
@@ -56,9 +47,27 @@ public interface CoolTimeRepository extends JpaRepository<CoolTime, Long> {
     void updateEatByUserId(@Param("status") Boolean status, @Param("userId") Long userId, @Param("foodId") Long FoodId);
 
 
-
     //배치용
     List<CoolTime> findByEat(boolean b);
+
+
+    // 친구 쿨타임 갖고오기(쿨타임 추천페이지)
+    @Query(nativeQuery = true, value =" select" +
+            " DISTINCT " +
+            " u.nickname AS name," +
+            " c.gauge AS gauge," +
+            " u.profile_img AS profileImg," +
+            " u.id As friendId" +
+            " from cooltime c" +
+            " left join users u " +
+            " on c.user_id = u.id " +
+            " left join follow_user fu " +
+            " on fu.friend_id = u.id " +
+            " left join food f " +
+            " on c.food_id = f.id " +
+            " where fu.host_id=:userId and f.id=:foodId" +
+            " ")
+    List<CoolTimeGetMyFriendsIF> findMyCoolTimeFriends(@Param("userId") Long hostId, @Param("foodId") Long foodId);
 
 
 }

@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "feed_post_img")
 public class FeedImg extends BaseTimeEntity {
 
     @Id
@@ -17,7 +18,7 @@ public class FeedImg extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "feedImgs")
+    @JoinColumn(name = "feed_post_id")
     private Feed feed;
 
     private String image;

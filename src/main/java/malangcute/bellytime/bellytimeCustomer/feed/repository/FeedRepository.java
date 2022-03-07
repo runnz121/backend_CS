@@ -18,18 +18,10 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             "WHERE f.shop.id in (SELECT fs.shop.id FROM FollowShop fs WHERE fs.user.id=:userId)")
     List<Feed> findByFilterWithSub(@Param("userId") Long userId, Pageable pageable);
 
-//
-//    @Query(" SELECT f FROM Feed AS f JOIN FETCH f.shop " +
-//            "WHERE f.shop.id in (SELECT s.id , " +
-//            "(6371 * acos(cos(radians(lat))*cos(radians(cafeLatitude))*cos(radians(cafeHardness) -radians(userHardness))+sin(radians(userLatitude))*sin(radians(cafeLatitude)))) AS distance " +
-//
-//            "FROM Shop s)")
-//    Page<Feed> findByFilterWithNearBy( @Param("userId") Long userId,
-//                                      @Param("lat") Long latitude,
-//                                      @Param("lon") Long longitude, Pageable pageable);
 
 
-//
-//    @Query(nativeQuery = true, value = "SELECT (6371 * acos (cos(radians(lat))*cos(radians(cafeLatitude))*cos(radians(cafeHardness) - radians(userHardness))+sin(radians(userLatitude))*sin(radians(cafeLatitude)))) FROM Shop s")
-//    List<Shop> check1 ( @Param("lat") Long latitude, @Param("lon")Long longitude);
+    @Query(nativeQuery = true, value = "SELECT * FROM feed_post WHERE id in (SELECT id FROM shop sh WHERE (6371 * acos (cos(radians(:lat)) * cos(radians(sh.latitude)) * cos(radians(sh.longitude) - radians(:lon)) + sin(radians(:lat)) * sin(radians(sh.latitude)))) < 2 )")
+    Page<Feed> findByFilterWithNearBy(  @Param("lat") double latitude,
+                                       @Param("lon") double longitude, Pageable pageable);
+
 }

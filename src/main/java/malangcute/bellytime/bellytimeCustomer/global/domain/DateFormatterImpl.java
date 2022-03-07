@@ -2,6 +2,9 @@ package malangcute.bellytime.bellytimeCustomer.global.domain;
 
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.DateFormatter;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -28,8 +31,8 @@ public class DateFormatterImpl implements DataFormatter{
     }
 
     @Override
-    public Date localDateTimeToDate(LocalDateTime localDateTime) {
-        return java.sql.Timestamp.valueOf(localDateTime);
+    public Timestamp localDateTimeToDate(LocalDateTime localDateTime) {
+        return Timestamp.valueOf(localDateTime);
     }
 
     @Override
@@ -71,5 +74,18 @@ public class DateFormatterImpl implements DataFormatter{
         LocalDate today = LocalDate.now();
         LocalDateTime todayLocal = LocalDateToLocalDateTime(today);
         return minusDateLocalDateTime(compare, todayLocal);
+    }
+
+    @Override
+    public String LocalDateTimeHour(LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH");
+        return localDateTime.format(formatter);
+    }
+
+    @Override
+    public String TimeStampHour(Timestamp timestamp) {
+        LocalDateTime toLocal = timestamp.toLocalDateTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH");
+        return toLocal.format(formatter);
     }
 }
