@@ -117,6 +117,10 @@ dependencies {
 	implementation 'org.json:json:20190722'
 
 
+	//MBR 의존성 추가(위치 계산 hibernate와 버전 동일)
+	implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '5.6.3.Final'
+
+
 
 	/**
 	 * testImplementation

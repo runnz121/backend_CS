@@ -99,6 +99,10 @@ spring:
     username: elastic
     password: Malangcute121!
 
+#  jpa:
+#    database-platform: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
+#    database: mysql
+#
 
 #  kafka:
 #
@@ -136,6 +140,8 @@ cloud:
     credentials:
       access-key: AKIAUN4P5GCX5AF6AS5E
       secret-key: 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
+
+
 
 
   # jpa setting

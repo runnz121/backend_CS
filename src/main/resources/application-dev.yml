@@ -13,6 +13,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 
+
+
 sec:
   auth:
     secretkey: malangcute!

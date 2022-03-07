@@ -16,6 +16,10 @@ public enum AuthProvider {
 
     private final String authprovider;
 
+//    AuthProvider(String authprovider) {
+//        this.authprovider = authprovider;
+//    }
+
 
     public static AuthProvider of(String authprovider) throws NoOAuthProviderException {
         return Arrays.stream(AuthProvider.values())

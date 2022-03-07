@@ -8,6 +8,8 @@ import malangcute.bellytime.bellytimeCustomer.chat.domain.ChatLog;
 import malangcute.bellytime.bellytimeCustomer.chat.dto.*;
 import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatLogRepository;
 import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatRepository;
+import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatRoomSearchStrategy;
+import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatRoomSearchStrategyFactory;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
@@ -30,9 +32,9 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
 
-    private final UserRepository userRepository;
-
     private final ChatLogRepository chatLogRepository;
+
+    private final ChatRoomSearchStrategyFactory chatRoomSearchStrategyFactory;
 
     private final UserService userService;
 
@@ -44,14 +46,17 @@ public class ChatService {
 
 
 
-    public boolean checkExistsRoomId(User user, CreateRoomRequest createRoomRequest) {
-        try {
-
-
-            return true;
+    public RoomIdResponse checkExistsRoomId(User user, CreateRoomRequest createRoomRequest) {
+        if (createRoomRequest.getInviteId().size() == 1) {
+            try {
+                Long invitedId = createRoomRequest.getInviteId().get(0);
+                return chatRoomSearchStrategyFactory.findStrategy(createRoomRequest.getType())
+                        .searchRoomWithType(user, invitedId, createRoomRequest.getType());
+            } catch(NullPointerException ex) {
+                return createRoomService(user, createRoomRequest);
+            }
         }
-
-        return false;
+       return createRoomService(user, createRoomRequest);
     }
 
 

@@ -19,5 +19,6 @@ public class BellytimeCustomerApplication  {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BellytimeCustomerApplication.class, args);
+
 	}
 }
