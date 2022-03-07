@@ -22,6 +22,8 @@ public class Feed extends BaseTimeEntity {
 
     private String title;
 
+    private String content;
+
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedImg> feedImgs = new ArrayList<>();
 
@@ -30,11 +32,12 @@ public class Feed extends BaseTimeEntity {
     private Shop shop;
 
     @Builder
-    public Feed(Long id, String title, String representImg, List<FeedImg> imgs, Shop shop) {
+    public Feed(Long id, String title, String representImg, List<FeedImg> imgs, Shop shop, String content) {
         this.title = title;
         this.id = id;
         this.representImg = representImg;
         this.feedImgs = imgs;
         this.shop = shop;
+        this.content = content;
     }
 }

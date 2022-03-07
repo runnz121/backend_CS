@@ -2,31 +2,22 @@ package malangcute.bellytime.bellytimeCustomer.search.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
 import malangcute.bellytime.bellytimeCustomer.global.domain.CacheElements;
 import malangcute.bellytime.bellytimeCustomer.search.dto.SearchDeleteRecentListRequest;
 import malangcute.bellytime.bellytimeCustomer.search.dto.SearchRecentListResponse;
 import malangcute.bellytime.bellytimeCustomer.search.dto.SearchResultList;
 import malangcute.bellytime.bellytimeCustomer.search.dto.SearchShopRequest;
-import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResponse;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListDto;
-import malangcute.bellytime.bellytimeCustomer.shop.repository.elastic.CustomShopSearchRepository;
 import malangcute.bellytime.bellytimeCustomer.shop.service.ShopService;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
-import org.apache.kafka.common.protocol.types.Field;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.cache.annotation.Cacheable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

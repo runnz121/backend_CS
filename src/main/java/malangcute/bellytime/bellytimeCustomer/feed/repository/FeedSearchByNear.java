@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -17,8 +18,9 @@ public class FeedSearchByNear implements FeedSearchStrategy {
     private final FeedRepository feedRepository;
 
     @Override
-    public List<FeedListResponse> selectedStrategy(User user, Long lat, Long lon, Pageable pageable) {
-        return null;
+    public List<FeedListResponse> selectedStrategy(User user, double lat, double lon, Pageable pageable) {
+         return feedRepository.findByFilterWithNearBy(lat, lon, Pageable.ofSize(pageable.getPageSize()))
+                 .stream().map(FeedListResponse::of).collect(Collectors.toList());
     }
 
     @Override

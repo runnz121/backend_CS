@@ -1,34 +1,36 @@
 package malangcute.bellytime.bellytimeCustomer.shop.dto;
 
 import lombok.*;
+import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
 @EqualsAndHashCode
 @ToString
 public class ShopSearchResponse {
 
-    private Long shop_id;
+    private Long shopId;
 
-    private String shop_name;
+    private String shopName;
 
-    private String profile_img;
-
-   // private Long review_count;
+    private String profileImg;
 
     private Long score;
 
     private String address;
 
-    private String runtime;
+    private boolean status;
 
-    // 리스트로 변환해야함
-  //  private String menu;
+    public static ShopSearchResponse of (Shop shop, boolean status) {
 
-  //  private Long follower_count;
-
-    public static ShopSearchResponse from (ShopSearchResultListDto dto) {
-        return new ShopSearchResponse(dto.getShop_id(), dto.getShop_name(), dto.getProfile_img(), dto.getScore(), dto.getAddress(), dto.getRuntime());
+        return new ShopSearchResponse(
+                shop.getId(),
+                shop.getName(),
+                shop.getImage(),
+                shop.getBellscore(),
+                shop.getAddress(),
+                status
+        );
     }
 }

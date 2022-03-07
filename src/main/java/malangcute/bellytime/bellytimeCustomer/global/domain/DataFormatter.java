@@ -1,5 +1,6 @@
 package malangcute.bellytime.bellytimeCustomer.global.domain;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,10 +20,15 @@ public interface DataFormatter {
 
      String plusDate(Date startDate, String duration);
 
+     String LocalDateTimeHour (LocalDateTime localDateTime);
+
      LocalDateTime stringToLocal(String stringDate);
 
      LocalDateTime dateToLocal(Date date);
 
      LocalDateTime LocalDateToLocalDateTime(LocalDate localDate);
+
+     String TimeStampHour(Timestamp timestamp);
+
 
 }

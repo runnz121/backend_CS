@@ -1,7 +1,9 @@
 package malangcute.bellytime.bellytimeCustomer.feed.controller;
 
+import com.amazonaws.Response;
 import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.feed.dto.FeedListResponse;
+import malangcute.bellytime.bellytimeCustomer.feed.dto.FeedResultResponse;
 import malangcute.bellytime.bellytimeCustomer.feed.repository.FeedSortStrategyFactory;
 import malangcute.bellytime.bellytimeCustomer.feed.service.FeedService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
@@ -24,26 +26,20 @@ public class FeedController {
 
     private final FeedService feedService;
 
-
-
-    // 내가 구독한 가게 피드 갖고오기
-//    @GetMapping("/list")
-//    public ResponseEntity<List<FeedListResponse>> getMyFeedListBySub (@RequireLogin User user,
-//                                                                      @RequestParam String filter,
-//                                                                      @PageableDefault Pageable pageable) {
-//        List<FeedListResponse> lists = feedService.getListBySub(user, filter, pageable);
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(lists);
-//    }
-
-//    // 위도경도 받아서 근처 있는 가게 피드갖고오기
     @GetMapping("/list")
-    public ResponseEntity<List<FeedListResponse>> getMyFeedListByNearBy (@RequireLogin User user,
+    public ResponseEntity<List<FeedListResponse>> getMyFeedListByFilter (@RequireLogin User user,
                                                                          @RequestParam String filter,
-                                                                         @RequestParam(required = false) Long lat,
-                                                                         @RequestParam(required = false) Long lon,
+                                                                         @RequestParam(required = false) double lat,
+                                                                         @RequestParam(required = false) double lon,
                                                                          @PageableDefault Pageable pageable) {
         List<FeedListResponse> lists = feedService.getListBy(user, filter, lat, lon, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(lists);
+    }
+
+    @GetMapping("/post")
+    public ResponseEntity<FeedResultResponse> getFeedFromRequest (@RequireLogin User user,
+                                                                  @RequestParam Long postId) {
+        FeedResultResponse post = feedService.getFeedList(postId);
+        return ResponseEntity.status(HttpStatus.OK).body(post);
     }
 }
