@@ -31,11 +31,11 @@ public class Comment extends BaseTimeEntity {
 
 
     //예약과 예약이 연관관계 주인
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reservation_id")
     private Reservation reservationId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User userId;
 

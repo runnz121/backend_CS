@@ -45,10 +45,10 @@ public class ChatController {
         template.convertAndSend("/sub/chatting/room/" + messageDto.getRoomId(), MessageDto.send(messageDto)); // 클이언트로 전송
     }
 
-    // 방생성 api -> roomId 반환
+    // 방생성 api -> roomId 반환 (이미 존재하면 있는 roomid 반환)
     @PostMapping("/chat/create")
     public ResponseEntity<?> createRoom(@RequireLogin User user, @RequestBody CreateRoomRequest createRoomRequest) {
-        RoomIdResponse response =  chatService.createRoomService(user, createRoomRequest);
+        RoomIdResponse response =  chatService.checkExistsRoomId(user, createRoomRequest);
         System.out.println("incontroller");
         System.out.println(user.getEmail());
         System.out.println(createRoomRequest.getInviteId());

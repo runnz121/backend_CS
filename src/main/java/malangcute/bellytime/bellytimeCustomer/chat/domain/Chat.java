@@ -49,3 +49,4 @@ public class Chat extends BaseTimeEntity {
         this.inviteId = inviteId;
     }
 }
+

@@ -23,11 +23,11 @@ public class FollowShop  {
     private Long id;
 
     @JoinColumn(name = "user_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     @JoinColumn(name = "shop_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Shop shop;
 
     public FollowShop(User userId, Shop shopId) {
