@@ -139,10 +139,10 @@ public class SecurityConfigsList extends WebSecurityConfigurerAdapter {
                 .userService(customOAuth2UserService)
                 .and()
                 .successHandler(oAuth2SuccessHandler)
-                .failureHandler(oAuth2FailureHandler)
-                .and()
-                .addFilterBefore(new TokenAuthentication(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTExceptionFilter(tokenProvider, objectMapper), TokenAuthentication.class);
+                .failureHandler(oAuth2FailureHandler);
+                // .and()
+                // .addFilterBefore(new TokenAuthentication(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+                // .addFilterBefore(new JWTExceptionFilter(tokenProvider, objectMapper), TokenAuthentication.class);
     }
 
     @Override
