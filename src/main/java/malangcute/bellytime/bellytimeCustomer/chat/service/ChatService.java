@@ -48,20 +48,25 @@ public class ChatService {
 
     public RoomIdResponse checkExistsRoomId(User user, CreateRoomRequest createRoomRequest) {
         if (createRoomRequest.getInviteId().size() == 1) {
+            System.out.println("1명일때 여기");
             try {
                 Long invitedId = createRoomRequest.getInviteId().get(0);
+                System.out.println("1명이일떄 : " + invitedId);
                 return chatRoomSearchStrategyFactory.findStrategy(createRoomRequest.getType())
                         .searchRoomWithType(user, invitedId, createRoomRequest.getType());
             } catch(NullPointerException ex) {
+                System.out.println("1:1 채팅방 생성시 문제");
                 return createRoomService(user, createRoomRequest);
             }
         }
+        System.out.println("저장시 여기 등록");
        return createRoomService(user, createRoomRequest);
     }
 
 
 
     //채팅방생성
+    @Transactional
     public RoomIdResponse createRoomService(User user, CreateRoomRequest createRoomRequest) {
 
         List<Chat> makeRooms = new ArrayList<>();
