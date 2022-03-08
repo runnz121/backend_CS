@@ -1,4 +1,4 @@
-package malangcute.bellytime.bellytimeCustomer.shop.repository;
+package malangcute.bellytime.bellytimeCustomer.feed.repository;
 
 import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.global.exception.NotFoundException;
@@ -9,15 +9,14 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class ShopSortStrategyFactory {
+public class FeedSortStrategyFactory {
 
-    private final List<ShopSortStrategy> shopSortStrategies;
+    private final List<FeedSearchStrategy> strategies;
 
+    public FeedSearchStrategy findStrategy(String filter) {
 
-    public ShopSortStrategy findStrategy(String type) {
-
-        return shopSortStrategies.stream()
-                .filter(strategy -> !Objects.isNull(type) && strategy.sortedBy(type))
+        return strategies.stream()
+                .filter(strategy -> !Objects.isNull(filter) && strategy.filterBy(filter))
                 .findAny()
                 .orElseThrow(() -> new NotFoundException("분류 기준이 없습니다"));
     }

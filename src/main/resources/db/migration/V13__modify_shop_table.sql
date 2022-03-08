@@ -1,0 +1,2 @@
+ALTER TABLE `shop` MODIFY `latitude` DECIMAL(18,10);
+ALTER TABLE `shop` MODIFY `longitude` DECIMAL(18,10);

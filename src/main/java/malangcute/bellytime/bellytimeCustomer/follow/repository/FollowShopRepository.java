@@ -2,6 +2,7 @@ package malangcute.bellytime.bellytimeCustomer.follow.repository;
 
 import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowShop;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.getFollowShopList;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -28,4 +29,6 @@ public interface FollowShopRepository extends JpaRepository<FollowShop, Long> {
     @Modifying
     @Query("DELETE FROM FollowShop fs WHERE fs.user.id=:userId AND fs.shop.id=:shopId ")
     void deleteFollowShopId(@Param("userId") Long id, @Param("shopId") Long shopId);
+
+    List<FollowShop> findByUserId(User user);
 }

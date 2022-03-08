@@ -34,7 +34,7 @@ public class CoolTime extends BaseTimeEntity {
 
     //@ManyToOne은 항상 연관관계의 주인이 되므로 mappedBy 설정이 불가 !
     //출처: https://data-make.tistory.com/611 [Data Makes Our Future]
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     //@JoinColumn(name = "user_id")//외래키를 맵핑하는 설정
     @JoinColumn(name = "user_id")
     private User userId;

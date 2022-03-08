@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 @Transactional
 @AllArgsConstructor
 @Slf4j
-@ToString
 public class CoolTimeService {
 
     private final TokenAuthentication tokenAuthentication;
@@ -146,7 +145,6 @@ public class CoolTimeService {
             gauge = Integer.toString(cal);
         } catch (ArithmeticException ex) {
             log.trace(String.valueOf(ex));
-            System.out.println("error here? by zero");
             gauge = "0";
         }
         return gauge;
@@ -194,5 +192,15 @@ public class CoolTimeService {
         for (CoolTimeCheckRequest request1 : request) {
             coolTimeRepository.updateEatByUserId(request1.isEat(), user.getId(), request1.getFoodId());
         }
+    }
+
+
+    //친구 쿨타임 갖고오기 (쿨타임 추천 페이지)
+    public List<CoolTimeGetMyFriends> getMyFriendsListByFood (User user, Long foodId) {
+        return  coolTimeRepository.findMyCoolTimeFriends(user.getId(), foodId)
+                .stream()
+                .sorted(Comparator.comparing(CoolTimeGetMyFriendsIF::getGauge).reversed())
+                .map(CoolTimeGetMyFriends::of)
+                .collect(Collectors.toList());
     }
 }
