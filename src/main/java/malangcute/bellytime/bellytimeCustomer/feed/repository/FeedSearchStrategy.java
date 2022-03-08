@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface FeedSearchStrategy {
 
-    List<FeedListResponse> selectedStrategy(User user,  double lat, double lon,Pageable pageable);
+    List<FeedListResponse> selectedStrategy(User user,  Double lat, Double lon,Pageable pageable);
 
     boolean filterBy(String filter);
 }

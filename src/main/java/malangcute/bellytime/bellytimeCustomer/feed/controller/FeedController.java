@@ -29,8 +29,8 @@ public class FeedController {
     @GetMapping("/list")
     public ResponseEntity<List<FeedListResponse>> getMyFeedListByFilter (@RequireLogin User user,
                                                                          @RequestParam String filter,
-                                                                         @RequestParam(required = false) double lat,
-                                                                         @RequestParam(required = false) double lon,
+                                                                         @RequestParam(required = false) Double lat,
+                                                                         @RequestParam(required = false) Double lon,
                                                                          @PageableDefault Pageable pageable) {
         List<FeedListResponse> lists = feedService.getListBy(user, filter, lat, lon, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(lists);

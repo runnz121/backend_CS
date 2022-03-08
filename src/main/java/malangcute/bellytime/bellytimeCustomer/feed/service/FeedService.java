@@ -24,7 +24,7 @@ public class FeedService {
 
     private final FeedRepository feedRepository;
 
-    public List<FeedListResponse> getListBy(User user, String filter, double lat, double lon, Pageable pageable) {
+    public List<FeedListResponse> getListBy(User user, String filter, Double lat, Double lon, Pageable pageable) {
         return strategyFactory.findStrategy(filter).selectedStrategy(user, lat, lon, pageable);
     }
 
