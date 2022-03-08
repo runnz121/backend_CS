@@ -49,9 +49,6 @@ public class ChatController {
     @PostMapping("/chat/create")
     public ResponseEntity<?> createRoom(@RequireLogin User user, @RequestBody CreateRoomRequest createRoomRequest) {
         RoomIdResponse response =  chatService.checkExistsRoomId(user, createRoomRequest);
-        System.out.println("incontroller");
-        System.out.println(user.getEmail());
-        System.out.println(createRoomRequest.getInviteId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
