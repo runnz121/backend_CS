@@ -34,19 +34,22 @@ public class MessageDto {
     }
 
 
-    public MessageDto(String roomId, Long sender, String nickName, String message) {
-        this.roomId = roomId;
-        this.sender = sender;
-        this.nickName = nickName;
-        this.content = message;
-    }
-
 
     public static MessageDto of (ChatLog log) {
-        return new MessageDto(log.getRoomId(), log.getSender(), log.getNickName(),log.getMessage());
+        return new MessageDto(
+                log.getRoomId(),
+                log.getSender(),
+                log.getNickName(),
+                log.getMessage(),
+                log.getCreatedAt().toString().replaceAll("T"," "));
     }
 
     public static MessageDto send (MessageDto send) {
-        return new MessageDto(send.getRoomId(), send.getSender(), send.getNickName(), send.getContent(), send.getSendTime());
+        return new MessageDto(
+                send.getRoomId(),
+                send.getSender(),
+                send.getNickName(),
+                send.getContent(),
+                send.getSendTime());
     }
 }

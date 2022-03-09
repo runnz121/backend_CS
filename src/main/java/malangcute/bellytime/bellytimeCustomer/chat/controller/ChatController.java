@@ -48,6 +48,7 @@ public class ChatController {
     // 방생성 api -> roomId 반환 (이미 존재하면 있는 roomid 반환)
     @PostMapping("/chat/create")
     public ResponseEntity<?> createRoom(@RequireLogin User user, @RequestBody CreateRoomRequest createRoomRequest) {
+        System.out.println("contrroller" + createRoomRequest.getInviteId());
         RoomIdResponse response =  chatService.checkExistsRoomId(user, createRoomRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -84,7 +85,7 @@ public class ChatController {
 
     //친구 초대하기
     @PostMapping("/chat/add/friend")
-    public ResponseEntity addFriend(@RequireLogin User user, @RequestBody ChatRoomFriendAddRequest request) {
+    public ResponseEntity addFriend(@RequireLogin User user, @RequestBody CreateRoomRequest request) {
         chatService.addFriend(user, request);
         return ResponseEntity.ok().body("초대완료");
     }

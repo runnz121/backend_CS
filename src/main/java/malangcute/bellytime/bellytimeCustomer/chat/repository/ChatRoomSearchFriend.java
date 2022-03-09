@@ -21,6 +21,7 @@ public class ChatRoomSearchFriend implements ChatRoomSearchStrategy{
 
     @Override
     public RoomIdResponse searchRoomWithType(User user, Long inviteId, String type) {
+        System.out.println("customer 타입 선택이고 이미 있는지 확인함");
        String friendRoomId = chatRepository.findSingleRoomIdExist(user.getId(), inviteId, type);
         return RoomIdResponse.of(friendRoomId);
     }
