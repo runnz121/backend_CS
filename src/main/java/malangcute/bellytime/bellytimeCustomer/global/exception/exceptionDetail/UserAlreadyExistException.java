@@ -1,4 +1,4 @@
-package malangcute.bellytime.bellytimeCustomer.global.exception;
+package malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail;
 
 public class UserAlreadyExistException extends IllegalArgumentException {
 

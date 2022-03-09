@@ -2,9 +2,7 @@ package malangcute.bellytime.bellytimeCustomer.user.domain;
 
 
 import lombok.*;
-import malangcute.bellytime.bellytimeCustomer.global.exception.UserNickNameException;
-import org.elasticsearch.cli.UserException;
-import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.UserNickNameException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

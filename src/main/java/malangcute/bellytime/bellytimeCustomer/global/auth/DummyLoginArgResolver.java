@@ -1,11 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth;
 
 import lombok.RequiredArgsConstructor;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoCookieException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoUserException;
-import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
-import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

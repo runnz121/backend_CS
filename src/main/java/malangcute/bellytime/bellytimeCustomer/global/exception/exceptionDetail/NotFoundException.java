@@ -1,4 +1,4 @@
-package malangcute.bellytime.bellytimeCustomer.global.exception;
+package malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail;
 
 import org.aspectj.weaver.ast.Not;
 

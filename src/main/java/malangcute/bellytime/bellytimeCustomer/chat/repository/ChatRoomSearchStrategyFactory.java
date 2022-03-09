@@ -1,12 +1,9 @@
 package malangcute.bellytime.bellytimeCustomer.chat.repository;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NotFoundException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 

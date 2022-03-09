@@ -1,21 +1,16 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.service;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.global.auth.UserPrincipal;
 import malangcute.bellytime.bellytimeCustomer.global.auth.domain.OAuth2UserInfo;
 import malangcute.bellytime.bellytimeCustomer.global.auth.oauth.OAuth2UserInfoFactory;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoOAuthProviderException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NoOAuthProviderException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider;
 import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

@@ -42,4 +42,5 @@ public class FeedController {
         FeedResultResponse post = feedService.getFeedList(postId);
         return ResponseEntity.status(HttpStatus.OK).body(post);
     }
+
 }

@@ -1,12 +1,10 @@
 package malangcute.bellytime.bellytimeCustomer.user.domain;
 
 import lombok.*;
-import malangcute.bellytime.bellytimeCustomer.global.exception.UserPassWordException;
-import org.elasticsearch.index.query.IntervalsSourceProvider;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.UserPassWordException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Embeddable

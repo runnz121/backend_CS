@@ -1,28 +1,17 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth;
 
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import malangcute.bellytime.bellytimeCustomer.global.auth.controller.LoginController;
 import malangcute.bellytime.bellytimeCustomer.global.auth.service.CustomUserService;
-import malangcute.bellytime.bellytimeCustomer.global.auth.service.LoginService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
-import malangcute.bellytime.bellytimeCustomer.global.config.SecurityProperties;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoCookieException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoTokenException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
-import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotValidTokenException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -30,10 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.Null;
 import java.io.IOException;
-import java.net.HttpCookie;
-import java.util.List;
 import java.util.Optional;
 
 

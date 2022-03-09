@@ -2,7 +2,7 @@ package malangcute.bellytime.bellytimeCustomer.reservation.service;
 
 import lombok.AllArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.global.domain.DateFormatterImpl;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoReservationException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NoReservationException;
 import malangcute.bellytime.bellytimeCustomer.reservation.domain.Reservation;
 import malangcute.bellytime.bellytimeCustomer.reservation.dto.ReservationShopInfoResponse;
 import malangcute.bellytime.bellytimeCustomer.reservation.repository.ReservationRepository;

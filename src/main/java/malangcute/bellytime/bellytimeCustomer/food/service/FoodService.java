@@ -7,10 +7,9 @@ import malangcute.bellytime.bellytimeCustomer.cooltime.dto.SearchFoodRequest;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.SearchResultResponse;
 import malangcute.bellytime.bellytimeCustomer.food.domain.Food;
 import malangcute.bellytime.bellytimeCustomer.food.dto.FoodResultDto;
-import malangcute.bellytime.bellytimeCustomer.food.dto.ResultFoodListDto;
 import malangcute.bellytime.bellytimeCustomer.food.repository.FoodRepository;
 
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoFoodException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NoFoodException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 import org.springframework.stereotype.Service;

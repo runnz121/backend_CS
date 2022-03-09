@@ -2,18 +2,16 @@ package malangcute.bellytime.bellytimeCustomer.feed.service;
 
 
 import lombok.RequiredArgsConstructor;
-import malangcute.bellytime.bellytimeCustomer.feed.domain.FeedImg;
 import malangcute.bellytime.bellytimeCustomer.feed.dto.FeedListResponse;
 import malangcute.bellytime.bellytimeCustomer.feed.dto.FeedResultResponse;
 import malangcute.bellytime.bellytimeCustomer.feed.repository.*;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NotFoundException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional

@@ -2,21 +2,12 @@ package malangcute.bellytime.bellytimeCustomer.global.auth;
 
 import io.jsonwebtoken.*;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
 import malangcute.bellytime.bellytimeCustomer.global.config.SecurityProperties;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoCookieException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotValidTokenException;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Component
 @AllArgsConstructor

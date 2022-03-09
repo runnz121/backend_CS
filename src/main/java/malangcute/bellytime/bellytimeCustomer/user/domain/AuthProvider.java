@@ -2,7 +2,7 @@ package malangcute.bellytime.bellytimeCustomer.user.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoOAuthProviderException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NoOAuthProviderException;
 
 import java.util.Arrays;
 

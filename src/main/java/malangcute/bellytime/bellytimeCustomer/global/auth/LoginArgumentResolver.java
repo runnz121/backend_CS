@@ -1,17 +1,12 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoCookieException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoTokenException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.UserIdNotFoundException;
-import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NoCookieException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NoTokenException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotValidTokenException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
-import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 import org.springframework.core.MethodParameter;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
