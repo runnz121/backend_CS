@@ -44,22 +44,24 @@ public class ChatService {
 
     private static final String SHOP = "shop";
 
+    private static final String PERSON_DELIMITER = ", ";
+
 
 
     public RoomIdResponse checkExistsRoomId(User user, CreateRoomRequest createRoomRequest) {
         if (createRoomRequest.getInviteId().size() == 1) {
-            System.out.println("1명일때 여기");
             try {
                 Long invitedId = createRoomRequest.getInviteId().get(0);
-                System.out.println("1명이일떄 : " + invitedId);
-                return chatRoomSearchStrategyFactory.findStrategy(createRoomRequest.getType())
+                RoomIdResponse response =  chatRoomSearchStrategyFactory.findStrategy(createRoomRequest.getType())
                         .searchRoomWithType(user, invitedId, createRoomRequest.getType());
+                if (response.getRoomId().isEmpty()) {
+                    return createRoomService(user, createRoomRequest);
+                }
+                return response;
             } catch(NullPointerException ex) {
-                System.out.println("1:1 채팅방 생성시 문제");
                 return createRoomService(user, createRoomRequest);
             }
         }
-        System.out.println("저장시 여기 등록");
        return createRoomService(user, createRoomRequest);
     }
 
@@ -68,13 +70,13 @@ public class ChatService {
     //채팅방생성
     @Transactional
     public RoomIdResponse createRoomService(User user, CreateRoomRequest createRoomRequest) {
-
         List<Chat> makeRooms = new ArrayList<>();
         String roomId = generateRoom(user);
+        String roomName = generateRoomName(createRoomRequest);
         for (Long invitedId : createRoomRequest.getInviteId()) {
           Chat makeRoom = Chat.builder()
                   .roomId(roomId)
-                  .roomName(generateRoomName(userService.findUserById(invitedId)))
+                  .roomName(roomName)
                   .type(createRoomRequest.getType())
                   .makerId(user)
                   .inviteId(userService.findUserById(invitedId))
@@ -148,13 +150,14 @@ public class ChatService {
     }
 
     //친구추가하기
-    public void addFriend(User user, ChatRoomFriendAddRequest request) {
+    public void addFriend(User user, CreateRoomRequest request) {
         List<Chat> makeRooms = new ArrayList<>();
         String roomId = generateRoom(user);
+        String userRoomName = generateRoomName(request);
         for (Long invitedId : request.getInviteId()) {
             Chat makeRoom = Chat.builder()
                     .roomId(roomId)
-                    .roomName(generateRoomName(userService.findUserById(invitedId)))
+                    .roomName(userRoomName)
                     .type(CUSTOMER)
                     .makerId(user)
                     .inviteId(userService.findUserById(invitedId))
@@ -175,10 +178,13 @@ public class ChatService {
     }
 
     //방 이름 생성
-    private String generateRoomName(User user) {
-        return user.getNickname().getNickName();
+    private String generateRoomName(CreateRoomRequest request) {
+        StringBuilder roomWithName = new StringBuilder();
+        for (Long id : request.getInviteId()) {
+            String eachUser = userService.findUserById(id).getNickname().getNickName();
+            roomWithName.append(eachUser);
+            roomWithName.append(PERSON_DELIMITER);
+        }
+        return roomWithName.toString().replaceAll(",$", "");
     }
-
-
-
 }
