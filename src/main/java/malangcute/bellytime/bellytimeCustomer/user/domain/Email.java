@@ -2,8 +2,7 @@ package malangcute.bellytime.bellytimeCustomer.user.domain;
 
 
 import lombok.*;
-import malangcute.bellytime.bellytimeCustomer.global.exception.UserEmailException;
-import org.elasticsearch.index.query.IntervalsSourceProvider;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.UserEmailException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

@@ -1,7 +1,6 @@
 package malangcute.bellytime.bellytimeCustomer.cooltime.service;
 
 import lombok.AllArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.cooltime.domain.CoolTime;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.*;
@@ -12,7 +11,7 @@ import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenAuthentication;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
 import malangcute.bellytime.bellytimeCustomer.global.domain.DateFormatterImpl;
-import malangcute.bellytime.bellytimeCustomer.global.exception.*;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import org.springframework.stereotype.Service;

@@ -8,7 +8,7 @@ import malangcute.bellytime.bellytimeCustomer.comment.dto.CommentWriteRequest;
 import malangcute.bellytime.bellytimeCustomer.comment.repository.CommentImgRepository;
 import malangcute.bellytime.bellytimeCustomer.comment.repository.CommentRepository;
 import malangcute.bellytime.bellytimeCustomer.global.aws.AwsS3uploader;
-import malangcute.bellytime.bellytimeCustomer.global.exception.FailedToConvertImgFileException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.FailedToConvertImgFileException;
 import malangcute.bellytime.bellytimeCustomer.reservation.service.ReservationService;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.stereotype.Service;

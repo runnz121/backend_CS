@@ -12,13 +12,9 @@ import malangcute.bellytime.bellytimeCustomer.cooltime.service.CoolTimeService;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.*;
 import malangcute.bellytime.bellytimeCustomer.follow.service.FollowService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
-import malangcute.bellytime.bellytimeCustomer.global.exception.FailedToConvertImgFileException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NotFoundException;
-import malangcute.bellytime.bellytimeCustomer.reservation.domain.Reservation;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.FailedToConvertImgFileException;
 import malangcute.bellytime.bellytimeCustomer.reservation.dto.ReservationShopInfoResponse;
-import malangcute.bellytime.bellytimeCustomer.reservation.dto.ReservationStateDto;
 import malangcute.bellytime.bellytimeCustomer.reservation.service.ReservationService;
-import malangcute.bellytime.bellytimeCustomer.user.domain.NickName;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.dto.UserProfileResponse;
 import malangcute.bellytime.bellytimeCustomer.user.dto.UserUpdateRequest;
@@ -29,8 +25,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")

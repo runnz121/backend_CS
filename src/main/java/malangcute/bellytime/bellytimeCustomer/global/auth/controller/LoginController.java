@@ -1,29 +1,19 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.controller;
 
 
-import com.nimbusds.oauth2.sdk.AccessTokenResponse;
-import io.jsonwebtoken.ExpiredJwtException;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.*;
 import malangcute.bellytime.bellytimeCustomer.global.auth.service.LoginService;
-import malangcute.bellytime.bellytimeCustomer.global.auth.util.CookieUtils;
-import malangcute.bellytime.bellytimeCustomer.global.exception.FailedToConvertImgFileException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NotValidTokenException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.FailedToConvertImgFileException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor

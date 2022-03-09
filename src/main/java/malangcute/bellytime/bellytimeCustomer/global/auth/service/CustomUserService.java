@@ -1,9 +1,6 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.service;
 
 import lombok.AllArgsConstructor;
-import malangcute.bellytime.bellytimeCustomer.global.exception.UserIdNotFoundException;
-import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
-import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

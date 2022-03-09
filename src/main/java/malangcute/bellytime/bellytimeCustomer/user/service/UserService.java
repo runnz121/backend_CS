@@ -4,16 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.FindMyFriendSearchRequest;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.MyFriendSearchResponse;
-import malangcute.bellytime.bellytimeCustomer.follow.repository.FollowShopRepository;
 import malangcute.bellytime.bellytimeCustomer.global.aws.AwsS3uploader;
-import malangcute.bellytime.bellytimeCustomer.global.exception.FailedToConvertImgFileException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoUserException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NotFoundException;
-import malangcute.bellytime.bellytimeCustomer.global.exception.UserIdNotFoundException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.FailedToConvertImgFileException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.UserIdNotFoundException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
-import malangcute.bellytime.bellytimeCustomer.user.domain.NickName;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
-import malangcute.bellytime.bellytimeCustomer.follow.dto.MyFollowShopResponse;
 import malangcute.bellytime.bellytimeCustomer.user.dto.UserProfileResponse;
 import malangcute.bellytime.bellytimeCustomer.user.dto.UserUpdateRequest;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
@@ -21,10 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional

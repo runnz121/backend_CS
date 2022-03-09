@@ -5,7 +5,7 @@ import malangcute.bellytime.bellytimeCustomer.global.auth.domain.GoogleOAuth2Use
 import malangcute.bellytime.bellytimeCustomer.global.auth.domain.KakaoOAuth2UserInfo;
 import malangcute.bellytime.bellytimeCustomer.global.auth.domain.NaverOAuth2UserInfo;
 import malangcute.bellytime.bellytimeCustomer.global.auth.domain.OAuth2UserInfo;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NoOAuthProviderException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NoOAuthProviderException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.AuthProvider;
 import org.json.JSONException;
 import java.util.Map;

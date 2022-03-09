@@ -1,7 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer.shop.repository;
 
 import lombok.RequiredArgsConstructor;
-import malangcute.bellytime.bellytimeCustomer.global.exception.NotFoundException;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
