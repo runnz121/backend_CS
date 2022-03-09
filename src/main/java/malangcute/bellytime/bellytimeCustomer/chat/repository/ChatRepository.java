@@ -30,9 +30,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
 
     @Modifying
-    void deleteByRoomId(String roomId);
-
-
+    void deleteByRoomIdAndInviteId(String roomId, User inviteId);
 }
 
 

@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Null;
 
-@ControllerAdvice
+
 @Slf4j
+@ControllerAdvice
 public class ExceptionController {
 
     @ExceptionHandler
     protected ResponseEntity handleException(Exception e) {
-        log.error("Got Null Point Excpetion : ", e);
+        log.error("Got Null Point Exception : ", e);
         return null;
     }
 }

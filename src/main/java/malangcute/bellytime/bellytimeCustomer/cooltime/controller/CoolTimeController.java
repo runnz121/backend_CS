@@ -1,6 +1,5 @@
 package malangcute.bellytime.bellytimeCustomer.cooltime.controller;
 
-import com.amazonaws.Response;
 import lombok.AllArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.*;
 import malangcute.bellytime.bellytimeCustomer.cooltime.service.CoolTimeService;

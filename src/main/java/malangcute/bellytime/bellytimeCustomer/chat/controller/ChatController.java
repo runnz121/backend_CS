@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.util.SerializationUtils;
 import org.springframework.web.bind.annotation.*;
@@ -36,14 +37,16 @@ public class ChatController {
 
     private final SimpMessagingTemplate template;
 
-
-//        //채팅 컨트롤러 (stomp)
+    //채팅 컨트롤러 (stomp)
     @MessageMapping(value = "/chat/chatting") //클라이언트에서 수신되는 곳
     public void chatController(MessageDto messageDto) {
+
         //로그를 저장
         chatService.saveLog(messageDto);
         template.convertAndSend("/sub/chatting/room/" + messageDto.getRoomId(), MessageDto.send(messageDto)); // 클이언트로 전송
+
     }
+
 
     // 방생성 api -> roomId 반환 (이미 존재하면 있는 roomid 반환)
     @PostMapping("/chat/create")
@@ -69,10 +72,11 @@ public class ChatController {
 
 
     //채팅방 삭제
-    @DeleteMapping("/chat/exit")
-    public ResponseEntity deleteRoom(@RequireLogin User user, @RequestBody ChatRoomDeleteRequest request) {
-        chatService.deleteRoomService(user, request.getChatRoomId());
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("삭제완료");
+    @PostMapping("/chat/exit")
+    public void deleteRoom(@RequireLogin User user, @RequestBody ChatRoomDeleteRequest request) {
+        MessageDto messageDto = chatService.deleteRoomService(user, request.getChatRoomId());
+        chatService.saveLog(messageDto);
+        template.convertAndSend("/sub/chatting/room/" + messageDto.getRoomId(), messageDto.getContent());
     }
 
 

@@ -120,8 +120,9 @@ public class ChatService {
 
 
     //채팅방 삭제
-    public void deleteRoomService(User user, String roomId) {
-        chatRepository.deleteByRoomId(roomId);
+    public MessageDto deleteRoomService(User user, String roomId) {
+        chatRepository.deleteByRoomIdAndInviteId(roomId, user);
+        return MessageDto.exit(roomId, user.getNickname().getNickName());
     }
 
 
@@ -130,6 +131,7 @@ public class ChatService {
         ChatLog log = ChatLog.create(messageDto);
         chatLogRepository.save(log);
     }
+
 
     //채팅방 로그 반환하기
     public List<MessageDto> getChatLog(RoomIdRequest request) {
