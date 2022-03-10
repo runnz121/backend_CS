@@ -51,7 +51,6 @@ public class ChatController {
     // 방생성 api -> roomId 반환 (이미 존재하면 있는 roomid 반환)
     @PostMapping("/chat/create")
     public ResponseEntity<?> createRoom(@RequireLogin User user, @RequestBody CreateRoomRequest createRoomRequest) {
-        System.out.println("contrroller" + createRoomRequest.getInviteId());
         RoomIdResponse response =  chatService.checkExistsRoomId(user, createRoomRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -76,9 +75,8 @@ public class ChatController {
     public void deleteRoom(@RequireLogin User user, @RequestBody ChatRoomDeleteRequest request) {
         MessageDto messageDto = chatService.deleteRoomService(user, request.getChatRoomId());
         chatService.saveLog(messageDto);
-        template.convertAndSend("/sub/chatting/room/" + messageDto.getRoomId(), messageDto.getContent());
+        template.convertAndSend("/sub/chatting/room/" + messageDto.getRoomId(), messageDto);
     }
-
 
     //채팅 로그 갖고오기
     @PostMapping("/chat/chatlog")

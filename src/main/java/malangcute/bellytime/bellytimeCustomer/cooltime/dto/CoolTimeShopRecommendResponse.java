@@ -27,11 +27,7 @@ public class CoolTimeShopRecommendResponse {
     private int followerCount;
 
     public static CoolTimeShopRecommendResponse of (Shop shop, int follower, int reviewCount, boolean status) {
-        System.out.println("indto>>>>>>>>>>.");
-        System.out.println(shop.getId());
-        System.out.println(shop.getName());
-        System.out.println(reviewCount);
-        System.out.println(status);
+
         return new CoolTimeShopRecommendResponse(
                 shop.getId(),
                 shop.getName(),

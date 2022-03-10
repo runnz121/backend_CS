@@ -72,11 +72,11 @@ public class ChatService {
     public RoomIdResponse createRoomService(User user, CreateRoomRequest createRoomRequest) {
         List<Chat> makeRooms = new ArrayList<>();
         String roomId = generateRoom(user);
-        String roomName = generateRoomName(createRoomRequest);
+     //   String roomName = generateRoomName(createRoomRequest);
         for (Long invitedId : createRoomRequest.getInviteId()) {
           Chat makeRoom = Chat.builder()
                   .roomId(roomId)
-                  .roomName(roomName)
+                  .roomName(createRoomRequest.getRoomName())
                   .type(createRoomRequest.getType())
                   .makerId(user)
                   .inviteId(userService.findUserById(invitedId))
