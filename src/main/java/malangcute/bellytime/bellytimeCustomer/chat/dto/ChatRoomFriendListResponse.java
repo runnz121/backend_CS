@@ -38,5 +38,4 @@ public class ChatRoomFriendListResponse {
     public static ChatRoomFriendListResponse from (Map.Entry<ChatImgDtoGroupingKey, List<ChatContactIdAndImgDto>> lists, String recentContent) {
         return new ChatRoomFriendListResponse(lists.getKey().getRoomId(), lists.getKey().getRoomName(), lists.getValue(), recentContent);
     }
-
 }

@@ -1,50 +1,43 @@
 package malangcute.bellytime.bellytimeCustomer.chat.controller;
 
+import java.util.List;
 
-import com.amazonaws.Response;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rabbitmq.client.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import malangcute.bellytime.bellytimeCustomer.chat.dto.*;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.ChatRoomDeleteRequest;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.ChatRoomFriendListResponse;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.ChatRoomInviteFriendsRequest;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.ChatRoomShopListResponse;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.CreateRoomRequest;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.MessageDto;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.RoomIdRequest;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.RoomIdResponse;
 import malangcute.bellytime.bellytimeCustomer.chat.service.ChatService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
-import net.minidev.json.JSONArray;
-import org.springframework.amqp.core.MessageDeliveryMode;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.util.SerializationUtils;
-import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class ChatController {
-
     private final ChatService chatService;
-
     private final SimpMessagingTemplate template;
 
-    //채팅 컨트롤러 (stomp)
-    @MessageMapping(value = "/chat/chatting") //클라이언트에서 수신되는 곳
+
+    @MessageMapping(value = "/chat/chatting")
     public void chatController(MessageDto messageDto) {
 
-        //로그를 저장
         chatService.saveLog(messageDto);
-        template.convertAndSend("/sub/chatting/room/" + messageDto.getRoomId(), MessageDto.send(messageDto)); // 클이언트로 전송
-
+        template.convertAndSend("/sub/chatting/room/" + messageDto.getRoomId(), MessageDto.send(messageDto));
     }
 
 
@@ -89,7 +82,7 @@ public class ChatController {
     @PostMapping("/chat/add/friend")
     public void addFriend(@RequireLogin User user, @RequestBody ChatRoomInviteFriendsRequest request) {
         chatService.addFriend(user, request);
-        List<MessageDto> messageDtos= chatService.sendInvitedMessage(request) ;
+        List<MessageDto> messageDtos = chatService.sendInvitedMessage(request);
         for (MessageDto messageDto : messageDtos) {
             template.convertAndSend("/sub/chatting/room/" + messageDto.getRoomId(), messageDto );
         }

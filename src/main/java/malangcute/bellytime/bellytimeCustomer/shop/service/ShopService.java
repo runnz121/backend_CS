@@ -2,6 +2,9 @@ package malangcute.bellytime.bellytimeCustomer.shop.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import malangcute.bellytime.bellytimeCustomer.comment.service.CommentService;
+import malangcute.bellytime.bellytimeCustomer.follow.dto.MyFollowShopResponse;
+import malangcute.bellytime.bellytimeCustomer.follow.service.FollowService;
 import malangcute.bellytime.bellytimeCustomer.global.domain.DataFormatter;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopResultDto;
@@ -10,7 +13,9 @@ import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResponse;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListWithMenuResponse;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopRepository;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopSortStrategyFactory;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,21 +36,21 @@ public class ShopService {
     //elastic
    // private final ShopSearchRepository shopSearchRepository;
 
-
     private final ShopSortStrategyFactory shopSortStrategyFactory;
+
+    private final FollowService followService;
+
+    private final CommentService commentService;
 
     private final DataFormatter dateFormat;
 
     //음식점 저장
     @Transactional
     public void saveShop(ShopSaveRequest shopSaveRequest) {
-        String name = shopSaveRequest.getName();
-        String address = shopSaveRequest.getAddress();
-        String img = shopSaveRequest.getImg();
         Shop newshop = Shop.builder()
-                .name(name)
-                .address(address)
-                .image(img)
+                .name(shopSaveRequest.getName())
+                .address(shopSaveRequest.getAddress())
+                .image(shopSaveRequest.getImg())
                 .build();
         shopRepository.save(newshop);
        // shopSearchRepository.save(newshop);
@@ -65,13 +70,10 @@ public class ShopService {
 
     // 팔로워가 많은 탑 3가게 갖고오기
     public List<ShopSearchResponse> getTop3ShopList() {
-
-        List<ShopSearchResponse> lists =  shopRepository.findPopularTop3Shop(PageRequest.of(0,3))
-                .stream()
-                .map(it -> ShopSearchResponse.of(it, checkStatus(it)))
-                .collect(Collectors.toList());
-
-        return lists;
+        return shopRepository.findPopularTop3Shop(PageRequest.of(0,3))
+        .stream()
+        .map(it -> ShopSearchResponse.of(it, checkStatus(it)))
+        .collect(Collectors.toList());
     }
 
     // 운영중인지 확인하기
@@ -85,15 +87,23 @@ public class ShopService {
              close = Long.parseLong(dateFormat.TimeStampHour(shop.getCloseTime()));
 
         } catch(NullPointerException ex) {
-            System.out.println("in checkstatus null false");
             return false;
         }
         if (current > open && current < close) {
-            System.out.println("in checkstatus true");
             return true;
         }
-        System.out.println("in checkstatus  false");
         return false;
+    }
+
+    //내가 팔로우한 가게 리스트 갖고오기
+    @Transactional(readOnly = true)
+    public List<MyFollowShopResponse> myFollowShop(User user, Pageable pageable) {
+        return shopRepository.findMyFollowShopById(user.getId(), Pageable.ofSize(pageable.getPageSize())).stream()
+                .map(shop -> MyFollowShopResponse.of
+                        (shop,  followService.shopFollower(shop),
+                                commentService.reviewCountByShopId(shop),
+                                checkStatus(shop)))
+                .collect(Collectors.toList());
     }
 
 

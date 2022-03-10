@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Arrays;
 import java.util.List;
 
 //jpa 문법 사용
@@ -54,5 +55,8 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
                                         @Param("foodId") Long foodId, Pageable pageable);
 
 
-
+    @Query(nativeQuery = true,
+            value = "SELECT * FROM shop sh WHERE sh.id IN (SELECT " +
+                    "fs.id FROM follow_shop fs WHERE fs.user_id=:userId)")
+    Page<Shop> findMyFollowShopById(@Param("userId") Long id, Pageable pageable);
 }

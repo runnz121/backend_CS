@@ -70,7 +70,7 @@ public class MessageDto {
                 .roomId(roomId)
                 .nickName(user.getNickname().getNickName())
                 .message(user.getNickname().getNickName() + " 님이 채팅방에 초대되었습니다.")
-                .sender(user.getId())
+                .sender(-2L)
                 .sendTime(null)
                 .contactId(user.getId())
                 .profileImg(user.getProfileImg())

@@ -1,2 +1,4 @@
-package malangcute.bellytime.bellytimeCustomer.chat.dto;public class ContectIdAndImgDto {
+package malangcute.bellytime.bellytimeCustomer.chat.dto;
+
+public class ContectIdAndImgDto {
 }
