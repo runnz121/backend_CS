@@ -30,12 +30,12 @@ public class Reservation extends BaseTimeEntity {
 
     private String showCheck;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User userId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "reservationShop")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shopId")
     private Shop shopId;
 
 

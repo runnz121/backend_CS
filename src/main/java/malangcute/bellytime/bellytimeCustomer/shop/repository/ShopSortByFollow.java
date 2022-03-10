@@ -1,8 +1,9 @@
 package malangcute.bellytime.bellytimeCustomer.shop.repository;
 
 import lombok.RequiredArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.follow.service.FollowService;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
-import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListDto;
+import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListWithMenuResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -18,6 +19,8 @@ public class ShopSortByFollow implements ShopSortStrategy{
 
     private final ShopRepository shopRepository;
 
+    private final FollowService followService;
+
     @Override
     public boolean sortedBy(String type) {
         return TYPE.equals(type);
@@ -25,11 +28,11 @@ public class ShopSortByFollow implements ShopSortStrategy{
 
 
     @Override
-    public List<ShopSearchResultListDto> SortedList(String name) {
-        List<ShopSearchResultListDto> resultList = shopRepository.findAllByNameContaining(name)
+    public List<ShopSearchResultListWithMenuResponse> SortedList(String name) {
+        List<ShopSearchResultListWithMenuResponse> resultList = shopRepository.findAllByNameContaining(name)
                 .stream()
-                .sorted(Comparator.comparing(Shop::getFollower).reversed())
-                .map(ShopSearchResultListDto::of)
+                .sorted(Comparator.comparingInt(followService::shopFollower))
+                .map(shop -> ShopSearchResultListWithMenuResponse.of(shop, followService.shopFollower(shop)))
                 .collect(Collectors.toList());
         return resultList;
     }

@@ -8,7 +8,7 @@ import malangcute.bellytime.bellytimeCustomer.search.dto.SearchDeleteRecentListR
 import malangcute.bellytime.bellytimeCustomer.search.dto.SearchRecentListResponse;
 import malangcute.bellytime.bellytimeCustomer.search.dto.SearchResultList;
 import malangcute.bellytime.bellytimeCustomer.search.dto.SearchShopRequest;
-import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListDto;
+import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListWithMenuResponse;
 import malangcute.bellytime.bellytimeCustomer.shop.service.ShopService;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -72,7 +72,7 @@ public class SearchService {
 
 
     // 이름과 정렬 기준으로 shop 찾기
-    public List<ShopSearchResultListDto> specificSearch(SearchShopRequest request) {
+    public List<ShopSearchResultListWithMenuResponse> specificSearch(SearchShopRequest request) {
         return shopService.searchBySpecificName(request.getName(), request.getSortBy());
     }
 

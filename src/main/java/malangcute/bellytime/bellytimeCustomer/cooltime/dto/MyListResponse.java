@@ -24,10 +24,4 @@ public class MyListResponse {
     private LocalDateTime leftDays;
 
 
-//    @Builder
-//    public static MyListResponse of(CoolTime item) {
-//        item.getId(),
-//        item.get
-//
-//    }
 }

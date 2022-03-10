@@ -1,13 +1,12 @@
 package malangcute.bellytime.bellytimeCustomer.search.controller;
 
 import lombok.RequiredArgsConstructor;
-import malangcute.bellytime.bellytimeCustomer.cooltime.dto.SearchFoodRequest;
 import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.search.dto.*;
 import malangcute.bellytime.bellytimeCustomer.search.service.SearchService;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSaveRequest;
-import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListDto;
+import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListWithMenuResponse;
 import malangcute.bellytime.bellytimeCustomer.shop.service.ShopService;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.http.HttpStatus;
@@ -43,7 +42,7 @@ public class SearchController {
     // score, follow순으로 반환
     @PostMapping("/resultlist")
     public ResponseEntity<?> searchShop(@RequestBody SearchShopRequest request) {
-        List<ShopSearchResultListDto> list  =  searchService.specificSearch(request);
+        List<ShopSearchResultListWithMenuResponse> list  =  searchService.specificSearch(request);
         return ResponseEntity.ok(list);
     }
 
