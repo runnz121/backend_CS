@@ -69,18 +69,18 @@ public class UserController {
 
     //유저가 팔로우한 가게 갖고오기
     @GetMapping("/follow/shop")
-    public ResponseEntity<List<MyFollowShopResponse> > myFollowShopList ( @RequireLogin User user, Pageable pageable) {
+    public ResponseEntity<List<MyFollowShopResponse>> myFollowShopList ( @RequireLogin User user, Pageable pageable) {
         List<MyFollowShopResponse> list = shopService.myFollowShop(user, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
     //유저가 팔로우할 가게 저장하기 여러개
-    @PostMapping("/follow/shop")
-    public ResponseEntity toFollowShop ( @RequireLogin User user,
-                                         @RequestBody List<FollowShopRequest> requests) {
-        followService.toFollowShop(user, requests);
-        return ResponseEntity.ok(HttpStatus.ACCEPTED);
-    }
+    // @PostMapping("/follow/shop")
+    // public ResponseEntity toFollowShop ( @RequireLogin User user,
+    //                                      @RequestBody List<FollowShopRequest> requests) {
+    //     followService.toFollowShop(user, requests);
+    //     return ResponseEntity.ok(HttpStatus.ACCEPTED);
+    // }
 
     // 유저가 팔로우 취소한 가게(팔로우 테이블에서 지우기)
     @DeleteMapping("/follow/shop")

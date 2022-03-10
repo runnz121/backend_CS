@@ -37,19 +37,15 @@ public class FollowService {
 
     private final UserService userService;
 
-    private final ShopService shopService;
 
-
-
-    //가게 팔로우처리하기
-    public void toFollowShop(User user, List<FollowShopRequest> requests){
-        Set<FollowShop> saveList = new HashSet<>();
-        for(FollowShopRequest request : requests) {
-            Shop shopResult  = shopRepository.findById(request.getShopId()).orElseThrow(() -> new NotFoundException("가게가 없습니다"));
-            saveList.add(FollowShop.create(user, shopResult));
-        }
-        followShopRepository.saveAll(saveList);
-    }
+    // public void toFollowShop(User user, List<FollowShopRequest> requests){
+    //     Set<FollowShop> saveList = new HashSet<>();
+    //     for(FollowShopRequest request : requests) {
+    //         Shop shopResult  = shopRepository.findById(request.getShopId()).orElseThrow(() -> new NotFoundException("가게가 없습니다"));
+    //         saveList.add(FollowShop.create(user, shopResult));
+    //     }
+    //     followShopRepository.saveAll(saveList);
+    // }
 
 
     //가게 언팔로우처리하기
