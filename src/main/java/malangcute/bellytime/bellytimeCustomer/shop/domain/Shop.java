@@ -47,9 +47,6 @@ public class Shop extends BaseTimeEntity { // 엘라스틱 서치는 localdateti
     private Timestamp closeTime;
 
 
-    @Formula("(select count(*) from follow_shop where follow_shop.shop_id=id)")
-    private int follower;
-
     @OneToMany(mappedBy = "shopId", cascade = CascadeType.ALL)
     private List<ShopMenu> shopId = new ArrayList<>();
 
@@ -64,7 +61,6 @@ public class Shop extends BaseTimeEntity { // 엘라스틱 서치는 localdateti
     @OneToMany(mappedBy = "shop")
     private List<Feed> feedList = new ArrayList<>();
 
-
     @Builder
    // @PersistenceConstructor //ES DB에 저장된 document가 aggregate로 재구성됨 (생성자에 붙여야함)
     public Shop (
@@ -76,7 +72,6 @@ public class Shop extends BaseTimeEntity { // 엘라스틱 서치는 localdateti
             BigDecimal longitude,
             String address,
             String runtime,
-            int follower,
             Timestamp openTime,
             Timestamp closeTime
     ) {
@@ -88,7 +83,6 @@ public class Shop extends BaseTimeEntity { // 엘라스틱 서치는 localdateti
         this.longitude = longitude;
         this.address = address;
         this.runtime = runtime;
-        this.follower = follower;
         this.openTime = openTime;
         this.closeTime = closeTime;
     }

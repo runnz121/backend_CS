@@ -10,6 +10,7 @@ import malangcute.bellytime.bellytimeCustomer.comment.repository.CommentReposito
 import malangcute.bellytime.bellytimeCustomer.global.aws.AwsS3uploader;
 import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.FailedToConvertImgFileException;
 import malangcute.bellytime.bellytimeCustomer.reservation.service.ReservationService;
+import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,5 +71,12 @@ public class CommentService {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public int reviewCountByShopId(Shop shop) {
+
+        int count =  commentRepository.getReviewCount(shop.getId());
+        System.out.println("in review Count : " + count);
+        return count;
     }
 }

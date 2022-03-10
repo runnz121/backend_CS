@@ -1,6 +1,6 @@
 package malangcute.bellytime.bellytimeCustomer.shop.repository;
 
-import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListDto;
+import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListWithMenuResponse;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ public interface ShopSortStrategy {
     // 분류기준중에 하나가 왔는지 체크
     boolean sortedBy(String type);
 
-    List<ShopSearchResultListDto> SortedList (String name);
+    List<ShopSearchResultListWithMenuResponse> SortedList (String name);
 }

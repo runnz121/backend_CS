@@ -31,4 +31,7 @@ public interface FollowShopRepository extends JpaRepository<FollowShop, Long> {
     void deleteFollowShopId(@Param("userId") Long id, @Param("shopId") Long shopId);
 
     List<FollowShop> findByUserId(User user);
+
+    @Query("SELECT COUNT(fs) FROM FollowShop fs WHERE fs.shop.id=:shopId")
+    int countFollowerShop(@Param("shopId") Long shopId);
 }

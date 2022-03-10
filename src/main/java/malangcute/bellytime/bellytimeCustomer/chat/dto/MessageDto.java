@@ -1,10 +1,8 @@
 package malangcute.bellytime.bellytimeCustomer.chat.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import malangcute.bellytime.bellytimeCustomer.chat.domain.ChatLog;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,7 +22,10 @@ public class MessageDto {
 
     private String sendTime;
 
+    private boolean filter;
 
+
+    @Builder
     public MessageDto(String roomId, Long sender, String nickName, String message, String sendTime) {
         this.roomId = roomId;
         this.sender = sender;
@@ -33,6 +34,12 @@ public class MessageDto {
         this.sendTime = sendTime;
     }
 
+    public MessageDto(String roomId, Long sender, String nickName,  String content) {
+        this.roomId = roomId;
+        this.nickName = nickName;
+        this.sender = sender;
+        this.content = content;
+    }
 
 
     public static MessageDto of (ChatLog log) {
@@ -51,5 +58,16 @@ public class MessageDto {
                 send.getNickName(),
                 send.getContent(),
                 send.getSendTime());
+    }
+
+
+    public static MessageDto exit (String roomId, String nickName) {
+        return new MessageDtoBuilder()
+                .roomId(roomId)
+                .nickName(nickName)
+                .message(nickName + " 님이 채팅방을 떠났습니다")
+                .sender(-1L)
+                .sendTime(null)
+                .build();
     }
 }

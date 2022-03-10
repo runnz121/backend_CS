@@ -3,24 +3,19 @@ package malangcute.bellytime.bellytimeCustomer.shop.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.global.domain.DataFormatter;
-import malangcute.bellytime.bellytimeCustomer.global.domain.DateFormatterImpl;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopResultDto;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSaveRequest;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResponse;
-import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListDto;
+import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListWithMenuResponse;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopRepository;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopSortStrategyFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import javax.validation.constraints.Null;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,7 +59,7 @@ public class ShopService {
     }
 
     // 전략 패턴 적용
-    public List<ShopSearchResultListDto> searchBySpecificName(String name, String sortType) {
+    public List<ShopSearchResultListWithMenuResponse> searchBySpecificName(String name, String sortType) {
         return shopSortStrategyFactory.findStrategy(sortType).SortedList(name);
     }
 
@@ -90,11 +85,14 @@ public class ShopService {
              close = Long.parseLong(dateFormat.TimeStampHour(shop.getCloseTime()));
 
         } catch(NullPointerException ex) {
+            System.out.println("in checkstatus null false");
             return false;
         }
         if (current > open && current < close) {
+            System.out.println("in checkstatus true");
             return true;
         }
+        System.out.println("in checkstatus  false");
         return false;
     }
 

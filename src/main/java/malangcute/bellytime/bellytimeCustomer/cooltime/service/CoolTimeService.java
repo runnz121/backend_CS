@@ -12,8 +12,10 @@ import malangcute.bellytime.bellytimeCustomer.global.auth.TokenAuthentication;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
 import malangcute.bellytime.bellytimeCustomer.global.domain.DateFormatterImpl;
 import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
+import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopCoolTimeSearchStrategyFactory;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,17 +30,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CoolTimeService {
 
-    private final TokenAuthentication tokenAuthentication;
-
-    private final TokenProvider tokenProvider;
-
     private final FoodService foodService;
 
     private final DateFormatterImpl dateFormatterImpl;
 
-    private final UserRepository userRepository;
-
     private final CoolTimeRepository coolTimeRepository;
+
+    private final ShopCoolTimeSearchStrategyFactory factory;
 
 
     // 쿨타임 항목 갖고오기(Food, CoolTime 조인)
@@ -201,5 +199,18 @@ public class CoolTimeService {
                 .sorted(Comparator.comparing(CoolTimeGetMyFriendsIF::getGauge).reversed())
                 .map(CoolTimeGetMyFriends::of)
                 .collect(Collectors.toList());
+    }
+
+    //필터로 쿨타임 반환
+    @Transactional(readOnly = true)
+    public List<CoolTimeShopRecommendResponse> getShopListFilterBy(User user, Long foodId, String filter, Double lat, Double lon, Pageable pageable) {
+        System.out.println("in cooltime service");
+        System.out.println(user.getId());
+        System.out.println(foodId);
+        System.out.println(filter);
+        System.out.println(lat);
+        System.out.println(lon);
+        System.out.println(pageable);
+        return factory.searchStrategy(filter).selectStrategy(user,foodId,lat,lon, pageable);
     }
 }

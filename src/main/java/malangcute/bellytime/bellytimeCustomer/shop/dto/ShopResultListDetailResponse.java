@@ -1,12 +1,14 @@
 package malangcute.bellytime.bellytimeCustomer.shop.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
-public class ShopSearchResponse {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ShopResultListDetailResponse {
 
     private Long shopId;
 
@@ -18,16 +20,21 @@ public class ShopSearchResponse {
 
     private String address;
 
+    private int followCounter;
+
     private boolean status;
 
-    public static ShopSearchResponse of (Shop shop, boolean status) {
 
-        return new ShopSearchResponse(
+
+    public static ShopResultListDetailResponse of (Shop shop, int followCounter, boolean status) {
+
+        return new ShopResultListDetailResponse(
                 shop.getId(),
                 shop.getName(),
                 shop.getImage(),
                 shop.getBellscore(),
                 shop.getAddress(),
+                followCounter,
                 status
         );
     }

@@ -84,4 +84,9 @@ public class FollowService {
         }
     }
 
+
+    public int shopFollower(Shop shop) {
+        System.out.println("count query 실행?");
+        return followShopRepository.countFollowerShop(shop.getId());
+    }
 }
