@@ -15,8 +15,15 @@ import java.util.List;
 public interface ShopRepository extends JpaRepository<Shop, Long> {
 
 
-    @Query(nativeQuery = true, value = " select * from shop sh where sh.id in (select * from (select fs.shop_id from follow_shop fs group by fs.shop_id order by count(fs.shop_id ) desc limit :param) AS pp) order by bellscore desc")
-    Page<Shop> findPopularTop3Shop(@Param("param")Long param, Pageable pageable);
+//    @Query(nativeQuery = true,
+//            value = " select * from shop sh where sh.id in (select * from (select fs.shop_id from follow_shop fs group by fs.shop_id order by count(fs.shop_id ) desc limit :param) AS pp) order by bellscore desc")
+//    Page<Shop> findPopularTop3Shop(@Param("param")Long param, Pageable pageable);
+
+
+    @Query(nativeQuery = true,
+            value = "select* from shop where shop.id in (select fs.shop_id from follow_shop fs group by fs.shop_id order by count(fs.shop_id ) desc )")
+    Page<Shop> findPopularTop3Shop(Pageable pageable);
+
 
     List<ShopResultDto> findByNameContaining(final String name);
 

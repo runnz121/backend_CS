@@ -15,5 +15,7 @@ public class CreateRoomRequest {
 
     private List<Long> inviteId = new ArrayList<>();
 
+    private  String roomName;
+
     private String type;
 }

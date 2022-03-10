@@ -66,7 +66,7 @@ public class ShopService {
     // 팔로워가 많은 탑 3가게 갖고오기
     public List<ShopSearchResponse> getTop3ShopList() {
 
-        List<ShopSearchResponse> lists =  shopRepository.findPopularTop3Shop(3L, PageRequest.of(0,3))
+        List<ShopSearchResponse> lists =  shopRepository.findPopularTop3Shop(PageRequest.of(0,3))
                 .stream()
                 .map(it -> ShopSearchResponse.of(it, checkStatus(it)))
                 .collect(Collectors.toList());
