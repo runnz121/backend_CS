@@ -11,11 +11,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CreateRoomRequest {
+public class ChatRoomInviteFriendsRequest {
 
     private List<Long> inviteId = new ArrayList<>();
 
-    private String roomName;
-
-    private String type;
+    private String roomId;
 }

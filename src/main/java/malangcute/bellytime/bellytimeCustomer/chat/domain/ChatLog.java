@@ -43,4 +43,6 @@ public class ChatLog extends BaseTimeEntity {
     public static ChatLog empty() {
         return new ChatLog(0L,"",0L,"","");
     }
+
+
 }

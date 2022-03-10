@@ -28,4 +28,8 @@ public class ChatRoomShopListResponse {
         List<ChatContactIdAndImgDto> list = lists.get(chat.getRoomId());
         return new ChatRoomShopListResponse(chat.getRoomId(), chat.getRoomName(), list, content);
     }
+
+    public static ChatRoomShopListResponse from (Map.Entry<ChatImgDtoGroupingKey, List<ChatContactIdAndImgDto>> lists, String recentContent) {
+        return new ChatRoomShopListResponse(lists.getKey().getRoomId(), lists.getKey().getRoomName(), lists.getValue(), recentContent);
+    }
 }

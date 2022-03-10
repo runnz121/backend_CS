@@ -4,10 +4,6 @@ import lombok.*;
 import malangcute.bellytime.bellytimeCustomer.chat.domain.ChatLog;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-
 @Getter
 @NoArgsConstructor
 public class MessageDto {
@@ -22,44 +18,42 @@ public class MessageDto {
 
     private String sendTime;
 
-    private boolean filter;
+    private Long contactId;
+
+    private String profileImg;
 
 
     @Builder
-    public MessageDto(String roomId, Long sender, String nickName, String message, String sendTime) {
+    public MessageDto(String roomId, Long sender, String nickName, String message, String sendTime, String profileImg, Long contactId) {
         this.roomId = roomId;
         this.sender = sender;
         this.nickName = nickName;
         this.content = message;
         this.sendTime = sendTime;
-    }
-
-    public MessageDto(String roomId, Long sender, String nickName,  String content) {
-        this.roomId = roomId;
-        this.nickName = nickName;
-        this.sender = sender;
-        this.content = content;
+        this.contactId = contactId;
+        this.profileImg = profileImg;
     }
 
 
     public static MessageDto of (ChatLog log) {
-        return new MessageDto(
-                log.getRoomId(),
-                log.getSender(),
-                log.getNickName(),
-                log.getMessage(),
-                log.getCreatedAt().toString().replaceAll("T"," "));
+        return new MessageDtoBuilder()
+                .roomId(log.getRoomId())
+                .sender(log.getSender())
+                .nickName(log.getNickName())
+                .message(log.getMessage())
+                .sendTime( log.getCreatedAt().toString().replaceAll("T"," "))
+                .build();
     }
 
     public static MessageDto send (MessageDto send) {
-        return new MessageDto(
-                send.getRoomId(),
-                send.getSender(),
-                send.getNickName(),
-                send.getContent(),
-                send.getSendTime());
+        return new MessageDtoBuilder()
+                .roomId(send.getRoomId())
+                .sender(send.getSender())
+                .nickName(send.getNickName())
+                .message(send.getContent())
+                .sendTime(send.getSendTime())
+                .build();
     }
-
 
     public static MessageDto exit (String roomId, String nickName) {
         return new MessageDtoBuilder()
@@ -70,4 +64,17 @@ public class MessageDto {
                 .sendTime(null)
                 .build();
     }
+
+    public static MessageDto invite (User user, String roomId) {
+        return new MessageDtoBuilder()
+                .roomId(roomId)
+                .nickName(user.getNickname().getNickName())
+                .message(user.getNickname().getNickName() + " 님이 채팅방에 초대되었습니다.")
+                .sender(user.getId())
+                .sendTime(null)
+                .contactId(user.getId())
+                .profileImg(user.getProfileImg())
+                .build();
+    }
+
 }

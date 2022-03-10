@@ -16,8 +16,11 @@ public class ChatContactIdAndImgDto {
 
     private String profileImg;
 
+    private String nickName;
 
-    public static ChatContactIdAndImgDto of (Chat chat) {
-        return new ChatContactIdAndImgDto(chat.getInviteId().getId(), chat.getInviteId().getProfileImg());
+
+    public static ChatContactIdAndImgDto from (ChatListResponseIF chat) {
+        return new ChatContactIdAndImgDto(chat.getContactId(), chat.getProfileImg(), chat.getNickName());
     }
+
 }

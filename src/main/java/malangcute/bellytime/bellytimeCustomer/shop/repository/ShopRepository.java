@@ -19,9 +19,8 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
 //            value = " select * from shop sh where sh.id in (select * from (select fs.shop_id from follow_shop fs group by fs.shop_id order by count(fs.shop_id ) desc limit :param) AS pp) order by bellscore desc")
 //    Page<Shop> findPopularTop3Shop(@Param("param")Long param, Pageable pageable);
 
-
     @Query(nativeQuery = true,
-            value = "select* from shop where shop.id in (select fs.shop_id from follow_shop fs group by fs.shop_id order by count(fs.shop_id ) desc )")
+            value = "select * from shop where id in (select * from (select fs.shop_id from follow_shop fs group by fs.shop_id order by count(fs.shop_id ) desc limit 3) AS pp) order by bellscore desc ")
     Page<Shop> findPopularTop3Shop(Pageable pageable);
 
 
@@ -51,7 +50,7 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
                     "WHERE sm.food_id=:foodId)" +
                     "AND shop.id IN (SELECT fs.shop_id FROM " +
                     "follow_shop fs WHERE fs.user_id=:userId)")
-    List<Shop> findByFilterWithFollow(   @Param("userId") Long userId,
+    Page<Shop> findByFilterWithFollow(   @Param("userId") Long userId,
                                         @Param("foodId") Long foodId, Pageable pageable);
 
 
