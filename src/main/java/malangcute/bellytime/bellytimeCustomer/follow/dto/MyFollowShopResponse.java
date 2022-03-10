@@ -2,6 +2,8 @@ package malangcute.bellytime.bellytimeCustomer.follow.dto;
 
 import lombok.*;
 import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowShop;
+import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
+import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopResultListDetailResponse;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -14,10 +16,28 @@ public class MyFollowShopResponse {
 
     private String profileImg;
 
-    public static MyFollowShopResponse from(FollowShop followShop) {
+    private int reviewCount;
+
+    private Long score;
+
+    private String address;
+
+    private boolean status;
+
+    private int followerCount;
+
+
+    public static MyFollowShopResponse of (Shop shop, int follower, int reviewCount, boolean status) {
+
         return new MyFollowShopResponse(
-                followShop.getShop().getId(),
-                followShop.getShop().getName(),
-                followShop.getShop().getImage());
+                shop.getId(),
+                shop.getName(),
+                shop.getImage(),
+                reviewCount,
+                shop.getBellscore(),
+                shop.getAddress(),
+                status,
+                follower
+        );
     }
 }

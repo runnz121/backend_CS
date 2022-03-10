@@ -2,6 +2,7 @@ package malangcute.bellytime.bellytimeCustomer.follow.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import malangcute.bellytime.bellytimeCustomer.comment.service.CommentService;
 import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowShop;
 import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowUser;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.*;
@@ -10,8 +11,12 @@ import malangcute.bellytime.bellytimeCustomer.follow.repository.FollowUserReposi
 import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopRepository;
+import malangcute.bellytime.bellytimeCustomer.shop.service.ShopService;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
+import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,16 +35,10 @@ public class FollowService {
 
     private final ShopRepository shopRepository;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
+    private final ShopService shopService;
 
-    //내가 팔로우한 가게 리스트 갖고오기
-    @Transactional(readOnly = true)
-    public List<MyFollowShopResponse> myFollowShop(User user) {
-        return followShopRepository.findMyFollowShopById(user.getId()).stream()
-                .map(MyFollowShopResponse::from)
-                .collect(Collectors.toList());
-    }
 
 
     //가게 팔로우처리하기
@@ -71,7 +70,7 @@ public class FollowService {
     public void toFollowFriend(User user, List<FollowFriendsRequest> requests){
         Set<FollowUser> saveList = new HashSet<>();
         for(FollowFriendsRequest request : requests) {
-            User userResult  = userRepository.findById(request.getFriendId()).orElseThrow(() -> new NotFoundException("유저가 없습니다"));
+            User userResult  = userService.findUserById(request.getFriendId());
             saveList.add(FollowUser.create(user, userResult));
         }
         followUserRepository.saveAll(saveList);
