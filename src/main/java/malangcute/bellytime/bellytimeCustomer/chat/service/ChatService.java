@@ -66,13 +66,12 @@ public class ChatService {
     }
 
 
-
     //채팅방생성
     @Transactional
     public RoomIdResponse createRoomService(User user, CreateRoomRequest createRoomRequest) {
         List<Chat> makeRooms = new ArrayList<>();
         String roomId = generateRoom(user);
-     //   String roomName = generateRoomName(createRoomRequest);
+        createRoomRequest.getInviteId().add(user.getId());
         for (Long invitedId : createRoomRequest.getInviteId()) {
           Chat makeRoom = Chat.builder()
                   .roomId(roomId)
@@ -88,34 +87,68 @@ public class ChatService {
     }
 
 
+    //친구추가하기
+    public void addFriend(User user, ChatRoomInviteFriendsRequest request) {
+        List<Chat> makeRooms = new ArrayList<>();
+        String roomName = chatRepository.findByRoomId(request.getRoomId()).getRoomName();
+        for (Long invitedId : request.getInviteId()) {
+            Chat makeRoom = Chat.builder()
+                    .roomId(request.getRoomId())
+                    .roomName(roomName)
+                    .type(CUSTOMER)
+                    .makerId(user)
+                    .inviteId(userService.findUserById(invitedId))
+                    .build();
+            makeRooms.add(makeRoom);
+        }
+        chatRepository.saveAll(makeRooms);
+    }
+
+    public List<MessageDto> sendInvitedMessage(ChatRoomInviteFriendsRequest request) {
+        List<MessageDto> list = new ArrayList<>();
+        for (Long userId : request.getInviteId()) {
+            User invited = userService.findUserById(userId);
+            list.add(MessageDto.invite(invited, request.getRoomId()));
+            saveLog(MessageDto.builder()
+                    .roomId(request.getRoomId())
+                    .sender(-2L)
+                    .nickName(invited.getNickname().getNickName())
+                    .message(invited.getNickname().getNickName() + " 님이 초대되었습니다.")
+                    .build())
+            ;
+        }
+        return list;
+    }
+
+
     //내가 주인인 방의 친구 목록 반환
     public List<ChatRoomFriendListResponse> friendChatRoomList(User user) {
-        Map<String, List<ChatContactIdAndImgDto>> friendList = chatRepository.findByMakerIdAndType(user, CUSTOMER).stream()
+
+        Map<ChatImgDtoGroupingKey, List<ChatContactIdAndImgDto>> lists =  chatRepository.findMyChatList(user.getId(), CUSTOMER)
+                .stream()
+                .filter(it-> !Objects.equals(it.getContactId(), user.getId()))
                 .collect(Collectors.groupingBy(
-                        Chat::getRoomId,
-                        Collectors.mapping(ChatContactIdAndImgDto::of, Collectors.toList())));
-
-        return chatRepository.findByMakerIdAndType(user, CUSTOMER)
-                .stream().filter(distinctByKey(Chat::getRoomId))
-                .map(it -> ChatRoomFriendListResponse.of(friendList, it, getLastContent(user,it.getRoomId())))
-                .collect(Collectors.toList());
-
+                        ChatImgDtoGroupingKey::new,
+                        Collectors.mapping(ChatContactIdAndImgDto::from, Collectors.toList())
+                ));
+       return lists.entrySet()
+               .stream()
+               .map(it -> ChatRoomFriendListResponse.from(it, getLastContent(user, it.getKey().getRoomId()))).collect(toList());
     }
 
 
     //내가 주인인 방의 샵 목록 반환
     public List<ChatRoomShopListResponse> shopChatRoomList(User user) {
-
-        Map<String, List<ChatContactIdAndImgDto>> shopList = chatRepository.findByMakerIdAndType(user, SHOP).stream()
-                .collect(Collectors.groupingBy(
-                        Chat::getRoomId,
-                        Collectors.mapping(ChatContactIdAndImgDto::of, Collectors.toList())));
-
-        return chatRepository.findByMakerIdAndType(user, SHOP)
+        Map<ChatImgDtoGroupingKey, List<ChatContactIdAndImgDto>> lists =  chatRepository.findMyChatList(user.getId(), SHOP)
                 .stream()
-                .filter(distinctByKey(Chat::getRoomId))
-                .map(it -> ChatRoomShopListResponse.of(shopList,it, getLastContent(user,it.getRoomId())))
-                .collect(Collectors.toList());
+                .filter(it-> !Objects.equals(it.getContactId(), user.getId()))
+                .collect(Collectors.groupingBy(
+                        ChatImgDtoGroupingKey::new,
+                        Collectors.mapping(ChatContactIdAndImgDto::from, Collectors.toList())
+                ));
+        return lists.entrySet()
+                .stream()
+                .map(it -> ChatRoomShopListResponse.from(it, getLastContent(user, it.getKey().getRoomId()))).collect(toList());
     }
 
 
@@ -144,30 +177,12 @@ public class ChatService {
     //채팅방 마지막 로그 반환하기
     @Transactional(readOnly = true)
     public String getLastContent(User user, String roomId) {
-
         ChatLog log = chatLogRepository.findBySenderAndRoomId(user.getId(), roomId)
                 .stream().sorted(Comparator.comparing(ChatLog::getCreatedAt))
                 .findAny().orElseGet(ChatLog::empty);
         return log.getMessage();
     }
 
-    //친구추가하기
-    public void addFriend(User user, CreateRoomRequest request) {
-        List<Chat> makeRooms = new ArrayList<>();
-        String roomId = generateRoom(user);
-        String userRoomName = generateRoomName(request);
-        for (Long invitedId : request.getInviteId()) {
-            Chat makeRoom = Chat.builder()
-                    .roomId(roomId)
-                    .roomName(userRoomName)
-                    .type(CUSTOMER)
-                    .makerId(user)
-                    .inviteId(userService.findUserById(invitedId))
-                    .build();
-            makeRooms.add(makeRoom);
-        }
-        chatRepository.saveAll(makeRooms);
-    }
 
     //중복제거
     private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {

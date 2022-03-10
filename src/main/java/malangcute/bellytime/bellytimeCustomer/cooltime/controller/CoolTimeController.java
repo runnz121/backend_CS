@@ -76,15 +76,7 @@ public class CoolTimeController {
                                                                                    @RequestParam(required = false) Double lat,
                                                                                    @RequestParam(required = false) Double lon,
                                                                                    @PageableDefault Pageable page) {
-        System.out.println("incontroller >>>>>>>>>");
-        System.out.println(user.getId());
-        System.out.println(foodId);
-        System.out.println(filter);
-        System.out.println(lat);
-        System.out.println(lon);
-        System.out.println(page);
-        List<Shop> list2 = shopRepository.findByFilterWithFollow(user.getId(), foodId,page);
-//        List<String> list3 = shopRepository.findById(1L).stream().map(Shop::getName).collect(Collectors.toList());
+
         List<CoolTimeShopRecommendResponse> list = coolTimeService.getShopListFilterBy(user, foodId, filter,lat, lon, page);
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }

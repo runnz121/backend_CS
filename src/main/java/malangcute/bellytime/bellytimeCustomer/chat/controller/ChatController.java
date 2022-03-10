@@ -87,9 +87,11 @@ public class ChatController {
 
     //친구 초대하기
     @PostMapping("/chat/add/friend")
-    public ResponseEntity addFriend(@RequireLogin User user, @RequestBody CreateRoomRequest request) {
+    public void addFriend(@RequireLogin User user, @RequestBody ChatRoomInviteFriendsRequest request) {
         chatService.addFriend(user, request);
-        return ResponseEntity.ok().body("초대완료");
+        List<MessageDto> messageDtos= chatService.sendInvitedMessage(request) ;
+        for (MessageDto messageDto : messageDtos) {
+            template.convertAndSend("/sub/chatting/room/" + messageDto.getRoomId(), messageDto );
+        }
     }
-
 }
