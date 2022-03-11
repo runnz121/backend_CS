@@ -71,7 +71,7 @@ public class CoolTimeController {
 
     @GetMapping("/shopList")
     public ResponseEntity<List<CoolTimeShopRecommendResponse>> getCoolTimeByFilter(@RequireLogin User user,
-                                                                                   @RequestParam() Long foodId,
+                                                                                   @RequestParam Long foodId,
                                                                                    @RequestParam String filter,
                                                                                    @RequestParam(required = false) Double lat,
                                                                                    @RequestParam(required = false) Double lon,
