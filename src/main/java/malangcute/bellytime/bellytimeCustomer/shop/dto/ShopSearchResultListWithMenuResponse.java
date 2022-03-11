@@ -28,7 +28,7 @@ public class ShopSearchResultListWithMenuResponse {
 
     private boolean status;
 
-    private int followCount;
+    private int followerCount;
 
     public static ShopSearchResultListWithMenuResponse of(Shop shop, int reviewCount, int followCount, boolean status) {
         return new ShopSearchResultListWithMenuResponse(
