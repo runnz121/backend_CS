@@ -1,5 +1,6 @@
 package malangcute.bellytime.bellytimeCustomer.follow.service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +17,7 @@ import malangcute.bellytime.bellytimeCustomer.follow.dto.FollowShopRequest;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.MyFriendListResponse;
 import malangcute.bellytime.bellytimeCustomer.follow.repository.FollowShopRepository;
 import malangcute.bellytime.bellytimeCustomer.follow.repository.FollowUserRepository;
+import malangcute.bellytime.bellytimeCustomer.global.domain.DataFormatter;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopRepository;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
@@ -32,6 +34,8 @@ public class FollowService {
     private final FollowUserRepository followUserRepository;
 
     private final UserService userService;
+
+    private final DataFormatter dateFormat;
 
 
     public void toUnFollowShop(User user, List<FollowShopRequest> requests) {
@@ -67,5 +71,24 @@ public class FollowService {
 
     public int shopFollower(Shop shop) {
         return followShopRepository.countFollowerShop(shop.getId());
+    }
+
+    // 운영중인지 확인하기
+    public boolean checkStatus(Shop shop) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        Long current = Long.parseLong(dateFormat.LocalDateTimeHour(currentTime));
+        Long open = null;
+        Long close = null;
+        try {
+            open = Long.parseLong(dateFormat.TimeStampHour(shop.getOpenTime()));
+            close = Long.parseLong(dateFormat.TimeStampHour(shop.getCloseTime()));
+
+        } catch (NullPointerException ex) {
+            return false;
+        }
+        if (current > open && current < close) {
+            return true;
+        }
+        return false;
     }
 }

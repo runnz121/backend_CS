@@ -14,34 +14,27 @@ public class ShopSearchResponse {
 
     private String profileImg;
 
+    private int reviewCount;
+
     private Long score;
 
     private String address;
 
     private boolean status;
 
-    public ShopSearchResponse(Long id, String name) {
-        this.shopId = id;
-        this.shopName = name;
-    }
+    private int followerCount;
 
-    public static ShopSearchResponse of (Shop shop, boolean status) {
+    public static ShopSearchResponse of (Shop shop, boolean status, int followerCount, int reviewCount) {
 
         return new ShopSearchResponse(
                 shop.getId(),
                 shop.getName(),
                 shop.getImage(),
+                reviewCount,
                 shop.getBellscore(),
                 shop.getAddress(),
-                status
-        );
-    }
-
-    public static ShopSearchResponse from (ShopDetailDto dto) {
-
-        return new ShopSearchResponse(
-            dto.getId(),
-            dto.getName()
+                status,
+                followerCount
         );
     }
 }
