@@ -1,6 +1,8 @@
 package malangcute.bellytime.bellytimeCustomer.global.schedule.quartz;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.quartz.*;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -10,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 //@DisallowConcurrentExecution // 작업이 겹치지 않으면서 순서 보장
+@Slf4j
 public class QuartzJobExecutor extends QuartzJobBean implements InterruptableJob {
 
     @Autowired
@@ -31,14 +34,14 @@ public class QuartzJobExecutor extends QuartzJobBean implements InterruptableJob
             jobParametersBuilder.addLong("currentTime", System.currentTimeMillis());
             jobLauncher.run((Job) applicationContext.getBean(JOB_NAME), jobParametersBuilder.toJobParameters()); //batch job 실행
         } catch (Exception e) {
-            System.out.println(e + "쿼츠 에러!!!");
+            log.trace(e + "쿼츠 에러!!!");
         }
     }
 
     @Override
     public void interrupt() throws UnableToInterruptJobException {
         isJobInterrupted = true;
-        if(currThread != null) {
+        if (currThread != null) {
             currThread.interrupt();
         }
     }

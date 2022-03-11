@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @NoArgsConstructor
@@ -18,7 +17,7 @@ public class CommentWriteRequest {
 
     private String visible;
 
-    private String Content;
+    private String content;
 
     private Long reservationId;
 

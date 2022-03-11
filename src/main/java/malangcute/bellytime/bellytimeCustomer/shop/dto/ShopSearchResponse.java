@@ -20,6 +20,11 @@ public class ShopSearchResponse {
 
     private boolean status;
 
+    public ShopSearchResponse(Long id, String name) {
+        this.shopId = id;
+        this.shopName = name;
+    }
+
     public static ShopSearchResponse of (Shop shop, boolean status) {
 
         return new ShopSearchResponse(
@@ -29,6 +34,14 @@ public class ShopSearchResponse {
                 shop.getBellscore(),
                 shop.getAddress(),
                 status
+        );
+    }
+
+    public static ShopSearchResponse from (ShopDetailDto dto) {
+
+        return new ShopSearchResponse(
+            dto.getId(),
+            dto.getName()
         );
     }
 }

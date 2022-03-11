@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.feed.domain.Feed;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Getter
 @NoArgsConstructor

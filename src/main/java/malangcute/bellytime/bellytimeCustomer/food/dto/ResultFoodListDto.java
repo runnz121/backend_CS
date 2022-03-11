@@ -13,8 +13,4 @@ import java.util.List;
 public class ResultFoodListDto {
 
     private List<String> resultList;
-
-    public static ResultFoodListDto of (Food resultList) {
-        return new ResultFoodListDto();
-    }
 }

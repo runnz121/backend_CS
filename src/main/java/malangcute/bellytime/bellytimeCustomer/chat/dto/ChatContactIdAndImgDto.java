@@ -3,9 +3,6 @@ package malangcute.bellytime.bellytimeCustomer.chat.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import malangcute.bellytime.bellytimeCustomer.chat.domain.Chat;
-
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -19,7 +16,7 @@ public class ChatContactIdAndImgDto {
     private String nickName;
 
 
-    public static ChatContactIdAndImgDto from (ChatListResponseIF chat) {
+    public static ChatContactIdAndImgDto from(ChatListResponseIF chat) {
         return new ChatContactIdAndImgDto(chat.getContactId(), chat.getProfileImg(), chat.getNickName());
     }
 

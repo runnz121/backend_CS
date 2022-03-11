@@ -108,7 +108,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 
     @Builder
-    public User (Long id, String nickName, String email, String passWord, String phoneNumber, String profileImg){
+    public User (Long id, String nickName, String email, String passWord, String phoneNumber, String profileImg) {
         this.id = id;
         this.nickname = new NickName(nickName);
         this.email = new Email(email);
@@ -174,21 +174,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.refreshToken = refreshToken;
     }
 
-    public void setProfileImg(String imgUrl) { this.profileImg = imgUrl; }
+    public void setProfileImg(String imgUrl) {this.profileImg = imgUrl; }
 
     public void setNickname(String nickname) {this.nickname = new NickName(nickname);}
-
-
-//    public void setImg(UserImg profileImg) {
-//        this.profileImg = profileImg;
-//    }
-//
-//    private void setUserImg(UserImg userImg) {
-//        if (Objects.isNull(userImg)) {
-//            return;
-//        }
-//        if (userImg.hasNotUser()) {
-//            profileImg.setUser(this);
-//        }
-//    }
 }

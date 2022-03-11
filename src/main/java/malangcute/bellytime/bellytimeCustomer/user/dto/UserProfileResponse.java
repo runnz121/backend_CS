@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 
-import javax.persistence.Access;
-import java.util.Optional;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor

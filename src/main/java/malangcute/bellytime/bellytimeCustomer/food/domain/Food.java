@@ -1,22 +1,31 @@
 package malangcute.bellytime.bellytimeCustomer.food.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.*;
-import malangcute.bellytime.bellytimeCustomer.global.domain.common.BaseTimeEntity;
-import malangcute.bellytime.bellytimeCustomer.shop.domain.ShopMenu;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.shop.domain.ShopMenu;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "food")
-@Document(indexName ="food")
+@Document(indexName = "food")
 public class Food {
 
     @Id
@@ -43,6 +52,6 @@ public class Food {
 
 
     public static Food of (Food list) {
-       return new Food(list.getId(), list.getName(), list.getImage());
+        return new Food(list.getId(), list.getName(), list.getImage());
     }
 }

@@ -6,7 +6,7 @@ public abstract class OAuth2UserInfo {
 
     protected Map<String, Object> attribute;
 
-    public OAuth2UserInfo(Map<String , Object> attribute){
+    public OAuth2UserInfo(Map<String, Object> attribute) {
         this.attribute = attribute;
     }
 

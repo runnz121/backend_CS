@@ -1,13 +1,12 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.domain;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Map;
+
+import org.json.JSONObject;
 
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
-    private final static String KAKAO_KEY="kakao_account";
+    private static final String KAKAO_KEY = "kakao_account";
 
     public KakaoOAuth2UserInfo(Map<String, Object> attribute) {
         super(attribute);

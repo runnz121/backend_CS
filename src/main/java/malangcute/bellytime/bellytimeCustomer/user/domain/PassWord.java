@@ -24,12 +24,12 @@ public class PassWord {
     @Column(name = "password", nullable = false)
     private String passWord;
 
-    public PassWord(String passWord){
+    public PassWord(String passWord) {
         validate(passWord);
         this.passWord = passWord;
     }
 
-    public void validate(String passWord){
+    public void validate(String passWord) {
         validateNull(passWord);
 //        validateLength(passWord);
 //        validPattern(passWord);

@@ -1,16 +1,17 @@
 package malangcute.bellytime.bellytimeCustomer.chat.repository;
 
+import org.springframework.stereotype.Component;
+
 import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.chat.domain.Chat;
 import malangcute.bellytime.bellytimeCustomer.chat.dto.RoomIdResponse;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
-import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class ChatRoomSearchShop implements ChatRoomSearchStrategy {
 
-    private final static String TYPE = "shop";
+    private static final String TYPE = "shop";
 
     private final ChatRepository chatRepository;
 
@@ -20,8 +21,9 @@ public class ChatRoomSearchShop implements ChatRoomSearchStrategy {
     }
 
     @Override
-    public RoomIdResponse searchRoomWithType(User user, Long inviteId, String type) {
-       String shopRoomId = chatRepository.findSingleRoomIdExist(user.getId(), inviteId, type);
-        return RoomIdResponse.of(shopRoomId);
+    public RoomIdResponse searchRoomWithType(Long inviteId, String type) {
+        //String shopRoomId = chatRepository.findSingleRoomIdExist(inviteId, type);
+        Chat chat = chatRepository.findSingleRoomIdExist(inviteId, type);
+        return RoomIdResponse.of(chat);
     }
 }

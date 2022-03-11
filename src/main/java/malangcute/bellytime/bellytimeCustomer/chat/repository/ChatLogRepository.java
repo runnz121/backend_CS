@@ -1,12 +1,10 @@
 package malangcute.bellytime.bellytimeCustomer.chat.repository;
 
-import malangcute.bellytime.bellytimeCustomer.chat.domain.Chat;
-import malangcute.bellytime.bellytimeCustomer.chat.domain.ChatLog;
-import malangcute.bellytime.bellytimeCustomer.chat.dto.RoomIdRequest;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Arrays;
-import java.util.List;
+import malangcute.bellytime.bellytimeCustomer.chat.domain.ChatLog;
 
 public interface ChatLogRepository extends JpaRepository<ChatLog, Long> {
 

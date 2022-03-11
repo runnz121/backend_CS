@@ -31,7 +31,6 @@ public class FoodService {
 
     private final UserService userService;
 
-    //음식 검색하기 -> list반환
     public List<SearchResultResponse> findFood(SearchFoodRequest request) {
         String findFood = request.getSearch();
         List<FoodResultDto> dtoList = foodRepository.findByNameContaining(findFood);
@@ -41,7 +40,6 @@ public class FoodService {
         return resultList;
     }
 
-    //food name으로 food 반환 -> 단일반환
     public Food findFoodFromName(String foodName) {
         try {
             Optional<Food> findFood = foodRepository.findByName(foodName);
@@ -65,13 +63,8 @@ public class FoodService {
 
     //엘라스틱 서치 사용 -> mysql 사용
     public List<String> searchByName(String name) {
-        //List<String> deList = Collections.synchronizedList(new ArrayList<>(Arrays.asList()));
-        List<String> getList = foodRepository.findByNameContaining(name).stream().map(it -> it.getName()).collect(Collectors.toList());
-
-        //System.out.println(deList);
-        System.out.println(getList);
-
-        //return  getList.parallelStream().collect(Collectors.toCollection(() -> deList));
+        List<String> getList = foodRepository.findByNameContaining(name).stream()
+            .map(FoodResultDto::getName).collect(Collectors.toList());
         return getList;
     }
 

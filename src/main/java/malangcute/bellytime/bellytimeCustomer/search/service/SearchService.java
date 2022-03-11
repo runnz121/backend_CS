@@ -64,7 +64,6 @@ public class SearchService {
 
     // 최근 검색어 저장
     private void saveRecentSearch(User user, String name) {
-        System.out.println(name);
         String key = CacheElements.USER_ID + user.getId();
         SetOperations<String, String> savelist = redisTemplate.opsForSet();
         savelist.add(key, name);

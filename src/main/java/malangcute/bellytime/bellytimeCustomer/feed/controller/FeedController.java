@@ -1,13 +1,7 @@
 package malangcute.bellytime.bellytimeCustomer.feed.controller;
 
-import com.amazonaws.Response;
-import lombok.RequiredArgsConstructor;
-import malangcute.bellytime.bellytimeCustomer.feed.dto.FeedListResponse;
-import malangcute.bellytime.bellytimeCustomer.feed.dto.FeedResultResponse;
-import malangcute.bellytime.bellytimeCustomer.feed.repository.FeedSortStrategyFactory;
-import malangcute.bellytime.bellytimeCustomer.feed.service.FeedService;
-import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
-import malangcute.bellytime.bellytimeCustomer.user.domain.User;
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -17,7 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.feed.dto.FeedListResponse;
+import malangcute.bellytime.bellytimeCustomer.feed.dto.FeedResultResponse;
+import malangcute.bellytime.bellytimeCustomer.feed.service.FeedService;
+import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 
 @RestController
 @RequestMapping("/feed")
