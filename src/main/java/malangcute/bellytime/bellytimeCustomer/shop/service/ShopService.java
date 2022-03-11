@@ -3,9 +3,13 @@ package malangcute.bellytime.bellytimeCustomer.shop.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.comment.service.CommentService;
+import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowShop;
+import malangcute.bellytime.bellytimeCustomer.follow.dto.FollowShopRequest;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.MyFollowShopResponse;
+import malangcute.bellytime.bellytimeCustomer.follow.repository.FollowShopRepository;
 import malangcute.bellytime.bellytimeCustomer.follow.service.FollowService;
 import malangcute.bellytime.bellytimeCustomer.global.domain.DataFormatter;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopResultDto;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSaveRequest;
@@ -21,7 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,8 +39,10 @@ public class ShopService {
     //jpa
     private final ShopRepository shopRepository;
 
+    private final FollowShopRepository followShopRepository;
+
     //elastic
-   // private final ShopSearchRepository shopSearchRepository;
+    // private final ShopSearchRepository shopSearchRepository;
 
     private final ShopSortStrategyFactory shopSortStrategyFactory;
 
@@ -48,19 +56,18 @@ public class ShopService {
     @Transactional
     public void saveShop(ShopSaveRequest shopSaveRequest) {
         Shop newshop = Shop.builder()
-                .name(shopSaveRequest.getName())
-                .address(shopSaveRequest.getAddress())
-                .image(shopSaveRequest.getImg())
-                .build();
+            .name(shopSaveRequest.getName())
+            .address(shopSaveRequest.getAddress())
+            .image(shopSaveRequest.getImg())
+            .build();
         shopRepository.save(newshop);
-       // shopSearchRepository.save(newshop);
+        // shopSearchRepository.save(newshop);
     }
-
 
     // Shop형태로 결과값을 받아 shopsearchreusltlistdto로 맵핑한다
     public List<String> searchByName(String name) {
         return shopRepository.findByNameContaining(name)
-                .stream().map(ShopResultDto::getName).collect(Collectors.toList());
+            .stream().map(ShopResultDto::getName).collect(Collectors.toList());
     }
 
     // 전략 패턴 적용
@@ -71,22 +78,26 @@ public class ShopService {
     // 팔로워가 많은 탑 3가게 갖고오기
     public List<ShopSearchResponse> getTop3ShopList() {
         return shopRepository.findPopularTop3Shop(PageRequest.of(0,3))
-        .stream()
-        .map(it -> ShopSearchResponse.of(it, checkStatus(it)))
-        .collect(Collectors.toList());
+            .stream()
+            .map(it -> ShopSearchResponse.of (it, checkStatus(it)))
+            .collect(Collectors.toList());
+        // return shopRepository.findPopularTop3Shop(PageRequest.of(0, 3))
+        //     .stream()
+        //     .map(it -> ShopSearchResponse.of(it, checkStatus(it)))
+        //     .collect(Collectors.toList());
     }
 
     // 운영중인지 확인하기
     public boolean checkStatus(Shop shop) {
         LocalDateTime currentTime = LocalDateTime.now();
-        Long current =  Long.parseLong(dateFormat.LocalDateTimeHour(currentTime));
+        Long current = Long.parseLong(dateFormat.LocalDateTimeHour(currentTime));
         Long open = null;
         Long close = null;
         try {
-             open = Long.parseLong(dateFormat.TimeStampHour(shop.getOpenTime()));
-             close = Long.parseLong(dateFormat.TimeStampHour(shop.getCloseTime()));
+            open = Long.parseLong(dateFormat.TimeStampHour(shop.getOpenTime()));
+            close = Long.parseLong(dateFormat.TimeStampHour(shop.getCloseTime()));
 
-        } catch(NullPointerException ex) {
+        } catch (NullPointerException ex) {
             return false;
         }
         if (current > open && current < close) {
@@ -99,12 +110,23 @@ public class ShopService {
     @Transactional(readOnly = true)
     public List<MyFollowShopResponse> myFollowShop(User user, Pageable pageable) {
         return shopRepository.findMyFollowShopById(user.getId(), Pageable.ofSize(pageable.getPageSize())).stream()
-                .map(shop -> MyFollowShopResponse.of
-                        (shop,  followService.shopFollower(shop),
-                                commentService.reviewCountByShopId(shop),
-                                checkStatus(shop)))
-                .collect(Collectors.toList());
+            .map(shop -> MyFollowShopResponse.of
+                (shop, followService.shopFollower(shop),
+                    commentService.reviewCountByShopId(shop),
+                    checkStatus(shop)))
+            .collect(Collectors.toList());
     }
+
+    public void toFollowShop(User user, List<FollowShopRequest> requests) {
+        Set<FollowShop> saveList = new HashSet<>();
+        for (FollowShopRequest request : requests) {
+            Shop shopResult = shopRepository.findById(request.getShopId())
+                .orElseThrow(() -> new NotFoundException("가게가 없습니다"));
+            saveList.add(FollowShop.create(user, shopResult));
+        }
+        followShopRepository.saveAll(saveList);
+    }
+}
 
 
 
@@ -149,20 +171,6 @@ public class ShopService {
 //                .collect(Collectors.toList());
 //        return all;
 //    }
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
 
 
 

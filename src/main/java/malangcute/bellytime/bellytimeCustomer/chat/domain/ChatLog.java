@@ -1,14 +1,17 @@
 package malangcute.bellytime.bellytimeCustomer.chat.domain;
 
-import lombok.*;
-import malangcute.bellytime.bellytimeCustomer.chat.dto.MessageDto;
-import malangcute.bellytime.bellytimeCustomer.global.domain.common.BaseTimeEntity;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.MessageDto;
+import malangcute.bellytime.bellytimeCustomer.global.domain.common.BaseTimeEntity;
 
 @Entity
 @Getter
@@ -29,6 +32,7 @@ public class ChatLog extends BaseTimeEntity {
     private String nickName;
 
 
+    @Builder
     public ChatLog(String roomId, Long sender, String content, String nickName) {
         this.roomId = roomId;
         this.sender = sender;
@@ -37,12 +41,15 @@ public class ChatLog extends BaseTimeEntity {
     }
 
     public static ChatLog create(MessageDto messageDto) {
-        return new ChatLog(messageDto.getRoomId(), messageDto.getSender(), messageDto.getContent(), messageDto.getNickName());
+        return new ChatLogBuilder()
+            .roomId(messageDto.getRoomId())
+            .sender(messageDto.getSender())
+            .content(messageDto.getContent())
+            .nickName(messageDto.getNickName())
+            .build();
     }
 
     public static ChatLog empty() {
         return new ChatLog(0L,"",0L,"","");
     }
-
-
 }

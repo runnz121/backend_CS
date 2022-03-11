@@ -14,30 +14,22 @@ import java.util.List;
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
 
-    //List<Chat> findByMakerIdOrInviteIdAndType(User inMakerId, User inInviteId, String type);
-
-    List<Chat> findByMakerIdAndType(User MakerId, String type);
-
-    Chat findByMakerId(User makerId);
-
-
-
     @Query(nativeQuery = true,
             value = " select ct.room_id AS roomId, ct.room_name AS roomName ,ct.invite_id AS contactId, " +
                     "(select u.profile_img from users u where u.id = ct.invite_id) AS profileImg, " +
                     "(select u.nickname from users u where u.id = ct.invite_id) AS nickName " +
                     " from chat ct where ct.room_id  in ( " +
-                    " select chat.room_id from chat where invite_id =:userId and type =:type) ")
-    List<ChatListResponseIF> findMyChatList(@Param("userId")Long userId, @Param("type")String type);
+                    " select chat.room_id from chat where invite_id =:userId and type =:types) ")
+    List<ChatListResponseIF> findMyChatList(@Param("userId")Long userId, @Param("types")String type);
+
 
 
 
     @Query(nativeQuery = true,
-            value = " SELECT room_id FROM ( " +
-                    " SELECT COUNT(c1.room_id) cnt, c1.room_id FROM chat AS c1 WHERE c1.room_id in " +
-                    "(SELECT c2.room_id from chat AS c2 WHERE c2.maker_id =:makerId AND c2.invite_id=:inviteId AND c2.type=:types) " +
-                    " GROUP BY c1.room_id) c3 WHERE c3.cnt = 1")
-    String findSingleRoomIdExist(@Param("makerId")Long makerId, @Param("inviteId")Long inviteId, @Param("types") String types);
+            value = " SELECT *, count(room_id) AS counts FROM chat cc WHERE cc.room_id  IN "
+                + " (SELECT c.room_id FROM chat c WHERE c.invite_id = 4) GROUP BY (room_id) "
+                + " HAVING invite_id=:inviteId AND counts=2 AND type=:types ")
+    Chat findSingleRoomIdExist(@Param("inviteId")Long inviteId, @Param("types") String types);
 
 
 

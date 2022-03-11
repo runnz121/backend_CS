@@ -1,6 +1,8 @@
 package malangcute.bellytime.bellytimeCustomer.chat.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.chat.domain.ChatLog;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 
@@ -35,7 +37,7 @@ public class MessageDto {
     }
 
 
-    public static MessageDto of (ChatLog log) {
+    public static MessageDto of(ChatLog log) {
         return new MessageDtoBuilder()
                 .roomId(log.getRoomId())
                 .sender(log.getSender())
@@ -45,7 +47,7 @@ public class MessageDto {
                 .build();
     }
 
-    public static MessageDto send (MessageDto send) {
+    public static MessageDto send(MessageDto send) {
         return new MessageDtoBuilder()
                 .roomId(send.getRoomId())
                 .sender(send.getSender())
@@ -55,7 +57,7 @@ public class MessageDto {
                 .build();
     }
 
-    public static MessageDto exit (String roomId, String nickName) {
+    public static MessageDto exit(String roomId, String nickName) {
         return new MessageDtoBuilder()
                 .roomId(roomId)
                 .nickName(nickName)
@@ -65,7 +67,7 @@ public class MessageDto {
                 .build();
     }
 
-    public static MessageDto invite (User user, String roomId) {
+    public static MessageDto invite(User user, String roomId) {
         return new MessageDtoBuilder()
                 .roomId(roomId)
                 .nickName(user.getNickname().getNickName())

@@ -1,28 +1,39 @@
 package malangcute.bellytime.bellytimeCustomer.chat.service;
 
-import lombok.AllArgsConstructor;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
-import malangcute.bellytime.bellytimeCustomer.chat.domain.Chat;
-import malangcute.bellytime.bellytimeCustomer.chat.domain.ChatLog;
-import malangcute.bellytime.bellytimeCustomer.chat.dto.*;
-import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatLogRepository;
-import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatRepository;
-import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatRoomSearchStrategy;
-import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatRoomSearchStrategyFactory;
-import malangcute.bellytime.bellytimeCustomer.user.domain.User;
-import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
-import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
-import net.minidev.json.JSONUtil;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import static java.util.stream.Collectors.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import malangcute.bellytime.bellytimeCustomer.chat.domain.Chat;
+import malangcute.bellytime.bellytimeCustomer.chat.domain.ChatLog;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.ChatContactIdAndImgDto;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.ChatImgDtoGroupingKey;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.ChatRoomFriendListResponse;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.ChatRoomInviteFriendsRequest;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.ChatRoomShopListResponse;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.CreateRoomRequest;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.MessageDto;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.RoomIdRequest;
+import malangcute.bellytime.bellytimeCustomer.chat.dto.RoomIdResponse;
+import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatLogRepository;
+import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatRepository;
+import malangcute.bellytime.bellytimeCustomer.chat.repository.ChatRoomSearchStrategyFactory;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
+import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 
 @Service
 @AllArgsConstructor
@@ -49,20 +60,21 @@ public class ChatService {
 
 
     public RoomIdResponse checkExistsRoomId(User user, CreateRoomRequest createRoomRequest) {
+
         if (createRoomRequest.getInviteId().size() == 1) {
             try {
                 Long invitedId = createRoomRequest.getInviteId().get(0);
                 RoomIdResponse response =  chatRoomSearchStrategyFactory.findStrategy(createRoomRequest.getType())
-                        .searchRoomWithType(user, invitedId, createRoomRequest.getType());
+                        .searchRoomWithType(invitedId, createRoomRequest.getType());
                 if (response.getRoomId().isEmpty()) {
                     return createRoomService(user, createRoomRequest);
                 }
                 return response;
-            } catch(NullPointerException ex) {
+            } catch (NullPointerException ex) {
                 return createRoomService(user, createRoomRequest);
             }
         }
-       return createRoomService(user, createRoomRequest);
+        return createRoomService(user, createRoomRequest);
     }
 
 
@@ -73,7 +85,7 @@ public class ChatService {
         String roomId = generateRoom(user);
         createRoomRequest.getInviteId().add(user.getId());
         for (Long invitedId : createRoomRequest.getInviteId()) {
-          Chat makeRoom = Chat.builder()
+            Chat makeRoom = Chat.builder()
                   .roomId(roomId)
                   .roomName(createRoomRequest.getRoomName())
                   .type(createRoomRequest.getType())
@@ -83,7 +95,7 @@ public class ChatService {
             makeRooms.add(makeRoom);
         }
         chatRepository.saveAll(makeRooms);
-        return RoomIdResponse.of(roomId);
+        return RoomIdResponse.from(roomId);
     }
 
 
@@ -114,8 +126,7 @@ public class ChatService {
                     .sender(-2L)
                     .nickName(invited.getNickname().getNickName())
                     .message(invited.getNickname().getNickName() + " 님이 초대되었습니다.")
-                    .build())
-            ;
+                    .build());
         }
         return list;
     }
@@ -131,7 +142,7 @@ public class ChatService {
                         ChatImgDtoGroupingKey::new,
                         Collectors.mapping(ChatContactIdAndImgDto::from, Collectors.toList())
                 ));
-       return lists.entrySet()
+        return lists.entrySet()
                .stream()
                .map(it -> ChatRoomFriendListResponse.from(it, getLastContent(user, it.getKey().getRoomId()))).collect(toList());
     }
@@ -187,9 +198,9 @@ public class ChatService {
     //중복제거
     private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
         Map<Object, Boolean> map = new HashMap<>();
-        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null; }
+        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
 
-    //roomID uuid로 생성
     private String generateRoom(User user) {
         return user.getId() + DELIMITER + UUID.randomUUID();
     }

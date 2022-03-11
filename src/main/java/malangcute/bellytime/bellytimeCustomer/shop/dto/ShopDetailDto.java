@@ -1,8 +1,5 @@
 package malangcute.bellytime.bellytimeCustomer.shop.dto;
 
-
-import malangcute.bellytime.bellytimeCustomer.shop.domain.ShopMenu;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -12,19 +9,21 @@ public interface ShopDetailDto {
 
     String getName();
 
-    String getImg();
+    int getCount();
 
-    Long getBellscore();
-
-    BigDecimal getLatitude();
-
-    BigDecimal getLongitude();
-
-    String getAddress();
-
-    String getRuntime();
-
-    Long getFollowerCount();
-
-    List<MenusList> getMenu();
+    // String getImg();
+    //
+    // Long getBellscore();
+    //
+    // BigDecimal getLatitude();
+    //
+    // BigDecimal getLongitude();
+    //
+    // String getAddress();
+    //
+    // String getRuntime();
+    //
+    // Long getFollowerCount();
+    //
+    // List<MenusList> getMenu();
 }

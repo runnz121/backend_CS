@@ -7,5 +7,5 @@ public interface ChatRoomSearchStrategy {
 
     boolean searchBy(String type);
 
-    RoomIdResponse searchRoomWithType(User user, Long inviteId, String type);
+    RoomIdResponse searchRoomWithType(Long inviteId, String type);
 }

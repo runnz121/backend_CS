@@ -35,7 +35,6 @@ public class ChatController {
 
     @MessageMapping(value = "/chat/chatting")
     public void chatController(MessageDto messageDto) {
-
         chatService.saveLog(messageDto);
         template.convertAndSend("/sub/chatting/room/" + messageDto.getRoomId(), MessageDto.send(messageDto));
     }
@@ -61,7 +60,6 @@ public class ChatController {
         List<ChatRoomShopListResponse> shopList = chatService.shopChatRoomList(user);
         return ResponseEntity.ok(shopList);
     }
-
 
     //채팅방 삭제
     @PostMapping("/chat/exit")

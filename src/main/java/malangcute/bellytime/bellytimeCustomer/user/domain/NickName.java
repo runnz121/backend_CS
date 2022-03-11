@@ -32,7 +32,7 @@ public class NickName {
     }
 
     //닉네임길이 검증(최소 2 글자이상 7글자 이하)
-    private void validLength(String nickName){
+    private void validLength(String nickName) {
         if (nickName.length() < MIN_LENGTH || nickName.length() > MAX_LENGTH) {
             throw new UserNickNameException("닉네임은" + MIN_LENGTH + "이상" + MAX_LENGTH + "이하여야 합니다");
         }

@@ -39,8 +39,6 @@ public class UserController {
 
     private final ShopService shopService;
 
-    private final UserRepository userRepository;
-
     private final CoolTimeService coolTimeService;
 
     private final ReservationService reservationService;
@@ -49,15 +47,15 @@ public class UserController {
 
     // 유저 정보 업데이트
     @GetMapping("/update")
-    public ResponseEntity update (@ModelAttribute UserUpdateRequest userUpdateRequest)
-            throws FailedToConvertImgFileException {
+    public ResponseEntity update(@ModelAttribute UserUpdateRequest userUpdateRequest)
+        throws FailedToConvertImgFileException {
         userService.userUpdate(userUpdateRequest);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     //유저 프로필 이미지 이름 갖고오기
     @GetMapping("/myprofile")
-    public ResponseEntity<UserProfileResponse> getMyProfile (@RequireLogin  User user) {
+    public ResponseEntity<UserProfileResponse> getMyProfile(@RequireLogin  User user) {
         UserProfileResponse result = userService.userProfile(user);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -69,23 +67,23 @@ public class UserController {
 
     //유저가 팔로우한 가게 갖고오기
     @GetMapping("/follow/shop")
-    public ResponseEntity<List<MyFollowShopResponse>> myFollowShopList ( @RequireLogin User user, Pageable pageable) {
+    public ResponseEntity<List<MyFollowShopResponse>> myFollowShopList(@RequireLogin User user, Pageable pageable) {
         List<MyFollowShopResponse> list = shopService.myFollowShop(user, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
     //유저가 팔로우할 가게 저장하기 여러개
-    // @PostMapping("/follow/shop")
-    // public ResponseEntity toFollowShop ( @RequireLogin User user,
-    //                                      @RequestBody List<FollowShopRequest> requests) {
-    //     followService.toFollowShop(user, requests);
-    //     return ResponseEntity.ok(HttpStatus.ACCEPTED);
-    // }
+    @PostMapping("/follow/shop")
+    public ResponseEntity toFollowShop(@RequireLogin User user,
+                                       @RequestBody List<FollowShopRequest> requests) {
+        shopService.toFollowShop(user, requests);
+        return ResponseEntity.ok(HttpStatus.ACCEPTED);
+    }
 
     // 유저가 팔로우 취소한 가게(팔로우 테이블에서 지우기)
     @DeleteMapping("/follow/shop")
-    public ResponseEntity toUnFollowShop ( @RequireLogin User user,
-                                           @RequestBody List<FollowShopRequest> requests) {
+    public ResponseEntity toUnFollowShop(@RequireLogin User user,
+                                         @RequestBody List<FollowShopRequest> requests) {
         followService.toUnFollowShop(user, requests);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -99,23 +97,23 @@ public class UserController {
 
    //닉네임으로 단일건 서치
    @PostMapping("/friends/search")
-    public ResponseEntity<MyFriendSearchResponse> findMyFriend ( @RequestBody FindMyFriendSearchRequest request) {
+    public ResponseEntity<MyFriendSearchResponse> findMyFriend(@RequestBody FindMyFriendSearchRequest request) {
         MyFriendSearchResponse result = userService.findUserByNickname(request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
    }
 
    //친구 팔로우, 언팔로우하기
     @PostMapping("/follow/friends")
-    public ResponseEntity<?> followMyFriends ( @RequireLogin User user,
-                                               @RequestBody List<FollowFriendsRequest> request) {
+    public ResponseEntity<?> followMyFriends(@RequireLogin User user,
+                                             @RequestBody List<FollowFriendsRequest> request) {
         followService.toFollowFriend(user, request);
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 
     //팔로우 지우기
     @DeleteMapping("/follow/friends")
-    public ResponseEntity<?> unFollowMyFriend ( @RequireLogin User user,
-                                                @RequestBody List<FollowFriendsRequest> request) {
+    public ResponseEntity<?> unFollowMyFriend(@RequireLogin User user,
+                                              @RequestBody List<FollowFriendsRequest> request) {
         followService.toUnFollowFriend(user, request);
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
@@ -127,9 +125,8 @@ public class UserController {
 
     //달력 요청시 갖고오기 -> year, month 받아 요청마다 데이터 조회 반환
     @PostMapping("/cal")
-    public ResponseEntity<CoolTimeCalListResponse1> myCoolTimeCalender (
-                                                @RequireLogin User user,
-                                                @RequestBody CoolTimeCalRequest request) {
+    public ResponseEntity<CoolTimeCalListResponse1> myCoolTimeCalender(@RequireLogin User user,
+                                                                       @RequestBody CoolTimeCalRequest request) {
         CoolTimeCalListResponse1 list = coolTimeService.getMyCoolTimeCal(user, request.getMonth(), request.getYear());
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
@@ -137,8 +134,8 @@ public class UserController {
 
     //쿨타임 먹은 음식 체크
     @PostMapping("/cal/check")
-    public ResponseEntity checkMyCoolTime ( @RequireLogin User user,
-                                            @RequestBody List<CoolTimeCheckRequest> requests) {
+    public ResponseEntity checkMyCoolTime(@RequireLogin User user,
+                                          @RequestBody List<CoolTimeCheckRequest> requests) {
         coolTimeService.updateCoolTimeEatCheck(user, requests);
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
@@ -148,7 +145,7 @@ public class UserController {
      *
      */
     @GetMapping("/reservation/list")
-    public ResponseEntity<List<ReservationShopInfoResponse>> myReservationList ( @RequireLogin User user) {
+    public ResponseEntity<List<ReservationShopInfoResponse>> myReservationList(@RequireLogin User user) {
         List<ReservationShopInfoResponse> list = reservationService.myReservationList(user);
         return ResponseEntity.ok(list);
     }

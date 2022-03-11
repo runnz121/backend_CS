@@ -54,7 +54,7 @@ public class CommentService {
     //comment 이미지 저장
     public void updateCommentImg(CommentWriteRequest request, Comment comment) {
         List<CommentImg> saveImgList = new ArrayList<>();
-        for(MultipartFile img : request.getImages()) {
+        for (MultipartFile img : request.getImages()) {
             saveImgList.add(CommentImg.builder()
                     .imgUrl(uploadImg(img))
                     .comment(comment)
@@ -74,9 +74,6 @@ public class CommentService {
     }
 
     public int reviewCountByShopId(Shop shop) {
-
-        int count =  commentRepository.getReviewCount(shop.getId());
-        System.out.println("in review Count : " + count);
-        return count;
+        return commentRepository.getReviewCount(shop.getId());
     }
 }

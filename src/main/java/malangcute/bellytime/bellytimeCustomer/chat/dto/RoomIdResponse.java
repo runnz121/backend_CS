@@ -15,7 +15,11 @@ public class RoomIdResponse {
 
     private String roomId;
 
-    public static RoomIdResponse of (String roomId) {
+    public static RoomIdResponse of(Chat chat) {
+        return new RoomIdResponse(chat.getRoomId());
+    }
+
+    public static RoomIdResponse from(String roomId) {
         return new RoomIdResponse(roomId);
     }
 }

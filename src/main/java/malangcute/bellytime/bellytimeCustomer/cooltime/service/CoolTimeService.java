@@ -1,28 +1,40 @@
 package malangcute.bellytime.bellytimeCustomer.cooltime.service;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import malangcute.bellytime.bellytimeCustomer.cooltime.domain.CoolTime;
-import malangcute.bellytime.bellytimeCustomer.cooltime.dto.*;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import malangcute.bellytime.bellytimeCustomer.cooltime.repository.CoolTimeRepository;
-import malangcute.bellytime.bellytimeCustomer.food.domain.Food;
-import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
-import malangcute.bellytime.bellytimeCustomer.global.auth.TokenAuthentication;
-import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
-import malangcute.bellytime.bellytimeCustomer.global.domain.DateFormatterImpl;
-import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
-import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopCoolTimeSearchStrategyFactory;
-import malangcute.bellytime.bellytimeCustomer.user.domain.User;
-import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import malangcute.bellytime.bellytimeCustomer.cooltime.domain.CoolTime;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalDayList2;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalFoodList3;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalListResponse1;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalTodayFoodList2;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalTodayFoodList3;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCheckRequest;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeGetMyFriends;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeGetMyFriendsIF;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeSettingRequest;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeShopRecommendResponse;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.DeleteCoolTimeRequest;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.GetMyCoolTimeList;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.GetMyCoolTimeListIF;
+import malangcute.bellytime.bellytimeCustomer.cooltime.repository.CoolTimeRepository;
+import malangcute.bellytime.bellytimeCustomer.food.domain.Food;
+import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
+import malangcute.bellytime.bellytimeCustomer.global.domain.DateFormatterImpl;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
+import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopCoolTimeSearchStrategyFactory;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 
 @Service
 @Transactional
@@ -115,14 +127,10 @@ public class CoolTimeService {
     private void  updateCoolTime(Long userId, Long foodId, Date startDate, String endDate, Integer duration) {
         LocalDateTime enddate = dateFormatterImpl.stringToLocal(endDate);
         LocalDateTime startdate = dateFormatterImpl.dateToLocal(startDate);
-
         LocalDateTime now = LocalDateTime.now();
         Long coolTimeDays = dateFormatterImpl.minusDateLocalDateTime(startdate,enddate);
-        System.out.println("cooltimesdays"+coolTimeDays);
         Long leftDays = dateFormatterImpl.minusDateLocalDateTime(startdate,now);
-        System.out.println("leftDays" + leftDays);
         String calgauge = calGauge(coolTimeDays, leftDays);
-        System.out.println(calgauge);
         coolTimeRepository.updateByUserId(userId,foodId,startdate,enddate,calgauge,duration);
     }
 
@@ -173,7 +181,7 @@ public class CoolTimeService {
 
             CoolTimeCalDayList2 list2 = new CoolTimeCalDayList2(finalI, list3);
             if (list2.getData().size() > 0 && finalI != today){
-                totalList.addList(list2);
+                  totalList.addList(list2);
             }
 
             CoolTimeCalTodayFoodList2 todayList = new CoolTimeCalTodayFoodList2(todayList2);
@@ -204,13 +212,6 @@ public class CoolTimeService {
     //필터로 쿨타임 반환
     @Transactional(readOnly = true)
     public List<CoolTimeShopRecommendResponse> getShopListFilterBy(User user, Long foodId, String filter, Double lat, Double lon, Pageable pageable) {
-        System.out.println("in cooltime service");
-        System.out.println(user.getId());
-        System.out.println(foodId);
-        System.out.println(filter);
-        System.out.println(lat);
-        System.out.println(lon);
-        System.out.println(pageable);
-        return factory.searchStrategy(filter).selectStrategy(user,foodId,lat,lon, pageable);
+        return factory.searchStrategy(filter).selectStrategy(user, foodId, lat, lon, pageable);
     }
 }

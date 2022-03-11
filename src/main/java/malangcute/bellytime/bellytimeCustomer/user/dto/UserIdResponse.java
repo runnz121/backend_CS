@@ -32,7 +32,7 @@ public class UserIdResponse {
 
     // 매개변수를 받아 적합한 타입의 인스턴스를 반환(집계메서드)
     @Builder
-    public static UserIdResponse of (User user){
+    public static UserIdResponse of (User user) {
         return new UserIdResponse(
                 user.getId(),
                 user.getNickname(),
