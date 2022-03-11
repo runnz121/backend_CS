@@ -1,9 +1,12 @@
 package malangcute.bellytime.bellytimeCustomer.shop.repository;
 
 import lombok.RequiredArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.comment.service.CommentService;
 import malangcute.bellytime.bellytimeCustomer.follow.service.FollowService;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListWithMenuResponse;
+import malangcute.bellytime.bellytimeCustomer.shop.service.ShopService;
+
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -20,6 +23,9 @@ public class ShopSortByScore implements ShopSortStrategy {
 
     private final FollowService followService;
 
+    private final CommentService commentService;
+
+
 
     @Override
     public boolean sortedBy(String type) {
@@ -31,7 +37,10 @@ public class ShopSortByScore implements ShopSortStrategy {
         List<ShopSearchResultListWithMenuResponse> resultList = shopRepository.findAllByNameContaining(name)
                 .stream()
                 .sorted(Comparator.comparing(Shop::getBellscore).reversed())
-                .map(shop -> ShopSearchResultListWithMenuResponse.of(shop,followService.shopFollower(shop) ))
+                .map(shop -> ShopSearchResultListWithMenuResponse.of(shop,
+                    commentService.reviewCountByShopId(shop),
+                    followService.shopFollower(shop),
+                    followService.checkStatus(shop)))
                 .collect(Collectors.toList());
         return resultList;
     }

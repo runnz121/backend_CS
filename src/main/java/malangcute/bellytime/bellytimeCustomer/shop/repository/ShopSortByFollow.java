@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.comment.service.CommentService;
 import malangcute.bellytime.bellytimeCustomer.follow.service.FollowService;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListWithMenuResponse;
+import malangcute.bellytime.bellytimeCustomer.shop.service.ShopService;
 
 // 특별 기능 서술
 @Component
@@ -21,6 +23,10 @@ public class ShopSortByFollow implements ShopSortStrategy {
 
     private final FollowService followService;
 
+    private final CommentService commentService;
+
+
+
     @Override
     public boolean sortedBy(String type) {
         return TYPE.equals(type);
@@ -32,7 +38,10 @@ public class ShopSortByFollow implements ShopSortStrategy {
         return shopRepository.findAllByNameContaining(name)
                 .stream()
                 .sorted(Comparator.comparingInt(followService::shopFollower))
-                .map(shop -> ShopSearchResultListWithMenuResponse.of(shop, followService.shopFollower(shop)))
+                .map(shop -> ShopSearchResultListWithMenuResponse.of(shop,
+                    commentService.reviewCountByShopId(shop),
+                    followService.shopFollower(shop),
+                    followService.checkStatus(shop)))
                 .collect(Collectors.toList());
     }
 }

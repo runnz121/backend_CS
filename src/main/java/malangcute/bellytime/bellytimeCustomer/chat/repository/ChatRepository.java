@@ -15,11 +15,11 @@ import java.util.List;
 public interface ChatRepository extends JpaRepository<Chat, Long> {
 
     @Query(nativeQuery = true,
-            value = " select ct.room_id AS roomId, ct.room_name AS roomName ,ct.invite_id AS contactId, " +
-                    "(select u.profile_img from users u where u.id = ct.invite_id) AS profileImg, " +
-                    "(select u.nickname from users u where u.id = ct.invite_id) AS nickName " +
-                    " from chat ct where ct.room_id  in ( " +
-                    " select chat.room_id from chat where invite_id =:userId and type =:types) ")
+            value = " select ct.room_id AS roomId, ct.room_name AS roomName ,ct.invite_id AS contactId, "
+                  + "(select u.profile_img from users u where u.id = ct.invite_id) AS profileImg, "
+                  + "(select u.nickname from users u where u.id = ct.invite_id) AS nickName "
+                  + " from chat ct where ct.room_id  in ( "
+                  + " select chat.room_id from chat where invite_id =:userId and type =:types) ")
     List<ChatListResponseIF> findMyChatList(@Param("userId")Long userId, @Param("types")String type);
 
 
@@ -27,7 +27,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
     @Query(nativeQuery = true,
             value = " SELECT *, count(room_id) AS counts FROM chat cc WHERE cc.room_id  IN "
-                + " (SELECT c.room_id FROM chat c WHERE c.invite_id = 4) GROUP BY (room_id) "
+                + " (SELECT c.room_id FROM chat c WHERE c.invite_id=:inviteId) GROUP BY (room_id) "
                 + " HAVING invite_id=:inviteId AND counts=2 AND type=:types ")
     Chat findSingleRoomIdExist(@Param("inviteId")Long inviteId, @Param("types") String types);
 

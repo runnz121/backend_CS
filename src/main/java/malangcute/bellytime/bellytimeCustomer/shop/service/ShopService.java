@@ -79,12 +79,10 @@ public class ShopService {
     public List<ShopSearchResponse> getTop3ShopList() {
         return shopRepository.findPopularTop3Shop(PageRequest.of(0,3))
             .stream()
-            .map(it -> ShopSearchResponse.of (it, checkStatus(it)))
+            .map(it -> ShopSearchResponse.of (it, checkStatus(it),
+                followService.shopFollower(it),
+                commentService.reviewCountByShopId(it)))
             .collect(Collectors.toList());
-        // return shopRepository.findPopularTop3Shop(PageRequest.of(0, 3))
-        //     .stream()
-        //     .map(it -> ShopSearchResponse.of(it, checkStatus(it)))
-        //     .collect(Collectors.toList());
     }
 
     // 운영중인지 확인하기
