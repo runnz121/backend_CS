@@ -1,22 +1,23 @@
 package malangcute.bellytime.bellytimeCustomer.global.auth.oauth;
-import lombok.AllArgsConstructor;
-import malangcute.bellytime.bellytimeCustomer.global.auth.UserPrincipal;
-import malangcute.bellytime.bellytimeCustomer.global.config.SecurityProperties;
-import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
-import malangcute.bellytime.bellytimeCustomer.user.domain.Email;
-import malangcute.bellytime.bellytimeCustomer.user.domain.User;
-import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
-import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import lombok.AllArgsConstructor;
+import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
+import malangcute.bellytime.bellytimeCustomer.global.auth.UserPrincipal;
+import malangcute.bellytime.bellytimeCustomer.global.config.SecurityProperties;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
+import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
+import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 
 
 @AllArgsConstructor
@@ -59,6 +60,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String redirect_uri =  securityProperties.getReuris().getGoogle();
         return UriComponentsBuilder.fromUriString(redirect_uri)
                 .queryParam("accessToken", accessToken)
+                .queryParam("userId", user.getId())
+                .queryParam("userNickName", user.getNickname().getNickName())
                 .build().toUriString();
     }
 

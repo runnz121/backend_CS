@@ -34,14 +34,19 @@ public class LoginService {
 
 
     //아이디 비밀번호 접속시 확인된 유저인지 확인 -> 리프레시, 엑세스 모드 발급
-    public RefreshAndAccessTokenResponse validUser(LoginWithIdAndPassRequest loginWithIdAndPassRequest) {
+    public LoginResultWithIdPass validUser(LoginWithIdAndPassRequest loginWithIdAndPassRequest) {
         User requestLoginUser = userService.findUserByEmail(loginWithIdAndPassRequest.getEmail());
         checkPassword(requestLoginUser, loginWithIdAndPassRequest.getPassword());
         String refreshToken = tokenProvider.createRefreshToken(loginWithIdAndPassRequest.getEmail());
         String accessToken = tokenProvider.createAccessToken(loginWithIdAndPassRequest.getEmail());
         requestLoginUser.setRefreshToken(refreshToken);
         userRepository.save(requestLoginUser);
-        return RefreshAndAccessTokenResponse.of(accessToken, refreshToken);
+
+        return LoginResultWithIdPass.of(requestLoginUser.getId(),
+                                requestLoginUser.getNickname().getNickName(),
+                                RefreshAndAccessTokenResponse.of(refreshToken, accessToken));
+
+       // return RefreshAndAccessTokenResponse.of(accessToken, refreshToken);
     }
 
     // 아이디 비밀번호 기반 유저 저장
