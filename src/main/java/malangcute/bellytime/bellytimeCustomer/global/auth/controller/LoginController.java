@@ -34,14 +34,14 @@ public class LoginController {
 
     // id 로 로그인 했을 때 -> httpresponesdp 쿠키 담아서 보냄
     @PostMapping("/login")
-    public ResponseEntity<AccessTokenResponseDto> loginWithIdController(
+    public ResponseEntity<FirstLoginDto> loginWithIdController(
             @RequestBody LoginWithIdAndPassRequest loginWithIdAndPassRequest
             , HttpServletResponse response) {
 
-        RefreshAndAccessTokenResponse token = loginService.validUser(loginWithIdAndPassRequest);
-        createCookie(response, token.getRefreshToken());
+        LoginResultWithIdPass res = loginService.validUser(loginWithIdAndPassRequest);
+        createCookie(response, res.getTokens().getRefreshToken());
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new AccessTokenResponseDto(token.getAccessToken()));
+                .body(FirstLoginDto.of(res.getUserId(), res.getUserNickName(), res.getTokens().getAccessToken()));
     }
 
     //새로운 유저 가입
