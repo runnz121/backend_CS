@@ -21,7 +21,7 @@ public class LoginController {
 
     private static final String REFRESH_TOKEN = "refreshToken";
     private static final int MAX_AGE = 24 * 60 * 60 * 100;
-    private static final String DOMAIN = "https://bellytime.kr";
+    private static final String DOMAIN = "bellytime.kr";
 
     private final LoginService loginService;
 
@@ -63,7 +63,7 @@ public class LoginController {
 
     private void createCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
-                .sameSite("https://bellytime.kr") //-> 도메인 설정후 해당 도메인으로 변경
+                .sameSite("None") //-> 도메인 설정후 해당 도메인으로 변경
                 .domain(DOMAIN) //.domain
                 //.sameSite("None")
                 //.sameSite("Lax")
