@@ -61,7 +61,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         return UriComponentsBuilder.fromUriString(redirect_uri)
                 .queryParam("accessToken", accessToken)
                 .queryParam("userId", user.getId())
-                .queryParam("userNickName", user.getNickname().getNickName())
+                .queryParam("userNickName", user.getNickname().getNickName().replaceAll(" ","_"))
                 .build().toUriString();
     }
 
