@@ -16,10 +16,12 @@ spring:
       client:
         registration:
         #google 로그인 요청 URL : http://localhost:8080/oauth2/authorize/google
+          # https://backend.bellytime.kr
+          #"{baseUrl}/oauth2/callback/{registrationId}"
           google:
             client-id: 71318484453-sn62ah5b0rdiktov48jesea0us3vauph.apps.googleusercontent.com
             client-secret: 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
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            redirectUri: "https://backend.bellytime.kr/oauth2/callback/google"
             scope:
               - email
               - profile
@@ -57,10 +59,6 @@ spring:
             token_uri: https://kauth.kakao.com/oauth/token # 엑세스 토큰을 요청하는 곳
             user-info-uri: https://kapi.kakao.com/v2/user/me # 엑세스 토큰 바탕으로 유저정보를 요청하는 곳
             user_name_attribute: id
-
-
-
-
 
 
 
@@ -128,6 +126,7 @@ logging:
               WIRE: TRACE
 
 
+
 # aws 설정
 cloud:
   aws:
@@ -151,4 +150,5 @@ cloud:
 #    hibernate:
 #      naming:
 #        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+
 #        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
