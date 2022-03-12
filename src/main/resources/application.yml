@@ -16,6 +16,7 @@ spring:
       client:
         registration:
         #google 로그인 요청 URL : http://localhost:8080/oauth2/authorize/google
+          # https://backend.bellytime.kr/oauth2/authorize/google
           # https://backend.bellytime.kr
           #"{baseUrl}/oauth2/callback/{registrationId}"
           google:
@@ -26,22 +27,24 @@ spring:
               - email
               - profile
         #naver 로그인 요청 URL :http://localhost:8080/oauth2/authorize/naver
+          # https://backend.bellytime.kr/oauth2/authorize/naver
           naver:
             client-id: i0Bq1fjOgdemE25lhHRz
             client-secret: GAgPjs9I_T
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"#"http://localhost:8080/login/oauth/naver"
+            redirectUri: "https://backend.bellytime.kr/oauth2/callback/naver"#"http://localhost:8080/login/oauth/naver" # "{baseUrl}/oauth2/callback/{registrationId}"
             authorization-grant-type: authorization_code
             scope:
               - email
               - name
             client-name: naver
         #kakao 로그인 요청 URL : http://localhost:8080/oauth2/authorize/kakao
+          # https://backend.bellytime.kr/oauth2/authorize/kakao
           kakao:
             client-id: 1c68643c1f9b83fba4d40c00d8d01689
             client-name: Kakao
             client-authentication-method: POST
             authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}" #http://localhost:8080/login/oauth/kakao
+            redirect-uri: "https://backend.bellytime.kr/oauth2/callback/kakao" #http://localhost:8080/login/oauth/kakao
             scope:
               - profile_nickname
               - account_email
