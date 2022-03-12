@@ -14,9 +14,11 @@ import malangcute.bellytime.bellytimeCustomer.global.auth.oauth.OAuth2FailureHan
 import malangcute.bellytime.bellytimeCustomer.global.auth.oauth.OAuth2SuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -31,6 +33,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.ForwardedHeaderFilter;
+
 import springfox.documentation.spring.web.json.Json;
 
 
@@ -70,6 +74,14 @@ public class SecurityConfigsList extends WebSecurityConfigurerAdapter {
         return new CookieAuthRepositories();
     }
 
+    @Bean
+    FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter() {
+        final FilterRegistrationBean<ForwardedHeaderFilter> filterRegistrationBean = new FilterRegistrationBean<ForwardedHeaderFilter>();
+        filterRegistrationBean.setFilter(new ForwardedHeaderFilter());
+        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return filterRegistrationBean;
+    }
+
 
     //cors 에러 처리
     @Bean
@@ -94,6 +106,7 @@ public class SecurityConfigsList extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                //.requiresChannel().anyRequest().requiresSecure().and()
                 .cors()
                 .and()
                 .httpBasic().disable()
@@ -139,10 +152,10 @@ public class SecurityConfigsList extends WebSecurityConfigurerAdapter {
                 .userService(customOAuth2UserService)
                 .and()
                 .successHandler(oAuth2SuccessHandler)
-                .failureHandler(oAuth2FailureHandler);
-                // .and()
-                // .addFilterBefore(new TokenAuthentication(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
-                // .addFilterBefore(new JWTExceptionFilter(tokenProvider, objectMapper), TokenAuthentication.class);
+                .failureHandler(oAuth2FailureHandler)
+                .and()
+                .addFilterBefore(new TokenAuthentication(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTExceptionFilter(tokenProvider, objectMapper), TokenAuthentication.class);
     }
 
     @Override

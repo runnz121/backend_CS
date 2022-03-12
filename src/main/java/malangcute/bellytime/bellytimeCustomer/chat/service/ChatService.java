@@ -137,7 +137,7 @@ public class ChatService {
 
         Map<ChatImgDtoGroupingKey, List<ChatContactIdAndImgDto>> lists =  chatRepository.findMyChatList(user.getId(), CUSTOMER)
                 .stream()
-                .filter(it-> !Objects.equals(it.getContactId(), user.getId()))
+               // .filter(it-> !Objects.equals(it.getContactId(), user.getId()))
                 .collect(Collectors.groupingBy(
                         ChatImgDtoGroupingKey::new,
                         Collectors.mapping(ChatContactIdAndImgDto::from, Collectors.toList())
@@ -152,7 +152,7 @@ public class ChatService {
     public List<ChatRoomShopListResponse> shopChatRoomList(User user) {
         Map<ChatImgDtoGroupingKey, List<ChatContactIdAndImgDto>> lists =  chatRepository.findMyChatList(user.getId(), SHOP)
                 .stream()
-                .filter(it-> !Objects.equals(it.getContactId(), user.getId()))
+                //.filter(it-> !Objects.equals(it.getContactId(), user.getId()))
                 .collect(Collectors.groupingBy(
                         ChatImgDtoGroupingKey::new,
                         Collectors.mapping(ChatContactIdAndImgDto::from, Collectors.toList())
