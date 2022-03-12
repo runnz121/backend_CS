@@ -60,6 +60,7 @@ public class SecurityConfigsList extends WebSecurityConfigurerAdapter {
 
     private final ObjectMapper objectMapper;
 
+    private static final long MAX_AGE = 24 * 60 * 60 * 100;
 
     // 인증 메니저
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -91,12 +92,13 @@ public class SecurityConfigsList extends WebSecurityConfigurerAdapter {
 
         //배포시 아래 2개로 바꿀것
         configuration.addAllowedOriginPattern("*"); // 이거 다시 비활성화
-       // configuration.addAllowedOrigin(frontEndDomain);
-       // configuration.addAllowedOrigin("http://localhost:3000/"); -> 추후 다시 바꾸기
+        //configuration.addAllowedOrigin(frontEndDomain);
+        // configuration.addAllowedOrigin("http://localhost:3000/"); //-> 추후 다시 바꾸기
         configuration.setAllowCredentials(true);
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-       // configuration.setMaxAge(MAX_AGES);
+        //configuration.addExposedHeader("Set-Cookie");
+        configuration.setMaxAge(MAX_AGE);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
