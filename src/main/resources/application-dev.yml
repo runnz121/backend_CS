@@ -22,10 +22,12 @@ sec:
     validtimeforRefresh: 864000000000
 
   cors:
-    frontEndDomain: http://localhost:3000
+    frontEndDomain: https://bellytime.kr
+    #frontEndDomain: http://localhost:3000
     #frontEndDomain: https://www.bellytime.kr
     #frontEndDomain: https://bellytime.kr
 
   reuris:
-    google: http://localhost:3000/oauth2/redirect?
+    google: https://bellytime.kr/oauth2/redirect?
+    #google: http://localhost:3000/oauth2/redirect?
     #google: https://localhost:3000?

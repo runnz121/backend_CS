@@ -134,10 +134,9 @@ public class ChatService {
 
     //내가 주인인 방의 친구 목록 반환
     public List<ChatRoomFriendListResponse> friendChatRoomList(User user) {
-
         Map<ChatImgDtoGroupingKey, List<ChatContactIdAndImgDto>> lists =  chatRepository.findMyChatList(user.getId(), CUSTOMER)
                 .stream()
-               // .filter(it-> !Objects.equals(it.getContactId(), user.getId()))
+                .filter(it-> !Objects.equals(it.getContactId(), user.getId()))
                 .collect(Collectors.groupingBy(
                         ChatImgDtoGroupingKey::new,
                         Collectors.mapping(ChatContactIdAndImgDto::from, Collectors.toList())
@@ -147,12 +146,11 @@ public class ChatService {
                .map(it -> ChatRoomFriendListResponse.from(it, getLastContent(user, it.getKey().getRoomId()))).collect(toList());
     }
 
-
     //내가 주인인 방의 샵 목록 반환
     public List<ChatRoomShopListResponse> shopChatRoomList(User user) {
         Map<ChatImgDtoGroupingKey, List<ChatContactIdAndImgDto>> lists =  chatRepository.findMyChatList(user.getId(), SHOP)
                 .stream()
-                //.filter(it-> !Objects.equals(it.getContactId(), user.getId()))
+                .filter(it-> !Objects.equals(it.getContactId(), user.getId()))
                 .collect(Collectors.groupingBy(
                         ChatImgDtoGroupingKey::new,
                         Collectors.mapping(ChatContactIdAndImgDto::from, Collectors.toList())
@@ -162,13 +160,11 @@ public class ChatService {
                 .map(it -> ChatRoomShopListResponse.from(it, getLastContent(user, it.getKey().getRoomId()))).collect(toList());
     }
 
-
     //채팅방 삭제
     public MessageDto deleteRoomService(User user, String roomId) {
         chatRepository.deleteByRoomIdAndInviteId(roomId, user);
         return MessageDto.exit(roomId, user.getNickname().getNickName());
     }
-
 
     //채팅 로그 저장
     public void saveLog(MessageDto messageDto) {
