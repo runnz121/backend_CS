@@ -27,5 +27,5 @@ sec:
     #frontEndDomain: https://bellytime.kr
 
   reuris:
-    google: https://localhost:3000/oauth2/redirect?
+    google: http://localhost:3000/oauth2/redirect?
     #google: https://localhost:3000?
