@@ -22,7 +22,7 @@ sec:
     validtimeforRefresh: 864000000000
 
   cors:
-    frontEndDomain: https://bellytime.kr
+    frontEndDomain: https://www.bellytime.kr
     #frontEndDomain: http://localhost:3000
     #frontEndDomain: https://www.bellytime.kr
     #frontEndDomain: https://bellytime.kr
