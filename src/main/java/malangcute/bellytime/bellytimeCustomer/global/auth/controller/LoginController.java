@@ -13,7 +13,10 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+
+import com.sun.xml.bind.v2.model.core.Ref;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,8 +59,9 @@ public class LoginController {
 
     //로그아웃
     @GetMapping("/logout")
-    public ResponseEntity logOutUSer(@RequireLogin User user) {
+    public ResponseEntity logOutUSer(@RequireLogin User user, HttpServletResponse response) {
         userService.userLogOut(user);
+        deleteCookie(response);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -73,5 +77,12 @@ public class LoginController {
                 .httpOnly(true)
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
+    }
+
+    private void deleteCookie(HttpServletResponse response) {
+        Cookie deleteCookie = new Cookie(REFRESH_TOKEN, null);
+        deleteCookie.setPath("/");
+        deleteCookie.setMaxAge(0);
+        response.addCookie(deleteCookie);
     }
 }
