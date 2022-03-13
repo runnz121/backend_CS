@@ -26,6 +26,6 @@ public class DummyLoginArgResolver implements HandlerMethodArgumentResolver {
                                 WebDataBinderFactory binderFactory) throws Exception {
 
 
-        return userService.findUserByEmail("test@test.com");
+        return userService.findUserByEmail("mang@mang.com");
     }
 }
