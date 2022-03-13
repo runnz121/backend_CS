@@ -27,7 +27,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final AwsS3uploader awsS3uploader;
-    private static final String ERASE_TOKEN ="";
+    private static final String ERASE_TOKEN = "";
 
     //유저 아이디로 유저 찾기(유저 반환)
     @Transactional(readOnly = true)

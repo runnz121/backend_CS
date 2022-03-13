@@ -58,11 +58,11 @@ public class LoginController {
     }
 
     //로그아웃
-    @GetMapping("/logout")
-    public ResponseEntity logOutUSer(@RequireLogin User user, HttpServletResponse response) {
+    @DeleteMapping("/log-out")
+    public ResponseEntity<AccessTokenResponseDto> logOutUSer(@RequireLogin User user, HttpServletResponse response) {
         userService.userLogOut(user);
         deleteCookie(response);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 
     private void createCookie(HttpServletResponse response, String refreshToken) {
