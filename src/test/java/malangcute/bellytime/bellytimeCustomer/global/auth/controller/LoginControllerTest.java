@@ -3,6 +3,8 @@ package malangcute.bellytime.bellytimeCustomer.global.auth.controller;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.config.TestSupport;
 import malangcute.bellytime.bellytimeCustomer.global.auth.TokenProvider;
+import malangcute.bellytime.bellytimeCustomer.global.auth.dto.FirstLoginDto;
+import malangcute.bellytime.bellytimeCustomer.global.auth.dto.LoginResultWithIdPass;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.LoginWithIdAndPassRequest;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.RefreshAndAccessTokenResponse;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.RegisterWithIdPassRequest;
@@ -57,6 +59,12 @@ class LoginControllerTest extends TestSupport {
     private static final RefreshAndAccessTokenResponse refreshAndAccessTokenResponse =
             new RefreshAndAccessTokenResponse("accessToken", "refreshToken");
 
+    public static final LoginResultWithIdPass loginResultWithIdPass =
+            new LoginResultWithIdPass(1L, "userNickName", refreshAndAccessTokenResponse);
+
+    private static final FirstLoginDto firstLoginDto =
+            new FirstLoginDto(1L, "userNickName", "accessToken");
+
     private PasswordEncoder PASSWORD_ENCODER =
             new BCryptPasswordEncoder();
 
@@ -104,7 +112,7 @@ class LoginControllerTest extends TestSupport {
     void loginWithIdController() throws Exception {
 
         // given
-        given(loginService.validUser(any())).willReturn(refreshAndAccessTokenResponse);
+        given(loginService.validUser(any())).willReturn(loginResultWithIdPass);
 
         // when, then
         mockMvc.perform(
@@ -123,7 +131,9 @@ class LoginControllerTest extends TestSupport {
                                         headerWithName("Set-Cookie").description("리프레시토큰 반환")
                                 ),
                                 responseFields(
-                                        fieldWithPath("accessToken").type(JsonFieldType.STRING).description("엑세스 토큰 반환")
+                                        fieldWithPath("accessToken").type(JsonFieldType.STRING).description("엑세스 토큰 반환"),
+                                        fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저의 아이디 반환"),
+                                        fieldWithPath("userNickName").type(JsonFieldType.STRING).description("유저의 닉네임 반환")
                                 )
                         ));
     }

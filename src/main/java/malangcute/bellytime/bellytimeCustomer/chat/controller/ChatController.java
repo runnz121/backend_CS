@@ -57,6 +57,7 @@ public class ChatController {
     //채팅방 -> 가게
     @GetMapping("/chat/list/shop")
     public ResponseEntity<?> getMyShopRoomList(@RequireLogin User user) {
+        System.out.println("incontroller" + user.getId());
         List<ChatRoomShopListResponse> shopList = chatService.shopChatRoomList(user);
         return ResponseEntity.ok(shopList);
     }
