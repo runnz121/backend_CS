@@ -16,6 +16,6 @@ public class UserProfileResponse {
     private String name;
 
     public static UserProfileResponse of (User user) {
-        return new UserProfileResponse(user.getProfileImg(), user.getUsername());
+        return new UserProfileResponse(user.getProfileImg(), user.getNickname().getNickName());
     }
 }
