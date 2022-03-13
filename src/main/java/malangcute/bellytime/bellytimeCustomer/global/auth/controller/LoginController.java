@@ -58,11 +58,11 @@ public class LoginController {
     }
 
     //로그아웃
-    @GetMapping("/logout")
-    public ResponseEntity logOutUSer(@RequireLogin User user, HttpServletResponse response) {
+    @DeleteMapping("/log-out")
+    public ResponseEntity<AccessTokenResponseDto> logOutUSer(@RequireLogin User user, HttpServletResponse response) {
         userService.userLogOut(user);
         deleteCookie(response);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 
     private void createCookie(HttpServletResponse response, String refreshToken) {
@@ -80,9 +80,19 @@ public class LoginController {
     }
 
     private void deleteCookie(HttpServletResponse response) {
-        Cookie deleteCookie = new Cookie(REFRESH_TOKEN, null);
-        deleteCookie.setPath("/");
-        deleteCookie.setMaxAge(0);
-        response.addCookie(deleteCookie);
+        ResponseCookie deleteCookie = ResponseCookie.from(REFRESH_TOKEN, "")
+            .sameSite("None")
+            .domain(DOMAIN)
+            .maxAge(0)
+            .path("/")
+            .secure(true)
+            .httpOnly(true)
+            .build();
+        response.addHeader("Set-Cookie", deleteCookie.toString());
+
+        // Cookie deleteCookie = new Cookie(REFRESH_TOKEN, null);
+        // deleteCookie.setPath("/");
+        // deleteCookie.setMaxAge(0);
+        // response.addCookie(deleteCookie);
     }
 }

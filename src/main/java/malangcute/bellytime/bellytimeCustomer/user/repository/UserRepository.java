@@ -23,6 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByNickname(NickName name);
 
     @Modifying
-    @Query("UPDATE User u SET u.refreshToken=:status WHERE u.userId=:userId ")
+    @Query("UPDATE User u SET u.refreshToken=:status WHERE u.id=:userId ")
     void logOutByUserId(@Param("userId") Long user, @Param("status") String status);
 }
