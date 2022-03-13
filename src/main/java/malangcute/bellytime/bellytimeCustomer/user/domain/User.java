@@ -28,6 +28,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String userName;
+
     @Embedded
     private NickName nickname;
 
@@ -108,8 +110,9 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 
     @Builder
-    public User (Long id, String nickName, String email, String passWord, String phoneNumber, String profileImg) {
+    public User (Long id, String userName, String nickName, String email, String passWord, String phoneNumber, String profileImg) {
         this.id = id;
+        this.userName = userName;
         this.nickname = new NickName(nickName);
         this.email = new Email(email);
         this.password = new PassWord(passWord);
@@ -165,6 +168,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     public void setAuthProvider(AuthProvider authProvider) {
         this.authProvider = authProvider;
     }
+
+    public void setUserName(String userName) { this.userName = userName; }
 
     public void setProviderId(String providerId){
         this.providerId = providerId;
