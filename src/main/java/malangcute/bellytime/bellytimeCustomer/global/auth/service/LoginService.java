@@ -60,6 +60,7 @@ public class LoginService {
                             .passWord(PASSWORD_ENCODER.encode(registerWithIdPassRequest.getPassword()))
                             .phoneNumber(registerWithIdPassRequest.getPhoneNumber())
                             .nickName(registerWithIdPassRequest.getNickname())
+                            .userName(registerWithIdPassRequest.getName())
                     .build();
            if (!Objects.isNull(registerWithIdPassRequest.getProfileImg()))
            {
