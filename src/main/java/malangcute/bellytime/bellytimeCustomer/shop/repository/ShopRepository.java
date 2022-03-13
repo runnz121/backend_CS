@@ -57,6 +57,6 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
 
     @Query(nativeQuery = true,
             value = "SELECT * FROM shop sh WHERE sh.id IN (SELECT " +
-                    "fs.id FROM follow_shop fs WHERE fs.user_id=:userId)")
+                    "fs.shop_id FROM follow_shop fs WHERE fs.user_id=:userId)")
     Page<Shop> findMyFollowShopById(@Param("userId") Long id, Pageable pageable);
 }
