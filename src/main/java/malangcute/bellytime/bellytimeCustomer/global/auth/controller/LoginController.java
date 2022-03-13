@@ -80,9 +80,19 @@ public class LoginController {
     }
 
     private void deleteCookie(HttpServletResponse response) {
-        Cookie deleteCookie = new Cookie(REFRESH_TOKEN, null);
-        deleteCookie.setPath("/");
-        deleteCookie.setMaxAge(0);
-        response.addCookie(deleteCookie);
+        ResponseCookie deleteCookie = ResponseCookie.from(REFRESH_TOKEN, "")
+            .sameSite("None")
+            .domain(DOMAIN)
+            .maxAge(0)
+            .path("/")
+            .secure(true)
+            .httpOnly(true)
+            .build();
+        response.addHeader("Set-Cookie", deleteCookie.toString());
+
+        // Cookie deleteCookie = new Cookie(REFRESH_TOKEN, null);
+        // deleteCookie.setPath("/");
+        // deleteCookie.setMaxAge(0);
+        // response.addCookie(deleteCookie);
     }
 }
