@@ -44,7 +44,7 @@ public class LoginService {
 
         return LoginResultWithIdPass.of(requestLoginUser.getId(),
                                 requestLoginUser.getNickname().getNickName(),
-                                RefreshAndAccessTokenResponse.of(refreshToken, accessToken));
+                                RefreshAndAccessTokenResponse.of(accessToken, refreshToken));
 
        // return RefreshAndAccessTokenResponse.of(accessToken, refreshToken);
     }
