@@ -1,12 +1,13 @@
 package malangcute.bellytime.bellytimeCustomer.cooltime.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
-//@Builder(builderMethodName = "create")
 public class GetMyCoolTimeList {
 
     private String foodId;
@@ -25,7 +26,8 @@ public class GetMyCoolTimeList {
     // 현재 날짜 기준으로 남은 일
     private  Long leftDays;
 
-    }
+
+}
 
 
 

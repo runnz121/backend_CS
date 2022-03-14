@@ -6,11 +6,18 @@ import java.time.LocalDateTime;
 
 public interface GetMyCoolTimeListIF {
     String getFoodId();
+
     String getFoodName();
+
     String getFoodImg();
+
     String getGauge();
+
     Integer getDuration();
+
     LocalDateTime getStartDate();
+
     LocalDateTime getEndDate();
+
     Boolean getEat();
 }

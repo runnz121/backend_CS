@@ -25,8 +25,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/user")
@@ -59,7 +63,6 @@ public class UserController {
         UserProfileResponse result = userService.userProfile(user);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-
 
     /**
      * Follow service
@@ -95,10 +98,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(list);
    }
 
-   //닉네임으로 단일건 서치
+   //이메일로 단일건 서치
    @PostMapping("/friends/search")
-    public ResponseEntity<MyFriendSearchResponse> findMyFriend(@RequestBody FindMyFriendSearchRequest request) {
-        MyFriendSearchResponse result = userService.findUserByNickname(request);
+    public ResponseEntity<MyFriendSearchResponse> findMyFriend(@RequireLogin User user, @RequestBody FindMyFriendSearchRequest request) {
+        MyFriendSearchResponse result = userService.findUserByNickname(user, request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
    }
 
@@ -150,12 +153,6 @@ public class UserController {
         return ResponseEntity.ok(list);
     }
 
-    //애약 상태 반환 -> 수정 필요(상의)
-//    public ResponseEntity<ReservationShopInfoResponse> myReservationState(@RequireLogin User user,
-//                                                @RequestBody ReservationStateDto) {
-//        return reservationService.
-//    }
-
 
     /**
      * comment 서비스
@@ -175,6 +172,4 @@ public class UserController {
         commentService.updateMyComment(user, request);
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
-
-
 }

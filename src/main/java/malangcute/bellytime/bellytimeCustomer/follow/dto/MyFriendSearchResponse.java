@@ -20,12 +20,14 @@ public class MyFriendSearchResponse {
 
     private String profileImg;
 
-    public static MyFriendSearchResponse from (User user) {
+    private boolean follow;
+
+    public static MyFriendSearchResponse from (User user, boolean follow) {
         return new MyFriendSearchResponse(
                 user.getId(),
                 user.getNickname().getNickName(),
-                user.getProfileImg()
+                user.getProfileImg(),
+                follow
         );
     }
-
 }

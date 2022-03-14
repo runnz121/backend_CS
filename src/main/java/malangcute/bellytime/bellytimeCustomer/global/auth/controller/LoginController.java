@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.global.auth.dto.*;
 import malangcute.bellytime.bellytimeCustomer.global.auth.service.LoginService;
+import malangcute.bellytime.bellytimeCustomer.global.config.SecurityProperties;
 import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.FailedToConvertImgFileException;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -30,10 +32,13 @@ public class LoginController {
 
     private final UserService userService;
 
+    private final SecurityProperties securityProperties;
+
     @GetMapping("/")
     public ResponseEntity<?> healthCheck(){
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
+
 
     // id 로 로그인 했을 때 -> httpresponesdp 쿠키 담아서 보냄
     @PostMapping("/login")
@@ -90,9 +95,5 @@ public class LoginController {
             .build();
         response.addHeader("Set-Cookie", deleteCookie.toString());
 
-        // Cookie deleteCookie = new Cookie(REFRESH_TOKEN, null);
-        // deleteCookie.setPath("/");
-        // deleteCookie.setMaxAge(0);
-        // response.addCookie(deleteCookie);
     }
 }
