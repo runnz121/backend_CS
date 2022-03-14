@@ -23,8 +23,8 @@ public interface CoolTimeRepository extends JpaRepository<CoolTime, Long> {
     @Query("SELECT f.id AS foodId, f.name AS foodName, "
         + "f.image AS foodImg, c.gauge AS gauge, c.startDate AS startDate, "
         + "c.endDate AS endDate, c.duration AS duration, c.eat AS eat "
-        + "FROM CoolTime c LEFT JOIN FETCH Food f ON c.foodId.id= f.id WHERE c.userId.id=:kk ")
-    List<GetMyCoolTimeListIF> findMyCoolTime(@Param("kk") Long userId);
+        + "FROM CoolTime c LEFT JOIN FETCH Food f ON c.foodId.id= f.id WHERE c.userId.id=:userId ")
+    List<GetMyCoolTimeListIF> findMyCoolTime(@Param("userId") Long userId);
 
     @Modifying
     @Query("DELETE FROM CoolTime c WHERE c.userId.id=:userId AND c.foodId.id=:foodId ")

@@ -2,6 +2,8 @@ package malangcute.bellytime.bellytimeCustomer.follow.repository;
 
 import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowUser;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.MyFriendSearchResponse;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
+
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -23,4 +25,5 @@ public interface FollowUserRepository extends JpaRepository<FollowUser,Long> {
     @Query("DELETE FROM FollowUser fu WHERE fu.hostId.id=:userId AND fu.friendId.id=:shopId ")
     void deleteFollowShopId(@Param("userId") Long id, @Param("shopId") Long shopId);
 
+    FollowUser findByHostIdAndFriendId(User hostId, User followId);
 }

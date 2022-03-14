@@ -14,15 +14,14 @@ public class MyFriendListResponse {
 
     private Long contactId;
 
-    private String name;
+    private String nickName;
 
     private String profileImg;
 
     public static MyFriendListResponse from(FollowUser followUser) {
         return new MyFriendListResponse(
                 followUser.getFriendId().getId(),
-                followUser.getFriendId().getUsername(),
+                followUser.getFriendId().getNickname().getNickName(),
                 followUser.getFriendId().getProfileImg());
     }
-
 }

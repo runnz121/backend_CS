@@ -19,15 +19,7 @@ public class CoolTimeCalListResponse1 {
 
 
 
-
-    // private static List<CoolTimeCalTodayFoodList2> today = new ArrayList<>();
-
-
      public void addList (CoolTimeCalDayList2 list) {
-//         Map<Integer, List<CoolTimeCalFoodList3>> map = list.stream().collect(
-//                 Collectors.toMap()
-//         )
-
 
          dateList.add(list);
     }

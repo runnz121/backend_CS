@@ -1,9 +1,11 @@
 package malangcute.bellytime.bellytimeCustomer.user.service;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.FindMyFriendSearchRequest;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.MyFriendSearchResponse;
+import malangcute.bellytime.bellytimeCustomer.follow.service.FollowService;
 import malangcute.bellytime.bellytimeCustomer.global.aws.AwsS3uploader;
 import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.FailedToConvertImgFileException;
 import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
@@ -15,19 +17,28 @@ import malangcute.bellytime.bellytimeCustomer.user.dto.UserUpdateRequest;
 import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 
+import javax.annotation.PostConstruct;
+
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
     private final AwsS3uploader awsS3uploader;
+    private final FollowService followService;
     private static final String ERASE_TOKEN = "";
+
+    @PostConstruct
+    public void init() {
+        followService.setUserService(this);
+    }
 
     //유저 아이디로 유저 찾기(유저 반환)
     @Transactional(readOnly = true)
@@ -61,7 +72,6 @@ public class UserService {
                 .orElseThrow(() -> new UserIdNotFoundException("선택한 유저 프로필이 없습니다"));
     }
 
-
     // 유저 정보 업데이트
     public void userUpdate(UserUpdateRequest userUpdateRequest) throws FailedToConvertImgFileException {
         User user = findUserByEmail(userUpdateRequest.getEmail());
@@ -76,12 +86,11 @@ public class UserService {
     }
 
     //닉네임으로 친구 찾기
-    public MyFriendSearchResponse findUserByNickname(FindMyFriendSearchRequest request) {
-        return userRepository.findByEmail(new Email(request.getEmail()))
-                .stream()
-                .map(MyFriendSearchResponse::from)
-                .findFirst().orElseThrow(() -> new NotFoundException("유저가 없습니다"));
-    }
+    public MyFriendSearchResponse findUserByNickname(User host, FindMyFriendSearchRequest request) {
+            User followId = findUserByEmail(request.getEmail());
+            boolean followStatus = followService.followStatus(host, followId);
+            return MyFriendSearchResponse.from(followId, followStatus);
+}
 
     //유저 로그아웃
     public void userLogOut(User user) {

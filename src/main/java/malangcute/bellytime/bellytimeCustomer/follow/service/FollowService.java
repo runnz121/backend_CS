@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowUser;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.FollowFriendsRequest;
@@ -17,6 +20,7 @@ import malangcute.bellytime.bellytimeCustomer.follow.dto.FollowShopRequest;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.MyFriendListResponse;
 import malangcute.bellytime.bellytimeCustomer.follow.repository.FollowShopRepository;
 import malangcute.bellytime.bellytimeCustomer.follow.repository.FollowUserRepository;
+import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.global.domain.DataFormatter;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopRepository;
@@ -26,16 +30,20 @@ import malangcute.bellytime.bellytimeCustomer.user.service.UserService;
 @Service
 @Slf4j
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FollowService {
 
     private final FollowShopRepository followShopRepository;
 
     private final FollowUserRepository followUserRepository;
 
-    private final UserService userService;
+    private UserService userService;
 
     private final DataFormatter dateFormat;
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
 
     public void toUnFollowShop(User user, List<FollowShopRequest> requests) {
@@ -90,5 +98,14 @@ public class FollowService {
             return true;
         }
         return false;
+    }
+
+    public boolean followStatus (User hostId, User followId) {
+        try {
+            followUserRepository.findByHostIdAndFriendId(hostId, followId).getFriendId();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
