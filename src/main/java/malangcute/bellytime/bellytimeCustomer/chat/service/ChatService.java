@@ -187,7 +187,7 @@ public class ChatService {
     @Transactional(readOnly = true)
     public String getLastContent(User user, String roomId) {
         ChatLog log = chatLogRepository.findBySenderAndRoomId(user.getId(), roomId)
-                .stream().sorted(Comparator.comparing(ChatLog::getCreatedAt))
+                .stream().sorted(Comparator.comparing(ChatLog::getCreatedAt).reversed())
                 .findAny().orElseGet(ChatLog::empty);
         return log.getMessage();
     }

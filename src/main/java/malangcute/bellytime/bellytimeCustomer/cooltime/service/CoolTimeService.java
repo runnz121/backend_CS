@@ -71,27 +71,12 @@ public class CoolTimeService {
 
         return listFromRepo
             .stream()
-            .sorted(Comparator.comparing(GetMyCoolTimeListIF::getGauge))
+            .sorted(Comparator.comparing(it -> Long.valueOf(it.getGauge())))
             .map(it -> GetMyCoolTimeList.of(it,
                     dateFormatterImpl.localToStringPattern(it.getStartDate()),
                     dateFormatterImpl.localToStringPattern(it.getEndDate()),
                     dateFormatterImpl.minusDateLocalDateTime(now, it.getEndDate())))
             .collect(Collectors.toList());
-
-        // return listFromRepo
-        //         .stream()
-        //         .map(it -> GetMyCoolTimeList.builder()
-        //                .foodId(it.getFoodId())
-        //                .foodName(it.getFoodName())
-        //                .gauge(it.getGauge())
-        //                .foodImg(it.getFoodImg())
-        //                .startDate(dateFormatterImpl.localToStringPattern(it.getStartDate()))
-        //                .duration(it.getDuration())
-        //                .predictDate(dateFormatterImpl.localToStringPattern(it.getEndDate()))
-        //                .leftDays(dateFormatterImpl.minusDateLocalDateTime(now,it.getEndDate()))
-        //                .build()
-        //         )
-        //         .collect(Collectors.toList());
     }
 
     //쿨타임 업데이터, 생성
@@ -175,9 +160,7 @@ public class CoolTimeService {
 
     //쿨타임 전략패턴
     public CoolTimeCalListResponse1 selected(User user, Long month, Long year, String check) {
-
         CoolTimeCalFactory.CoolTimeStatus status = CoolTimeCalFactory.CoolTimeStatus.of(check);
-
         return coolTimeCalFactory.find(status).coolTimeCalByFilter(user, month, year);
     }
 
@@ -194,7 +177,7 @@ public class CoolTimeService {
     public List<CoolTimeGetMyFriends> getMyFriendsListByFood (User user, Long foodId) {
         return  coolTimeRepository.findMyCoolTimeFriends(user.getId(), foodId)
                 .stream()
-                .sorted(Comparator.comparing(CoolTimeGetMyFriendsIF::getGauge).reversed())
+                .sorted(Comparator.comparing(it -> Long.valueOf(it.getGauge())))
                 .map(CoolTimeGetMyFriends::of)
                 .collect(Collectors.toList());
     }

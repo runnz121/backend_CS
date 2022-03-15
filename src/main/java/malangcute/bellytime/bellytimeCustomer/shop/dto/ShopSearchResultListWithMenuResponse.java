@@ -30,7 +30,9 @@ public class ShopSearchResultListWithMenuResponse {
 
     private int followerCount;
 
-    public static ShopSearchResultListWithMenuResponse of(Shop shop, int reviewCount, int followCount, boolean status) {
+    private boolean follow;
+
+    public static ShopSearchResultListWithMenuResponse of(Shop shop, int reviewCount, int followCount, boolean status, boolean follow) {
         return new ShopSearchResultListWithMenuResponse(
             shop.getId(),
             shop.getName(),
@@ -39,7 +41,8 @@ public class ShopSearchResultListWithMenuResponse {
             shop.getBellscore(),
             shop.getAddress(),
             status,
-            followCount
+            followCount,
+            follow
         );
     }
 

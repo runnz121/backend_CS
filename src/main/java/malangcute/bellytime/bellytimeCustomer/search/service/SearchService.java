@@ -71,8 +71,8 @@ public class SearchService {
 
 
     // 이름과 정렬 기준으로 shop 찾기
-    public List<ShopSearchResultListWithMenuResponse> specificSearch(SearchShopRequest request) {
-        return shopService.searchBySpecificName(request.getName(), request.getSortBy());
+    public List<ShopSearchResultListWithMenuResponse> specificSearch(User user, SearchShopRequest request) {
+        return shopService.searchBySpecificName(user, request.getName(), request.getSortBy());
     }
 
     // 최근 검색어 삭제

@@ -11,6 +11,7 @@ import malangcute.bellytime.bellytimeCustomer.comment.service.CommentService;
 import malangcute.bellytime.bellytimeCustomer.follow.service.FollowService;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListWithMenuResponse;
 import malangcute.bellytime.bellytimeCustomer.shop.service.ShopService;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 
 // 특별 기능 서술
 @Component
@@ -34,14 +35,15 @@ public class ShopSortByFollow implements ShopSortStrategy {
 
 
     @Override
-    public List<ShopSearchResultListWithMenuResponse> SortedList(String name) {
+    public List<ShopSearchResultListWithMenuResponse> SortedList(User user, String name) {
         return shopRepository.findAllByNameContaining(name)
                 .stream()
                 .sorted(Comparator.comparingInt(followService::shopFollower))
                 .map(shop -> ShopSearchResultListWithMenuResponse.of(shop,
                     commentService.reviewCountByShopId(shop),
                     followService.shopFollower(shop),
-                    followService.checkStatus(shop)))
+                    followService.checkStatus(shop),
+                    followService.followStatusShop(user, shop)))
                 .collect(Collectors.toList());
     }
 }

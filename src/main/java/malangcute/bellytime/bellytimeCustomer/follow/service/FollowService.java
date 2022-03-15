@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowShop;
 import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowUser;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.FollowFriendsRequest;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.FollowShopRequest;
@@ -102,7 +103,16 @@ public class FollowService {
 
     public boolean followStatus (User hostId, User followId) {
         try {
-            followUserRepository.findByHostIdAndFriendId(hostId, followId).getFriendId();
+            followUserRepository.findByHostIdAndFriendId(hostId, followId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean followStatusShop (User userId, Shop shopId) {
+        try {
+            followShopRepository.findByUserIdAndShopId(userId.getId(), shopId.getId());
             return true;
         } catch (Exception e) {
             return false;
