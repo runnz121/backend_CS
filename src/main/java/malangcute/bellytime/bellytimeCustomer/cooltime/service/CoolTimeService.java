@@ -2,6 +2,7 @@ package malangcute.bellytime.bellytimeCustomer.cooltime.service;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.cooltime.domain.CoolTime;
+import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalDateList;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalDayList2;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalFoodList3;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeCalListResponse1;
@@ -28,6 +30,8 @@ import malangcute.bellytime.bellytimeCustomer.cooltime.dto.CoolTimeShopRecommend
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.DeleteCoolTimeRequest;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.GetMyCoolTimeList;
 import malangcute.bellytime.bellytimeCustomer.cooltime.dto.GetMyCoolTimeListIF;
+import malangcute.bellytime.bellytimeCustomer.cooltime.repository.CoolTimeCalFactory;
+import malangcute.bellytime.bellytimeCustomer.cooltime.repository.CoolTimeCalStrategy;
 import malangcute.bellytime.bellytimeCustomer.cooltime.repository.CoolTimeRepository;
 import malangcute.bellytime.bellytimeCustomer.food.domain.Food;
 import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
@@ -49,6 +53,10 @@ public class CoolTimeService {
     private final CoolTimeRepository coolTimeRepository;
 
     private final ShopCoolTimeSearchStrategyFactory factory;
+
+    private final CoolTimeCalFactory coolTimeCalFactory;
+
+
 
 
     // 쿨타임 항목 갖고오기(Food, CoolTime 조인)
@@ -83,27 +91,26 @@ public class CoolTimeService {
         String duration = String.valueOf(request.getDuration());
         String endDate = dateFormatterImpl.plusDate(startDate, duration);
         Long userId = user.getId();
-        Long getFoodId= request.getFoodId();
+        Long getFoodId = request.getFoodId();
 
         Food foodId = foodService.findFoodFromName(request.getFoodName());
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime enddate = dateFormatterImpl.stringToLocal(endDate);
         LocalDateTime startdate = dateFormatterImpl.dateToLocal(startDate);
-        Long leftDays = dateFormatterImpl.minusDateLocalDateTime(startdate,now);
-        Long coolTimeDays = dateFormatterImpl.minusDateLocalDateTime(startdate,enddate);
+        Long leftDays = dateFormatterImpl.minusDateLocalDateTime(startdate, now);
+        Long coolTimeDays = dateFormatterImpl.minusDateLocalDateTime(startdate, enddate);
 
-       String gaugeInit = calGauge(coolTimeDays,leftDays);
+       String gaugeInit = calGauge(coolTimeDays, leftDays);
 
         try {
-            Optional<CoolTime> exists = coolTimeRepository.findUserIdAndFoodId(userId,getFoodId);
+            Optional<CoolTime> exists = coolTimeRepository.findUserIdAndFoodId(userId, getFoodId);
             if (exists.isPresent()) {
                 updateCoolTime(userId, getFoodId, startDate, endDate, request.getDuration());
+            } else {
+                createCoolTime(user, foodId, gaugeInit, startDate, endDate, request.getDuration());
             }
-            else {
-                createCoolTime(user,foodId, gaugeInit, startDate, endDate, request.getDuration());
-            }
-        } catch(NotFoundException ex) {
+        } catch (NotFoundException ex) {
             createCoolTime(user, foodId, gaugeInit, startDate, endDate, request.getDuration());
         }
     }
@@ -118,8 +125,8 @@ public class CoolTimeService {
                 .gauge(gauge)
                 .endDate(dateFormatterImpl.stringToLocal(endDate))
                 .duration(duration)
+                .eat(false)
                 .build();
-
         coolTimeRepository.save(createCoolTime);
     }
 
@@ -128,15 +135,15 @@ public class CoolTimeService {
         LocalDateTime enddate = dateFormatterImpl.stringToLocal(endDate);
         LocalDateTime startdate = dateFormatterImpl.dateToLocal(startDate);
         LocalDateTime now = LocalDateTime.now();
-        Long coolTimeDays = dateFormatterImpl.minusDateLocalDateTime(startdate,enddate);
-        Long leftDays = dateFormatterImpl.minusDateLocalDateTime(startdate,now);
+        Long coolTimeDays = dateFormatterImpl.minusDateLocalDateTime(startdate, enddate);
+        Long leftDays = dateFormatterImpl.minusDateLocalDateTime(startdate, now);
         String calgauge = calGauge(coolTimeDays, leftDays);
-        coolTimeRepository.updateByUserId(userId,foodId,startdate,enddate,calgauge,duration);
+        coolTimeRepository.updateByUserId(userId, foodId, startdate, enddate, calgauge, duration);
     }
 
     //나의 쿨타임 삭제하기
     @Transactional
-    public void deleteCoolTime(User user, DeleteCoolTimeRequest request){
+    public void deleteCoolTime(User user, DeleteCoolTimeRequest request) {
         Long userId = user.getId();
         Long foodId = request.getFoodId();
         coolTimeRepository.deleteByUserId(userId, foodId);
@@ -146,7 +153,7 @@ public class CoolTimeService {
     private String calGauge(Long coolTimeDays, Long leftDays) {
         String gauge = "";
         try {
-            Integer cal = Math.round(leftDays*100/coolTimeDays);
+            Integer cal = Math.round(leftDays * 100 / coolTimeDays);
             gauge = Integer.toString(cal);
         } catch (ArithmeticException ex) {
             log.trace(String.valueOf(ex));
@@ -155,81 +162,14 @@ public class CoolTimeService {
         return gauge;
     }
 
-    // private List<CoolTimeCalTodayFoodList2> getTodayMyCoolTimeCal(User user, Long month) {
-    //     int td = LocalDateTime.now().getDayOfMonth();
-    //     int md = LocalDateTime.now().getMonthValue();
-    // }
 
+    //쿨타임 전략패턴
+    public CoolTimeCalListResponse1 selected(User user, Long month, Long year, String check) {
 
+        CoolTimeCalFactory.CoolTimeStatus status = CoolTimeCalFactory.CoolTimeStatus.of(check);
 
-    // 나의 쿨타임 리스트 갖고오기 (이부분은 친구랑 공통)
-    public CoolTimeCalListResponse1 getMyCoolTimeCal(User user, Long month, Long year)
-    {
-        List<GetMyCoolTimeListIF> listFromRepo = coolTimeRepository.findMyCoolTime(user.getId());
-        CoolTimeCalListResponse1 totalList = new CoolTimeCalListResponse1();
-
-        //달이 31일까지
-        for (int i = 1; i <= 31; i++) {
-            int finalI = i;
-
-            //food관련된 정보들
-            List<CoolTimeCalFoodList3> list3 = listFromRepo.stream()
-                .filter(it -> it.getEndDate().getDayOfMonth() == finalI &&
-                    it.getEndDate().getMonthValue() == month)
-                .map(CoolTimeCalFoodList3::from)
-                .collect(Collectors.toList());
-
-            CoolTimeCalDayList2 list2 = new CoolTimeCalDayList2(finalI, list3);
-            if (list2.getData().size() > 0){
-                totalList.addList(list2);
-            }
-        }
-        return totalList;
+        return coolTimeCalFactory.find(status).coolTimeCalByFilter(user, month, year);
     }
-
-
-
-
-
-    // 쿨타임 달력 조회해서 달력결과 리스트로 반환(해당년, 달)
-    // public CoolTimeCalListResponse1 getMyCoolTimeCal(User user, Long month, Long year)
-    //  {
-    //     int today = LocalDateTime.now().getDayOfMonth();
-    //
-    //     List<GetMyCoolTimeListIF> listFromRepo = coolTimeRepository.findMyCoolTime(user.getId());
-    //     CoolTimeCalListResponse1 totalList = new CoolTimeCalListResponse1();
-    //
-    //
-    //     //달이 31일까지
-    //     for (int i = 1; i <= 31; i++) {
-    //         int finalI = i;
-    //
-    //         //food관련된 정보들
-    //         List<CoolTimeCalFoodList3> list3 = listFromRepo.stream()
-    //                 .filter(it -> it.getEndDate().getDayOfMonth() == finalI &&
-    //                         it.getEndDate().getMonthValue() == month)
-    //                 .map(CoolTimeCalFoodList3::from)
-    //                 .collect(Collectors.toList());
-    //
-    //         List<CoolTimeCalTodayFoodList3> todayList2 = listFromRepo.stream()
-    //                 .filter(it -> it.getEndDate().getDayOfMonth() == today && it.getEndDate().getMonthValue() == month)
-    //                 .map(CoolTimeCalTodayFoodList3::from)
-    //                 .collect(Collectors.toList());
-    //         System.out.println("todayList2");
-    //
-    //         CoolTimeCalDayList2 list2 = new CoolTimeCalDayList2(finalI, list3);
-    //         if (list2.getData().size() > 0 && finalI != today){
-    //               totalList.addList(list2);
-    //         }
-    //
-    //         CoolTimeCalTodayFoodList2 todayList = new CoolTimeCalTodayFoodList2(todayList2);
-    //         if (list2.getDay() == today && list2.getData().size() > 0) {
-    //             totalList.addToday(todayList);
-    //         }
-    //     }
-    //     return totalList;
-    // }
-
 
 
     //쿨타임 eat, 상태 업데이트

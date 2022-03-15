@@ -21,8 +21,7 @@ public class CoolTimeCalDayList2 {
 
     private List<CoolTimeCalFoodList3> data = new ArrayList<>();
 
-    public static CoolTimeCalDayList2 of (int day, List<CoolTimeCalFoodList3> list3) {
+    public static CoolTimeCalDayList2 of(int day, List<CoolTimeCalFoodList3> list3) {
         return new CoolTimeCalDayList2(day, list3);
     }
-
 }

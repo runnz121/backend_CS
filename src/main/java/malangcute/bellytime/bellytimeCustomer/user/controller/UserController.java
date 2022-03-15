@@ -130,7 +130,7 @@ public class UserController {
     @PostMapping("/cal")
     public ResponseEntity<CoolTimeCalListResponse1> myCoolTimeCalender(@RequireLogin User user,
                                                                        @RequestBody CoolTimeCalRequest request) {
-        CoolTimeCalListResponse1 list = coolTimeService.getMyCoolTimeCal(user, request.getMonth(), request.getYear());
+        CoolTimeCalListResponse1 list = coolTimeService.selected(user, request.getMonth(), request.getYear(), "me");
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
