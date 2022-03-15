@@ -25,5 +25,18 @@ public class GetMyCoolTimeList {
     private  String predictDate;
     // 현재 날짜 기준으로 남은 일
     private  Long leftDays;
+
+    public static GetMyCoolTimeList of(GetMyCoolTimeListIF myCoolTime, String startDate, String predictDate, Long leftDays) {
+        return new GetMyCoolTimeList(
+            myCoolTime.getFoodId(),
+            myCoolTime.getFoodName(),
+            myCoolTime.getGauge(),
+            myCoolTime.getFoodImg(),
+            startDate,
+            myCoolTime.getDuration(),
+            predictDate,
+            leftDays
+        );
+    }
 }
 
