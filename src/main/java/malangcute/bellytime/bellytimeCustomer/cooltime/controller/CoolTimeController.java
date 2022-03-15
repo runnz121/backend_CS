@@ -87,7 +87,7 @@ public class CoolTimeController {
                                                                                        Double lat,
                                                                                    @RequestParam(required = false)
                                                                                        Double lon,
-                                                                                   @PageableDefault Pageable page) {
+                                                                                   @PageableDefault(page = 1, value = 3) Pageable page) {
 
         List<CoolTimeShopRecommendResponse> list = coolTimeService.getShopListFilterBy(user, foodId, filter, lat, lon, page);
         return ResponseEntity.status(HttpStatus.OK).body(list);

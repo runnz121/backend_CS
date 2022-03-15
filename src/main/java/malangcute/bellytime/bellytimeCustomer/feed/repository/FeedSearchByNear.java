@@ -19,7 +19,7 @@ public class FeedSearchByNear implements FeedSearchStrategy {
 
     @Override
     public List<FeedListResponse> selectedStrategy(User user, Double lat, Double lon, Pageable pageable) {
-         return feedRepository.findByFilterWithNearBy(lat, lon, Pageable.ofSize(pageable.getPageSize()))
+         return feedRepository.findByFilterWithNearBy(lat, lon, pageable)
                  .stream().map(FeedListResponse::of).collect(Collectors.toList());
     }
 
