@@ -42,7 +42,7 @@ public class CoolTimeController {
 
     //마이리스트 불러오기
     @GetMapping("/mylist")
-    public ResponseEntity<?> myList(@RequireLogin User user) {
+    public ResponseEntity<List<GetMyCoolTimeList> > myList(@RequireLogin User user) {
         List<GetMyCoolTimeList> myList = coolTimeService.getMyList(user);
         return ResponseEntity.status(HttpStatus.OK).body(myList);
     }
