@@ -71,7 +71,7 @@ public class CoolTimeService {
 
         return listFromRepo
             .stream()
-            .sorted(Comparator.comparing(it -> Long.valueOf(it.getGauge())))
+            .sorted(Comparator.comparing(it -> Long.valueOf(it.getGauge()), Comparator.reverseOrder()))
             .map(it -> GetMyCoolTimeList.of(it,
                     dateFormatterImpl.localToStringPattern(it.getStartDate()),
                     dateFormatterImpl.localToStringPattern(it.getEndDate()),

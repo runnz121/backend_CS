@@ -7,7 +7,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Getter
 @MappedSuperclass
@@ -19,6 +23,17 @@ public abstract class BaseTimeEntity {
 
     @LastModifiedDate
     private LocalDateTime modifiedAt;
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now(ZoneId.of("JST", ZoneId.SHORT_IDS));
+        this.modifiedAt = LocalDateTime.now(ZoneId.of("JST", ZoneId.SHORT_IDS));
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.modifiedAt = LocalDateTime.now(ZoneId.of("JST", ZoneId.SHORT_IDS));
+    }
 
 
     public void setCreatedAt(LocalDateTime createdAt){
