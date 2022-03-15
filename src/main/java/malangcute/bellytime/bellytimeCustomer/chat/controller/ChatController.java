@@ -2,6 +2,9 @@ package malangcute.bellytime.bellytimeCustomer.chat.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -72,8 +75,9 @@ public class ChatController {
 
     //채팅 로그 갖고오기
     @PostMapping("/chat/chatlog")
-    public ResponseEntity<List<MessageDto>> chatLog(@RequestBody RoomIdRequest request) {
-        List<MessageDto> list = chatService.getChatLog(request);
+    public ResponseEntity<List<MessageDto>> chatLog(@RequestBody RoomIdRequest request, @PageableDefault(page = 1, size = 20)
+        Pageable pageable) {
+        List<MessageDto> list = chatService.getChatLog(request, pageable);
         return ResponseEntity.ok(list);
     }
 
