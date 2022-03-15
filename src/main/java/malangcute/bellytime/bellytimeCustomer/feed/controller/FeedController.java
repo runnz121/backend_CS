@@ -30,7 +30,7 @@ public class FeedController {
                                                                          @RequestParam String filter,
                                                                          @RequestParam(required = false) Double lat,
                                                                          @RequestParam(required = false) Double lon,
-                                                                         @PageableDefault(page = 1, value = 3) Pageable page) {
+                                                                         @PageableDefault(page = 1) Pageable page) {
         List<FeedListResponse> lists = feedService.getListBy(user, filter, lat, lon, page);
         return ResponseEntity.status(HttpStatus.OK).body(lists);
     }
