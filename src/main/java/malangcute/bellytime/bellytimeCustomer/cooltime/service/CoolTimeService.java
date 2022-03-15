@@ -35,6 +35,7 @@ import malangcute.bellytime.bellytimeCustomer.cooltime.repository.CoolTimeCalStr
 import malangcute.bellytime.bellytimeCustomer.cooltime.repository.CoolTimeRepository;
 import malangcute.bellytime.bellytimeCustomer.food.domain.Food;
 import malangcute.bellytime.bellytimeCustomer.food.service.FoodService;
+import malangcute.bellytime.bellytimeCustomer.global.domain.DataFormatter;
 import malangcute.bellytime.bellytimeCustomer.global.domain.DateFormatterImpl;
 import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopCoolTimeSearchStrategyFactory;
@@ -48,7 +49,7 @@ public class CoolTimeService {
 
     private final FoodService foodService;
 
-    private final DateFormatterImpl dateFormatterImpl;
+    private final DataFormatter dateFormatterImpl;
 
     private final CoolTimeRepository coolTimeRepository;
 
@@ -69,19 +70,28 @@ public class CoolTimeService {
         List<GetMyCoolTimeListIF> listFromRepo = coolTimeRepository.findMyCoolTime(userId);
 
         return listFromRepo
-                .stream()
-                .map(it -> GetMyCoolTimeList.builder()
-                       .foodId(it.getFoodId())
-                       .foodName(it.getFoodName())
-                       .gauge(it.getGauge())
-                       .foodImg(it.getFoodImg())
-                       .startDate(dateFormatterImpl.localToStringPattern(it.getStartDate()))
-                       .duration(it.getDuration())
-                       .predictDate(dateFormatterImpl.localToStringPattern(it.getEndDate()))
-                       .leftDays(dateFormatterImpl.minusDateLocalDateTime(now,it.getEndDate()))
-                       .build()
-                )
-                .collect(Collectors.toList());
+            .stream()
+            .sorted(Comparator.comparing(GetMyCoolTimeListIF::getGauge))
+            .map(it -> GetMyCoolTimeList.of(it,
+                    dateFormatterImpl.localToStringPattern(it.getStartDate()),
+                    dateFormatterImpl.localToStringPattern(it.getEndDate()),
+                    dateFormatterImpl.minusDateLocalDateTime(now, it.getEndDate())))
+            .collect(Collectors.toList());
+
+        // return listFromRepo
+        //         .stream()
+        //         .map(it -> GetMyCoolTimeList.builder()
+        //                .foodId(it.getFoodId())
+        //                .foodName(it.getFoodName())
+        //                .gauge(it.getGauge())
+        //                .foodImg(it.getFoodImg())
+        //                .startDate(dateFormatterImpl.localToStringPattern(it.getStartDate()))
+        //                .duration(it.getDuration())
+        //                .predictDate(dateFormatterImpl.localToStringPattern(it.getEndDate()))
+        //                .leftDays(dateFormatterImpl.minusDateLocalDateTime(now,it.getEndDate()))
+        //                .build()
+        //         )
+        //         .collect(Collectors.toList());
     }
 
     //쿨타임 업데이터, 생성
