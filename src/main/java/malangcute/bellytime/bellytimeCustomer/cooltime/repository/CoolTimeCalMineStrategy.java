@@ -50,7 +50,7 @@ public class CoolTimeCalMineStrategy implements CoolTimeCalStrategy {
 			.collect(Collectors.toList());
 
 		if (!todays.isEmpty()) {
-			return CoolTimeCalListResponse1.of(totalList, CoolTimeCalTodayFoodList2.of(todays));
+			return CoolTimeCalListResponse1.of(totalList, todays);
 		}
 		return CoolTimeCalListResponse1.of(totalList, null);
 	}
