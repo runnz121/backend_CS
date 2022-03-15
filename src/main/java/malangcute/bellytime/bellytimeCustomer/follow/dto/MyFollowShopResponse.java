@@ -26,8 +26,10 @@ public class MyFollowShopResponse {
 
     private int followerCount;
 
+    private boolean follow;
 
-    public static MyFollowShopResponse of (Shop shop, int follower, int reviewCount, boolean status) {
+
+    public static MyFollowShopResponse of (Shop shop, int follower, int reviewCount, boolean status, boolean follow) {
 
         return new MyFollowShopResponse(
                 shop.getId(),
@@ -37,7 +39,8 @@ public class MyFollowShopResponse {
                 shop.getBellscore(),
                 shop.getAddress(),
                 status,
-                follower
+                follower,
+                follow
         );
     }
 }

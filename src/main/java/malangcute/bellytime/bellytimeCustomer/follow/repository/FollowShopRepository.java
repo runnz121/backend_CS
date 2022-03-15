@@ -2,6 +2,7 @@ package malangcute.bellytime.bellytimeCustomer.follow.repository;
 
 import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowShop;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.getFollowShopList;
+import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface FollowShopRepository extends JpaRepository<FollowShop, Long> {
+public interface FollowShopRepository<findByUserIdAndShopId> extends JpaRepository<FollowShop, Long> {
 
 //    @Query("SELECT s.id AS shopId, s.name AS shopName, s.image AS profileImg FROM FollowShop fs LEFT JOIN FETCH Shop s ON fs.shop.id = s.id WHERE fs.user.id=:userId ")
 //    List<getFollowShopList> findMyFollowShopById(@Param("userId") Long id);
@@ -34,4 +35,6 @@ public interface FollowShopRepository extends JpaRepository<FollowShop, Long> {
 
     @Query("SELECT COUNT(fs) FROM FollowShop fs WHERE fs.shop.id=:shopId")
     int countFollowerShop(@Param("shopId") Long shopId);
+
+    FollowShop findByUserIdAndShopId(Long userId, Long shopId);
 }

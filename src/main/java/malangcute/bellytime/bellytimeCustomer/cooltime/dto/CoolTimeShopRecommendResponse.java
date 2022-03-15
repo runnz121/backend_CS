@@ -26,7 +26,9 @@ public class CoolTimeShopRecommendResponse {
 
     private int followerCount;
 
-    public static CoolTimeShopRecommendResponse of (Shop shop, int follower, int reviewCount, boolean status) {
+    private boolean follow;
+
+    public static CoolTimeShopRecommendResponse of (Shop shop, int follower, int reviewCount, boolean status, boolean follow) {
 
         return new CoolTimeShopRecommendResponse(
                 shop.getId(),
@@ -36,7 +38,8 @@ public class CoolTimeShopRecommendResponse {
                 shop.getBellscore(),
                 shop.getAddress(),
                 status,
-                follower
+                follower,
+                follow
         );
     }
 }

@@ -41,8 +41,8 @@ public class SearchController {
 
     // score, follow순으로 반환
     @PostMapping("/resultlist")
-    public ResponseEntity<?> searchShop(@RequestBody SearchShopRequest request) {
-        List<ShopSearchResultListWithMenuResponse> list  =  searchService.specificSearch(request);
+    public ResponseEntity<List<ShopSearchResultListWithMenuResponse>> searchShop(@RequireLogin User user, @RequestBody SearchShopRequest request) {
+        List<ShopSearchResultListWithMenuResponse> list  =  searchService.specificSearch(user, request);
         return ResponseEntity.ok(list);
     }
 

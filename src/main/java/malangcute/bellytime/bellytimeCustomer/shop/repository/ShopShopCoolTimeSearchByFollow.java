@@ -38,7 +38,8 @@ public class ShopShopCoolTimeSearchByFollow implements ShopCoolTimeSearchStrateg
                 .map(shop -> CoolTimeShopRecommendResponse.of
                         (shop,  followService.shopFollower(shop),
                                 commentService.reviewCountByShopId(shop),
-                                shopService.checkStatus(shop)))
+                                shopService.checkStatus(shop),
+                            followService.followStatusShop(user, shop)))
                 .collect(Collectors.toList());
     }
 }

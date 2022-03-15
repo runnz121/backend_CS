@@ -6,6 +6,7 @@ import malangcute.bellytime.bellytimeCustomer.follow.service.FollowService;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListWithMenuResponse;
 import malangcute.bellytime.bellytimeCustomer.shop.service.ShopService;
+import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 
 import org.springframework.stereotype.Component;
 
@@ -33,14 +34,15 @@ public class ShopSortByScore implements ShopSortStrategy {
     }
 
     @Override
-    public List<ShopSearchResultListWithMenuResponse> SortedList(String name) {
+    public List<ShopSearchResultListWithMenuResponse> SortedList(User user, String name) {
         List<ShopSearchResultListWithMenuResponse> resultList = shopRepository.findAllByNameContaining(name)
                 .stream()
                 .sorted(Comparator.comparing(Shop::getBellscore).reversed())
                 .map(shop -> ShopSearchResultListWithMenuResponse.of(shop,
                     commentService.reviewCountByShopId(shop),
                     followService.shopFollower(shop),
-                    followService.checkStatus(shop)))
+                    followService.checkStatus(shop),
+                    followService.followStatusShop(user, shop)))
                 .collect(Collectors.toList());
         return resultList;
     }

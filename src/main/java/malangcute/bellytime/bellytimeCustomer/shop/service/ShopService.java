@@ -71,17 +71,18 @@ public class ShopService {
     }
 
     // 전략 패턴 적용
-    public List<ShopSearchResultListWithMenuResponse> searchBySpecificName(String name, String sortType) {
-        return shopSortStrategyFactory.findStrategy(sortType).SortedList(name);
+    public List<ShopSearchResultListWithMenuResponse> searchBySpecificName(User user, String name, String sortType) {
+        return shopSortStrategyFactory.findStrategy(sortType).SortedList(user, name);
     }
 
     // 팔로워가 많은 탑 3가게 갖고오기
-    public List<ShopSearchResponse> getTop3ShopList() {
+    public List<ShopSearchResponse> getTop3ShopList(User user) {
         return shopRepository.findPopularTop3Shop(PageRequest.of(0,3))
             .stream()
             .map(it -> ShopSearchResponse.of (it, checkStatus(it),
                 followService.shopFollower(it),
-                commentService.reviewCountByShopId(it)))
+                commentService.reviewCountByShopId(it),
+                followService.followStatusShop(user, it)))
             .collect(Collectors.toList());
     }
 
@@ -107,11 +108,12 @@ public class ShopService {
     //내가 팔로우한 가게 리스트 갖고오기
     @Transactional(readOnly = true)
     public List<MyFollowShopResponse> myFollowShop(User user, Pageable pageable) {
-        return shopRepository.findMyFollowShopById(user.getId(), Pageable.ofSize(pageable.getPageSize())).stream()
+        return shopRepository.findMyFollowShopById(user.getId(), pageable).stream()
             .map(shop -> MyFollowShopResponse.of
                 (shop, followService.shopFollower(shop),
                     commentService.reviewCountByShopId(shop),
-                    checkStatus(shop)))
+                    checkStatus(shop),
+                    followService.followStatusShop(user, shop)))
             .collect(Collectors.toList());
     }
 
