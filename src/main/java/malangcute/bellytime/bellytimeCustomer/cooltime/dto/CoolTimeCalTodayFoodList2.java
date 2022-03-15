@@ -12,6 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 public class CoolTimeCalTodayFoodList2 {
 
-    private List<CoolTimeCalTodayFoodList3> data = new ArrayList<>();
+    private List<CoolTimeCalTodayFoodList3> today = new ArrayList<>();
+
+
+    public static CoolTimeCalTodayFoodList2 of (List<CoolTimeCalTodayFoodList3> todayList) {
+        return new CoolTimeCalTodayFoodList2(todayList);
+    }
 
 }

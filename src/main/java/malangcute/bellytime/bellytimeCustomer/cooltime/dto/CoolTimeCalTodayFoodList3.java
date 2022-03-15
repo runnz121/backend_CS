@@ -24,11 +24,11 @@ public class CoolTimeCalTodayFoodList3 {
 
 
 
-    public static CoolTimeCalTodayFoodList3 of (Food food, CoolTime coolTime) {
+    public static CoolTimeCalTodayFoodList3 of(Food food, CoolTime coolTime) {
         return new CoolTimeCalTodayFoodList3(food.getName(), food.getId(), food.getImage(), coolTime.getEat());
     }
 
-    public static CoolTimeCalTodayFoodList3 from (GetMyCoolTimeListIF list) {
+    public static CoolTimeCalTodayFoodList3 from(GetMyCoolTimeListIF list) {
         return new CoolTimeCalTodayFoodList3(
                 list.getFoodName(),
                 Long.valueOf(list.getFoodId()),

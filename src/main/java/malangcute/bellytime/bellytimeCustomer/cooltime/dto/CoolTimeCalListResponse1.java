@@ -15,16 +15,10 @@ public class CoolTimeCalListResponse1 {
 
     private List<CoolTimeCalDayList2> dateList = new ArrayList<>();
 
-    private List<CoolTimeCalTodayFoodList2> today = new ArrayList<>();
+    private CoolTimeCalTodayFoodList2 today;
 
 
-
-     public void addList (CoolTimeCalDayList2 list) {
-
-         dateList.add(list);
-    }
-
-    public void addToday (CoolTimeCalTodayFoodList2 list) {
-         today.add(list);
+    public static CoolTimeCalListResponse1 of (List<CoolTimeCalDayList2> dateList, CoolTimeCalTodayFoodList2 todayList) {
+         return new CoolTimeCalListResponse1(dateList, todayList);
     }
 }

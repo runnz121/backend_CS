@@ -22,7 +22,7 @@ public class CoolTimeCalFoodList3 {
         return new CoolTimeCalFoodList3(food.getName(), food.getId(), food.getImage());
     }
 
-    public static CoolTimeCalFoodList3 from (GetMyCoolTimeListIF list) {
+    public static CoolTimeCalFoodList3 from(GetMyCoolTimeListIF list) {
         return new CoolTimeCalFoodList3(
                 list.getFoodName(),
                 Long.valueOf(list.getFoodId()),
