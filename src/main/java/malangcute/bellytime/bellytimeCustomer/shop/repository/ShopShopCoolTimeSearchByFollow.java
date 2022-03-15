@@ -34,7 +34,7 @@ public class ShopShopCoolTimeSearchByFollow implements ShopCoolTimeSearchStrateg
 
     @Override
     public List<CoolTimeShopRecommendResponse> selectStrategy(User user, Long foodId, Double lat, Double lon, Pageable pageable) {
-        return shopRepository.findByFilterWithFollow(user.getId(), foodId, Pageable.ofSize(pageable.getPageSize())).stream()
+        return shopRepository.findByFilterWithFollow(user.getId(), foodId, pageable).stream()
                 .map(shop -> CoolTimeShopRecommendResponse.of
                         (shop,  followService.shopFollower(shop),
                                 commentService.reviewCountByShopId(shop),

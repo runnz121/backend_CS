@@ -19,7 +19,7 @@ public class FeedSearchByFollow implements FeedSearchStrategy {
 
     @Override
     public List<FeedListResponse> selectedStrategy(User user, Double lat, Double lon, Pageable pageable) {
-        return feedRepository.findByFilterWithSub(user.getId(), Pageable.ofSize(pageable.getPageSize()))
+        return feedRepository.findByFilterWithSub(user.getId(), pageable)
                 .stream().map(FeedListResponse::of)
                 .collect(Collectors.toList());
     }

@@ -39,7 +39,7 @@ public class ShopShopCoolTimeSearchByNearBy implements ShopCoolTimeSearchStrateg
                                                               Double lon,
                                                               Pageable pageable) {
 
-        return shopRepository.findByFilterWithNearBy(foodId, lat, lon, Pageable.ofSize(pageable.getPageSize()))
+        return shopRepository.findByFilterWithNearBy(foodId, lat, lon, pageable)
                 .stream()
                 .map(shop -> CoolTimeShopRecommendResponse.of
                         (shop, followService.shopFollower(shop),
