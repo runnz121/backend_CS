@@ -13,6 +13,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -174,8 +176,8 @@ public class ChatService {
 
 
     //채팅방 로그 반환하기
-    public List<MessageDto> getChatLog(RoomIdRequest request) {
-        return chatLogRepository.findByRoomId(request.getRoomId()).stream()
+    public List<MessageDto> getChatLog(RoomIdRequest request, Pageable pageable) {
+        return chatLogRepository.findByRoomId(request.getRoomId(), pageable).stream()
                 .sorted(Comparator.comparing(ChatLog::getCreatedAt))
                 .map(MessageDto::of)
                 .collect(Collectors.toList());
