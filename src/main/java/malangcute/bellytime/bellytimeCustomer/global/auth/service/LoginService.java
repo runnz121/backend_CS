@@ -31,6 +31,7 @@ public class LoginService {
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
     private final TokenProvider tokenProvider;
     private final AwsS3uploader awsS3uploader;
+    private static final String ERASE_TOKEN = "";
 
 
     //아이디 비밀번호 접속시 확인된 유저인지 확인 -> 리프레시, 엑세스 모드 발급
@@ -82,5 +83,10 @@ public class LoginService {
         if (!PASSWORD_ENCODER.matches(password, user.getPassword())) {
             throw new UserPassWordException("비밀번호가 잘못되었습니다");
         }
+    }
+
+    //유저 로그아웃
+    public void userLogOut(User user) {
+        userRepository.logOutByUserId(user.getId(), ERASE_TOKEN);
     }
 }

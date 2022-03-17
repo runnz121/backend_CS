@@ -33,7 +33,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final AwsS3uploader awsS3uploader;
     private final FollowService followService;
-    private static final String ERASE_TOKEN = "";
+
 
     @PostConstruct
     public void init() {
@@ -64,7 +64,7 @@ public class UserService {
     //나의 프로필 찾기
     @Transactional(readOnly = true)
     public UserProfileResponse userProfile(User user) {
-            return userRepository.findById(user.getId())
+            return userRepository.findByEmail(user.getEmail())
                 .stream()
                 .filter(it -> Objects.equals(it.getId(), user.getId()))
                 .findAny()
@@ -73,11 +73,9 @@ public class UserService {
     }
 
     // 유저 정보 업데이트
-    public void userUpdate(UserUpdateRequest userUpdateRequest) throws FailedToConvertImgFileException {
-        User user = findUserByEmail(userUpdateRequest.getEmail());
-        user.setProfileImg(updateImg(userUpdateRequest.getProfileImg()));
-        user.setNickname(userUpdateRequest.getNickname());
-        userRepository.save(user);
+    public void userUpdate(UserUpdateRequest request) throws FailedToConvertImgFileException {
+        User user = findUserByEmail(request.getEmail());
+        user.updateUserProfile(request.getNickname(), updateImg(request.getProfileImg()));
     }
 
     // 프로필 이미지 업데이트
@@ -87,13 +85,10 @@ public class UserService {
 
     //닉네임으로 친구 찾기
     public MyFriendSearchResponse findUserByNickname(User host, FindMyFriendSearchRequest request) {
-            User followId = findUserByEmail(request.getEmail());
-            boolean followStatus = followService.followStatus(host, followId);
-            return MyFriendSearchResponse.from(followId, followStatus);
+        User followId = findUserByEmail(request.getEmail());
+        boolean followStatus = followService.followStatus(host, followId);
+        return MyFriendSearchResponse.from(followId, followStatus);
 }
 
-    //유저 로그아웃
-    public void userLogOut(User user) {
-        userRepository.logOutByUserId(user.getId(), ERASE_TOKEN);
-    }
+
 }

@@ -117,15 +117,7 @@ public class ShopService {
             .collect(Collectors.toList());
     }
 
-    public void toFollowShop(User user, List<FollowShopRequest> requests) {
-        Set<FollowShop> saveList = new HashSet<>();
-        for (FollowShopRequest request : requests) {
-            Shop shopResult = shopRepository.findById(request.getShopId())
-                .orElseThrow(() -> new NotFoundException("가게가 없습니다"));
-            saveList.add(FollowShop.create(user, shopResult));
-        }
-        followShopRepository.saveAll(saveList);
-    }
+
 }
 
 

@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 public class User extends BaseTimeEntity implements UserDetails {
 
     @Id
-    // 테스트 때문에 주석처리
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -140,10 +139,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     }
 
     @Override
-    public String getPassword(){
-        return this.password.getPassWord();
-    }
-
+    public String getPassword() { return this.password.getPassWord(); }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -182,4 +178,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     public void setProfileImg(String imgUrl) {this.profileImg = imgUrl; }
 
     public void setNickname(String nickname) {this.nickname = new NickName(nickname);}
+
+    public void updateUserProfile(String changeNickname, String changeImg) {
+        this.nickname = new NickName(changeNickname);
+        this.profileImg = changeImg;
+    }
 }

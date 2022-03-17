@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/testdb?autoReconnect=true
+    username: root
+    password: 123456
+
+
+sec:
+  auth:
+    secretkey: malangcute!
+    validtimeforAccess: 864000000000000
+    validtimeforRefresh: 8640000000000000000
+
+  cors:
+    #frontEndDomain: http://localhost:3000
+    frontEndDomain: https://www.bellytime.kr
+    #frontEndDomain: https://bellytime.kr
+
+  reuris:
+    google: http://localhost:3000/oauth2/redirect?
+

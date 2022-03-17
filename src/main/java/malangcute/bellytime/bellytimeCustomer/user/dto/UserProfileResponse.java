@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class UserProfileResponse {
 
