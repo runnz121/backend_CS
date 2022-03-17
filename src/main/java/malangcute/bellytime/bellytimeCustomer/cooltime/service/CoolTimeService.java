@@ -177,7 +177,7 @@ public class CoolTimeService {
     public List<CoolTimeGetMyFriends> getMyFriendsListByFood (User user, Long foodId) {
         return  coolTimeRepository.findMyCoolTimeFriends(user.getId(), foodId)
                 .stream()
-                .sorted(Comparator.comparing(it -> Long.valueOf(it.getGauge())))
+                .sorted(Comparator.comparing(it -> Long.valueOf(it.getGauge()), Comparator.reverseOrder()))
                 .map(CoolTimeGetMyFriends::of)
                 .collect(Collectors.toList());
     }

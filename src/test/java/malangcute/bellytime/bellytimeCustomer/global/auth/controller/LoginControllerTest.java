@@ -29,8 +29,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -65,12 +64,8 @@ class LoginControllerTest extends TestSupport {
     private static final FirstLoginDto firstLoginDto =
             new FirstLoginDto(1L, "userNickName", "accessToken");
 
-    private PasswordEncoder PASSWORD_ENCODER =
-            new BCryptPasswordEncoder();
-
     private static final MockMultipartFile USER_IMG =
             new MockMultipartFile("profileImg", "cats.JPEG", MediaType.IMAGE_JPEG_VALUE, "cats".getBytes());
-
 
     public static final LoginWithIdAndPassRequest LOGIN_REQUEST =
            new LoginWithIdAndPassRequest("runnz@gmail.com", "test");
@@ -84,19 +79,6 @@ class LoginControllerTest extends TestSupport {
                 .phoneNumber("010-222-2222")
                 .profileImg(USER_IMG)
                 .build();
-
-    @BeforeEach
-    public void setUser() {
-        user = User
-                .builder()
-                .nickName("종빈")
-                .email("runnz@gmail.com")
-                .passWord(PASSWORD_ENCODER.encode("test"))
-                .phoneNumber("010-1234-1234")
-                .profileImg("cats.jpeg")
-                .build();
-        userRepository.save(user);
-    }
 
 
     @DisplayName("로그인 컨트롤러 헬스 체크")
@@ -186,20 +168,20 @@ class LoginControllerTest extends TestSupport {
     void logOutUSer() throws Exception {
 
         // given
-        user.setRefreshToken("refreshToken");
-        String token = tokenProvider.createAccessToken(user.getEmail().getEmail());
+        가입된_유저(1L).setRefreshToken("refreshToken");
+        String token = tokenProvider.createAccessToken(가입된_유저(1L).getEmail().getEmail());
 
         // when
-        userService.userLogOut(user);
+        loginService.userLogOut(가입된_유저(1L));
 
         // then
         mockMvc.perform(
-                        get("/logout")
+                        delete("/log-out")
                                 .header("Authorization","Bearer " + token)
-                                .header("Cookie", "refreshToken="+token)
+                                .header("Cookie", "refreshToken=" + token)
 
                 )
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andDo(
                         document("logout-with-token",
                                 requestHeaders(

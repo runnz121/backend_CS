@@ -50,8 +50,8 @@ public class UserController {
     private final CommentService commentService;
 
     // 유저 정보 업데이트
-    @GetMapping("/update")
-    public ResponseEntity update(@ModelAttribute UserUpdateRequest userUpdateRequest)
+    @PostMapping("/update")
+    public ResponseEntity update(@RequireLogin User user, @ModelAttribute UserUpdateRequest userUpdateRequest)
         throws FailedToConvertImgFileException {
         userService.userUpdate(userUpdateRequest);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -79,7 +79,7 @@ public class UserController {
     @PostMapping("/follow/shop")
     public ResponseEntity toFollowShop(@RequireLogin User user,
                                        @RequestBody List<FollowShopRequest> requests) {
-        shopService.toFollowShop(user, requests);
+        followService.toFollowShop(user, requests);
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 
@@ -93,21 +93,22 @@ public class UserController {
 
     // 팔로우 리스트 불러오기
    @GetMapping("/friends/list")
-    public ResponseEntity<List<MyFriendListResponse> > myFriendList ( @RequireLogin User user) {
+    public ResponseEntity<List<MyFriendListResponse> > myFriendList(@RequireLogin User user) {
         List<MyFriendListResponse> list = followService.getMyFriends(user);
         return ResponseEntity.status(HttpStatus.OK).body(list);
    }
 
    //이메일로 단일건 서치
    @PostMapping("/friends/search")
-    public ResponseEntity<MyFriendSearchResponse> findMyFriend(@RequireLogin User user, @RequestBody FindMyFriendSearchRequest request) {
+    public ResponseEntity<MyFriendSearchResponse> findMyFriend(@RequireLogin User user,
+                                                              @RequestBody FindMyFriendSearchRequest request) {
         MyFriendSearchResponse result = userService.findUserByNickname(user, request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
    }
 
    //친구 팔로우, 언팔로우하기
     @PostMapping("/follow/friends")
-    public ResponseEntity<?> followMyFriends(@RequireLogin User user,
+    public ResponseEntity followMyFriends(@RequireLogin User user,
                                              @RequestBody List<FollowFriendsRequest> request) {
         followService.toFollowFriend(user, request);
         return ResponseEntity.ok(HttpStatus.ACCEPTED);

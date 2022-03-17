@@ -30,10 +30,6 @@ public class LoginController {
 
     private final LoginService loginService;
 
-    private final UserService userService;
-
-    private final SecurityProperties securityProperties;
-
     @GetMapping("/")
     public ResponseEntity<?> healthCheck(){
         return ResponseEntity.status(HttpStatus.OK).body("ok");
@@ -65,7 +61,7 @@ public class LoginController {
     //로그아웃
     @DeleteMapping("/log-out")
     public ResponseEntity<AccessTokenResponseDto> logOutUSer(@RequireLogin User user, HttpServletResponse response) {
-        userService.userLogOut(user);
+        loginService.userLogOut(user);
         deleteCookie(response);
         return ResponseEntity.noContent().build();
     }

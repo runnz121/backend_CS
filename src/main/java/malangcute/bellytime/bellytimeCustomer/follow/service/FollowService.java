@@ -23,6 +23,7 @@ import malangcute.bellytime.bellytimeCustomer.follow.repository.FollowShopReposi
 import malangcute.bellytime.bellytimeCustomer.follow.repository.FollowUserRepository;
 import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.global.domain.DataFormatter;
+import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopRepository;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
@@ -38,12 +39,25 @@ public class FollowService {
 
     private final FollowUserRepository followUserRepository;
 
+    private final ShopRepository shopRepository;
+
     private UserService userService;
 
     private final DataFormatter dateFormat;
 
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+
+    public void toFollowShop(User user, List<FollowShopRequest> requests) {
+        Set<FollowShop> saveList = new HashSet<>();
+        for (FollowShopRequest request : requests) {
+            Shop shopResult = shopRepository.findById(request.getShopId())
+                .orElseThrow(() -> new NotFoundException("가게가 없습니다"));
+            saveList.add(FollowShop.create(user, shopResult));
+        }
+        followShopRepository.saveAll(saveList);
     }
 
 
