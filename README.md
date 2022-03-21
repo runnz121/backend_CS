@@ -18,8 +18,8 @@ bellytime 고객용 백엔드 서버
 ### 현재 구성도
 <img width="1126" alt="스크린샷 2022-03-21 오전 9 06 48" src="https://user-images.githubusercontent.com/54499829/159191850-a4cdd64f-1c67-4c46-8a3b-6afd6f185512.png">
 
-
-
+### 테이블 스키마
+<img width="1052" alt="스크린샷 2022-03-21 오전 9 09 02" src="https://user-images.githubusercontent.com/54499829/159191937-3a6a5be6-457f-4aca-b031-92f0f7076eb9.png">
 
 
 ### 백엔드 기술 스택
