@@ -16,7 +16,9 @@ bellytime 고객용 백엔드 서버
 6. 쿨타임을 설정하고 해당 쿨타임에 음식에 대한 알림을 받아 볼 수 있습니다.
 
 ### 현재 구성도
-<img width="1241" alt="스크린샷 2022-03-21 오전 9 04 36" src="https://user-images.githubusercontent.com/54499829/159191784-bb6eb58b-b635-43a3-a132-79521c76b00d.png">
+<img width="1126" alt="스크린샷 2022-03-21 오전 9 06 48" src="https://user-images.githubusercontent.com/54499829/159191850-a4cdd64f-1c67-4c46-8a3b-6afd6f185512.png">
+
+
 
 
 
