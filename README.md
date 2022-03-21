@@ -16,7 +16,9 @@ bellytime 고객용 백엔드 서버
 6. 쿨타임을 설정하고 해당 쿨타임에 음식에 대한 알림을 받아 볼 수 있습니다.
 
 ### 현재 구성도
-<img width="1284" alt="스크린샷 2022-02-25 오전 3 38 54" src="https://user-images.githubusercontent.com/54499829/155586728-a1b4f5f7-bd87-4d12-88bc-aa1d56b3aadf.png">
+<img width="1241" alt="스크린샷 2022-03-21 오전 9 04 36" src="https://user-images.githubusercontent.com/54499829/159191784-bb6eb58b-b635-43a3-a132-79521c76b00d.png">
+
+
 
 ### 백엔드 기술 스택
 1. springboot
