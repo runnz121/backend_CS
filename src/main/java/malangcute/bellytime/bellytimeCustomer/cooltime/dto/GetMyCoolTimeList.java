@@ -10,7 +10,7 @@ import lombok.*;
 @Getter
 public class GetMyCoolTimeList {
 
-    private String foodId;
+    private Long foodId;
 
     private String foodName;
 

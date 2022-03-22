@@ -5,7 +5,7 @@ import org.apache.kafka.common.protocol.types.Field;
 import java.time.LocalDateTime;
 
 public interface GetMyCoolTimeListIF {
-    String getFoodId();
+    Long getFoodId();
 
     String getFoodName();
 

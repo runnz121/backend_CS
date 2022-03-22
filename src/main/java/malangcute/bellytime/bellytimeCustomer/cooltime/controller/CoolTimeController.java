@@ -49,7 +49,7 @@ public class CoolTimeController {
 
     //쿨타임 업데이트 및 저장하기
     @PostMapping("/setting")
-    public ResponseEntity<?> setting(@RequireLogin User user, @RequestBody CoolTimeSettingRequest request)
+    public ResponseEntity setting(@RequireLogin User user, @RequestBody CoolTimeSettingRequest request)
         throws ParseException {
         coolTimeService.settingCoolTime(user, request);
         return new ResponseEntity<>("요청완료", HttpStatus.OK);
@@ -57,7 +57,7 @@ public class CoolTimeController {
 
     //쿨타임 삭제하기
     @DeleteMapping("/setting")
-    public ResponseEntity<?> delete(@RequireLogin User user, @RequestBody DeleteCoolTimeRequest request) {
+    public ResponseEntity delete(@RequireLogin User user, @RequestBody DeleteCoolTimeRequest request) {
         coolTimeService.deleteCoolTime(user, request);
         return new ResponseEntity<>("삭제완료", HttpStatus.OK);
     }

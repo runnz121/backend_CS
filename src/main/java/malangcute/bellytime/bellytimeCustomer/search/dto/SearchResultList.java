@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class SearchResultList {
 

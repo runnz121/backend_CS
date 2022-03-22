@@ -32,7 +32,9 @@ import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 @RequiredArgsConstructor
 @Slf4j
 public class ChatController {
+
     private final ChatService chatService;
+
     private final SimpMessagingTemplate template;
 
 
@@ -45,22 +47,21 @@ public class ChatController {
 
     // 방생성 api -> roomId 반환 (이미 존재하면 있는 roomid 반환)
     @PostMapping("/chat/create")
-    public ResponseEntity<?> createRoom(@RequireLogin User user, @RequestBody CreateRoomRequest createRoomRequest) {
+    public ResponseEntity<RoomIdResponse> createRoom(@RequireLogin User user, @RequestBody CreateRoomRequest createRoomRequest) {
         RoomIdResponse response =  chatService.checkExistsRoomId(user, createRoomRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     //내가 갖고 있는 방 목록 조회 -> 친구
     @GetMapping("/chat/list/friend")
-    public ResponseEntity<?> getMyFriendRoomList(@RequireLogin User user) {
+    public ResponseEntity<List<ChatRoomFriendListResponse>> getMyFriendRoomList(@RequireLogin User user) {
         List<ChatRoomFriendListResponse> friendList = chatService.friendChatRoomList(user);
         return ResponseEntity.ok(friendList);
     }
 
     //채팅방 -> 가게
     @GetMapping("/chat/list/shop")
-    public ResponseEntity<?> getMyShopRoomList(@RequireLogin User user) {
-        System.out.println("incontroller" + user.getId());
+    public ResponseEntity<List<ChatRoomShopListResponse>> getMyShopRoomList(@RequireLogin User user) {
         List<ChatRoomShopListResponse> shopList = chatService.shopChatRoomList(user);
         return ResponseEntity.ok(shopList);
     }
