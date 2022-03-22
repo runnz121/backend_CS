@@ -3,18 +3,15 @@ package malangcute.bellytime.bellytimeCustomer.shop.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import malangcute.bellytime.bellytimeCustomer.comment.service.CommentService;
-import malangcute.bellytime.bellytimeCustomer.follow.domain.FollowShop;
-import malangcute.bellytime.bellytimeCustomer.follow.dto.FollowShopRequest;
 import malangcute.bellytime.bellytimeCustomer.follow.dto.MyFollowShopResponse;
 import malangcute.bellytime.bellytimeCustomer.follow.repository.FollowShopRepository;
 import malangcute.bellytime.bellytimeCustomer.follow.service.FollowService;
 import malangcute.bellytime.bellytimeCustomer.global.domain.DataFormatter;
-import malangcute.bellytime.bellytimeCustomer.global.exception.exceptionDetail.NotFoundException;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopResultDto;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSaveRequest;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResponse;
-import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListWithMenuResponse;
+import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListResponse;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopRepository;
 import malangcute.bellytime.bellytimeCustomer.shop.repository.ShopSortStrategyFactory;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
@@ -25,9 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,7 +66,7 @@ public class ShopService {
     }
 
     // 전략 패턴 적용
-    public List<ShopSearchResultListWithMenuResponse> searchBySpecificName(User user, String name, String sortType) {
+    public List<ShopSearchResultListResponse> searchBySpecificName(User user, String name, String sortType) {
         return shopSortStrategyFactory.findStrategy(sortType).SortedList(user, name);
     }
 

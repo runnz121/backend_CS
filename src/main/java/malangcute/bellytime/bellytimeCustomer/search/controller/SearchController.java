@@ -6,7 +6,7 @@ import malangcute.bellytime.bellytimeCustomer.global.auth.RequireLogin;
 import malangcute.bellytime.bellytimeCustomer.search.dto.*;
 import malangcute.bellytime.bellytimeCustomer.search.service.SearchService;
 import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSaveRequest;
-import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListWithMenuResponse;
+import malangcute.bellytime.bellytimeCustomer.shop.dto.ShopSearchResultListResponse;
 import malangcute.bellytime.bellytimeCustomer.shop.service.ShopService;
 import malangcute.bellytime.bellytimeCustomer.user.domain.User;
 import org.springframework.http.HttpStatus;
@@ -41,28 +41,28 @@ public class SearchController {
 
     // score, follow순으로 반환
     @PostMapping("/resultlist")
-    public ResponseEntity<List<ShopSearchResultListWithMenuResponse>> searchShop(@RequireLogin User user, @RequestBody SearchShopRequest request) {
-        List<ShopSearchResultListWithMenuResponse> list  =  searchService.specificSearch(user, request);
+    public ResponseEntity<List<ShopSearchResultListResponse>> searchShop(@RequireLogin User user, @RequestBody SearchShopRequest request) {
+        List<ShopSearchResultListResponse> list  =  searchService.specificSearch(user, request);
         return ResponseEntity.ok(list);
     }
 
     // 가게 이름으로 찾기
     @GetMapping("/shop/{name}")
-    public ResponseEntity<?> searchShop1(@PathVariable String name) {
+    public ResponseEntity<List<String>> searchShop1(@PathVariable String name) {
         List<String> shopList = shopService.searchByName(name);
         return ResponseEntity.ok(shopList);
     }
 
     // 음식 찾기
     @GetMapping("/food")
-    public ResponseEntity<?> searchfood(@RequestBody SearchDto searchDto) {
+    public ResponseEntity<List<String>> searchfood(@RequestBody SearchDto searchDto) {
         List<String> shopList = foodService.searchByName(searchDto.getSearch());
         return ResponseEntity.ok(shopList);
     }
 
     //새로운 가게 저장
     @PostMapping("/shop")
-    public ResponseEntity<?> saveShop(@RequestBody ShopSaveRequest shopSaveRequest) {
+    public ResponseEntity saveShop(@RequestBody ShopSaveRequest shopSaveRequest) {
         shopService.saveShop(shopSaveRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("저장되었습니다");
     }

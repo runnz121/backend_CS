@@ -6,11 +6,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.mock.web.MockFilterConfig;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.snippet.Attributes;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -20,8 +24,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
 import javax.persistence.EntityManager;
+import javax.servlet.ServletException;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
@@ -36,7 +42,8 @@ import malangcute.bellytime.bellytimeCustomer.user.repository.UserRepository;
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
-//@MockBean(JpaMetamodelMappingContext.class)
+// @AutoConfigureRestDocs
+// @MockBean(JpaMetamodelMappingContext.class)
 public abstract class TestSupport { //extends ControllerTest
 
     protected MockMvc mockMvc;
@@ -52,6 +59,10 @@ public abstract class TestSupport { //extends ControllerTest
 
     protected static PasswordEncoder PASSWORD_ENCODER =
         new BCryptPasswordEncoder();
+
+    @Autowired
+    private WebApplicationContext context;
+
 
 
     protected static final String ACCESS_TOKEN = "accessToken";
@@ -93,18 +104,23 @@ public abstract class TestSupport { //extends ControllerTest
         return new ObjectMapper().writeValueAsString(obj);
     }
 
-
-
     // jwt를 필터 에서 거름으로 이를 우회하기 위한 설정  https://kimyhcj.tistory.com/386
-    //DelegatingFilterProxy delegateProxyFilter = new DelegatingFilterProxy();
-    //delegateProxyFilter.init(new MockFilterConfig(context.getServletContext(), BeanIds.SPRING_SECURITY_FILTER_CHAIN));
+    // DelegatingFilterProxy delegateProxyFilter = new DelegatingFilterProxy();
+    // delegateProxyFilter.init(new MockFilterConfig(context.getServletContext(), BeanIds.SPRING_SECURITY_FILTER_CHAIN));
+    //
+    //
+
 
 
     @BeforeEach
-    public void setting(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentationContextProvider) {
+    public void setting(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentationContextProvider) throws
+        ServletException {
+
+
+
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
-                //.addFilter(delegateProxyFilter)
+               // .addFilter(delegateProxyFilter)
                 .apply(documentationConfiguration(restDocumentationContextProvider)
                         .operationPreprocessors()
                         .withRequestDefaults(prettyPrint()) //요청부분 문서화

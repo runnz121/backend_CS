@@ -2,17 +2,11 @@ package malangcute.bellytime.bellytimeCustomer.shop.dto;
 
 import lombok.*;
 import malangcute.bellytime.bellytimeCustomer.shop.domain.Shop;
-import malangcute.bellytime.bellytimeCustomer.shop.domain.ShopMenu;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
-
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class ShopSearchResultListWithMenuResponse {
+public class ShopSearchResultListResponse {
 
     private Long shopId;
 
@@ -32,8 +26,8 @@ public class ShopSearchResultListWithMenuResponse {
 
     private boolean follow;
 
-    public static ShopSearchResultListWithMenuResponse of(Shop shop, int reviewCount, int followCount, boolean status, boolean follow) {
-        return new ShopSearchResultListWithMenuResponse(
+    public static ShopSearchResultListResponse of(Shop shop, int reviewCount, int followCount, boolean status, boolean follow) {
+        return new ShopSearchResultListResponse(
             shop.getId(),
             shop.getName(),
             shop.getImage(),
