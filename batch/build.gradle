@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+}
+
+group 'malangcute.bellytime'
+version '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+// 최상위 루트 포함
+dependencies {
+    implementation(project(':' ))
+
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    //스프링 배치 설정
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+
+    //quartz 스케쥴러 추가
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// 루트 프로젝트에 포함하여 빌드
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.shaded.com.google.common.base.CaseFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
