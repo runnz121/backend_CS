@@ -27,6 +27,30 @@ configurations {
 	}
 }
 
+// sub-module(batch)
+subprojects {
+	group 'malangcute.bellytime'
+	version '1.0'
+
+	apply plugin: 'java'
+	apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'org.springframework.boot'
+
+	sourceCompatibility = 11
+
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+		testImplementation('org.springframework.boot:spring-boot-starter-test')
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	}
+}
+
+
 repositories {
 	mavenCentral()
 }
@@ -73,9 +97,9 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 
 
-	// swagger 설정
-	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
-	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+//	// swagger 설정
+//	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+//	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 
 	// flyway 설정
 	implementation 'org.flywaydb:flyway-core'
@@ -89,7 +113,6 @@ dependencies {
 
 	//cloudfront, s3 설정
 	implementation "org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE"
-
 
 
 	//rabbitMQ 설정(외부 브로커 핸들링용)
