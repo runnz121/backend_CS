@@ -11,7 +11,7 @@ repositories {
 
 // 최상위 루트 포함
 dependencies {
-    implementation(project(':' ))
+    implementation(project(':'))
 
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'

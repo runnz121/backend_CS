@@ -1,32 +1,32 @@
-//package malangcute.bellytime.bellytimeCustomer.global.batch;
+// package malangcute.bellytime.bellytimeCustomer.global.batch;
 //
-//import malangcute.bellytime.bellytimeCustomer.global.quartz.QuartzProperties;
-//import org.quartz.SchedulerException;
-//import org.quartz.Trigger;
-//import org.quartz.spi.JobFactory;
-//import org.quartz.spi.TriggerFiredBundle;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.springframework.batch.core.configuration.JobRegistry;
-//import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-//import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
-//import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-//import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
-//import org.springframework.boot.context.properties.EnableConfigurationProperties;
-//import org.springframework.context.SmartLifecycle;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
-//import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-//import org.springframework.scheduling.quartz.SpringBeanJobFactory;
+// import malangcute.bellytime.bellytimeCustomer.global.quartz.QuartzProperties;
+// import org.quartz.SchedulerException;
+// import org.quartz.Trigger;
+// import org.quartz.spi.JobFactory;
+// import org.quartz.spi.TriggerFiredBundle;
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
+// import org.springframework.batch.core.configuration.JobRegistry;
+// import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+// import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
+// import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+// import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
+// import org.springframework.boot.context.properties.EnableConfigurationProperties;
+// import org.springframework.context.SmartLifecycle;
+// import org.springframework.context.annotation.Bean;
+// import org.springframework.context.annotation.Configuration;
+// import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
+// import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+// import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 //
-//import javax.sql.DataSource;
-//import java.util.List;
+// import javax.sql.DataSource;
+// import java.util.List;
 //
-//@Configuration
-//@EnableConfigurationProperties(QuartzProperties.class)
-//@EnableBatchProcessing
-//public class BatchConfiguration {
+// @Configuration
+// @EnableConfigurationProperties(QuartzProperties.class)
+// @EnableBatchProcessing
+// public class BatchConfiguration {
 //    /**
 //     * JobRegistry 에 Job 을 자동으로 등록하기 위한 설정.
 //     *
@@ -159,4 +159,4 @@
 //            }
 //        };
 //    }
-//}
+// }

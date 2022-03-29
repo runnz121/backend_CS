@@ -29,14 +29,14 @@ public class QuartzConfig {
         schedulerFactoryBean.setSchedulerName("coolTime");
         schedulerFactoryBean.setJobFactory(quartzJobFactory);
         schedulerFactoryBean.setTransactionManager(transactionManager);
-        schedulerFactoryBean.setAutoStartup(true);
+       // schedulerFactoryBean.setAutoStartup(true);
         return schedulerFactoryBean;
     }
 
 
-    @Bean(initMethod = "init")
-    public QuartzStarter quartzStarter() {
-        return new QuartzStarter();
-    }
+    // @Bean(initMethod = "init")
+    // public QuartzStarter quartzStarter() {
+    //     return new QuartzStarter();
+    // }
 
 }

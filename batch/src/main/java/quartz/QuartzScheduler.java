@@ -19,7 +19,7 @@ public class QuartzScheduler {
 		schedulerFactoryBean.setJobFactory(jobFactory);
 		schedulerFactoryBean.setApplicationContext(applicationContext);
 		schedulerFactoryBean.setSchedulerName("coolTime");
-		schedulerFactoryBean.setAutoStartup(true);
+		//schedulerFactoryBean.setAutoStartup(true);
 		return schedulerFactoryBean;
 	}
 }
