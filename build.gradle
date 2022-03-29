@@ -27,7 +27,7 @@ configurations {
 	}
 }
 
-// sub-module(batch)
+// sub-module(batch), Chat
 subprojects {
 	group 'malangcute.bellytime'
 	version '1.0'
@@ -36,7 +36,7 @@ subprojects {
 	apply plugin: 'io.spring.dependency-management'
 	apply plugin: 'org.springframework.boot'
 
-	sourceCompatibility = 11
+	sourceCompatibility = '11'
 
 	repositories {
 		mavenCentral()
@@ -49,6 +49,7 @@ subprojects {
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	}
 }
+
 
 
 repositories {
